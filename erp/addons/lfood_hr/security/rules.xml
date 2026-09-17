@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_contract_company" model="ir.rule">
+        <field name="name">Hợp đồng lao động theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_contract"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_leave_company" model="ir.rule">
+        <field name="name">Đơn nghỉ theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_leave"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_att_company" model="ir.rule">
+        <field name="name">Chấm công theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_attendance"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_term_company" model="ir.rule">
+        <field name="name">Chấm dứt hợp đồng theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_termination"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

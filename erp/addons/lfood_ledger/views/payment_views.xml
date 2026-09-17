@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_list" model="ir.ui.view">
+        <field name="name">lfood.payment.list</field>
+        <field name="model">lfood.payment</field>
+        <field name="arch" type="xml">
+            <list string="Thu, chi tiền" decoration-muted="state == 'cancel'" decoration-info="state == 'draft'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="method"/>
+                <field name="partner_id"/>
+                <field name="memo"/>
+                <field name="amount" sum="Tổng"/>
+                <field name="counterpart_account" optional="show"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'posted'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_payment_form" model="ir.ui.view">
+        <field name="name">lfood.payment.form</field>
+        <field name="model">lfood.payment</field>
+        <field name="arch" type="xml">
+            <form string="Phiếu thu, phiếu chi">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary"
+                            invisible="state != 'draft'" groups="lfood_base.group_accountant"/>
+                    <button name="action_cancel" type="object" string="Hủy phiếu" invisible="state != 'posted'"
+                            groups="lfood_base.group_chief_accountant" confirm="Hủy phiếu và tự đảo bút toán?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_moves" type="object" class="oe_stat_button" icon="fa-book" string="Bút toán"
+                                invisible="state == 'draft'"/>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not cash_warning">
+                        Chi bằng tiền mặt từ ngưỡng thanh toán không dùng tiền mặt (tham số NGUONG_TT_KHONG_TIEN_MAT):
+                        khoản mua này không đủ điều kiện khấu trừ thuế GTGT đầu vào và không được tính vào chi phí được trừ khi tính thuế TNDN.
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="kind" widget="radio" options="{'horizontal': true}" readonly="state != 'draft'"/>
+                            <field name="method" widget="radio" options="{'horizontal': true}" readonly="state != 'draft'"/>
+                            <field name="purpose" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="person" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="amount" class="o_lfood_big_total" readonly="state != 'draft'"/>
+                            <field name="memo" readonly="state != 'draft'"/>
+                            <field name="voucher_id" invisible="purpose != 'supplier'" readonly="state != 'draft'"/>
+                            <field name="cash_account" readonly="state != 'draft'"/>
+                            <field name="counterpart_account" readonly="state != 'draft'"/>
+                            <field name="cost_item_id" invisible="purpose != 'expense'" readonly="state != 'draft'"/>
+                            <field name="cash_warning" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        Chi tiền: Nợ TK đối ứng / Có TK tiền. Thu tiền: Nợ TK tiền / Có TK đối ứng.
+                        Mở tài khoản chi tiết theo từng ngân hàng (ví dụ 1121) nếu công ty có nhiều tài khoản ngân hàng.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_payment_search" model="ir.ui.view">
+        <field name="name">lfood.payment.search</field>
+        <field name="model">lfood.payment</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="memo"/>
+                <filter name="f_out" string="Chi" domain="[('kind', '=', 'out')]"/>
+                <filter name="f_in" string="Thu" domain="[('kind', '=', 'in')]"/>
+                <separator/>
+                <filter name="f_cash" string="Tiền mặt" domain="[('method', '=', 'cash')]"/>
+                <filter name="f_bank" string="Chuyển khoản" domain="[('method', '=', 'bank')]"/>
+                <filter name="f_date" string="Ngày" date="date"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_payment" model="ir.actions.act_window">
+        <field name="name">Thu, chi tiền</field>
+        <field name="res_model">lfood.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

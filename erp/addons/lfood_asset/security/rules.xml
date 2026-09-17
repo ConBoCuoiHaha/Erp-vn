@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_asset_company" model="ir.rule">
+        <field name="name">Tài sản theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_asset"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_schedule_company" model="ir.rule">
+        <field name="name">Lịch khấu hao theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_asset_schedule"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_depr_company" model="ir.rule">
+        <field name="name">Chứng từ khấu hao theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_asset_depreciation"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_depr_line_company" model="ir.rule">
+        <field name="name">Dòng khấu hao theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_asset_depreciation_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

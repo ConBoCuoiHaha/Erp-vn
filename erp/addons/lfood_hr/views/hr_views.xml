@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Hồ sơ nhân viên: thêm hợp đồng và phép năm -->
+    <record id="view_employee_form_hr" model="ir.ui.view">
+        <field name="name">lfood.employee.form.hr</field>
+        <field name="model">lfood.employee</field>
+        <field name="inherit_id" ref="lfood_payroll.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="component_line_ids" position="before">
+                <group string="Hợp đồng và phép năm">
+                    <group>
+                        <field name="contract_id"/>
+                        <field name="leave_condition"/>
+                    </group>
+                    <group>
+                        <field name="leave_entitled"/>
+                        <field name="leave_taken"/>
+                        <field name="leave_remaining"/>
+                    </group>
+                </group>
+                <field name="contract_ids" readonly="1">
+                    <list>
+                        <field name="name"/>
+                        <field name="kind"/>
+                        <field name="date_start"/>
+                        <field name="date_end"/>
+                        <field name="salary"/>
+                        <field name="state"/>
+                    </list>
+                </field>
+            </field>
+        </field>
+    </record>
+
+    <!-- Hợp đồng lao động -->
+    <record id="view_contract_list" model="ir.ui.view">
+        <field name="name">lfood.hr.contract.list</field>
+        <field name="model">lfood.hr.contract</field>
+        <field name="arch" type="xml">
+            <list string="Hợp đồng lao động" decoration-muted="state in ('closed', 'cancel')">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="kind"/>
+                <field name="job" optional="show"/>
+                <field name="date_start"/>
+                <field name="date_end"/>
+                <field name="salary"/>
+                <field name="insurance_salary" optional="show"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_contract_form" model="ir.ui.view">
+        <field name="name">lfood.hr.contract.form</field>
+        <field name="model">lfood.hr.contract</field>
+        <field name="arch" type="xml">
+            <form string="Hợp đồng lao động">
+                <header>
+                    <button name="action_activate" type="object" string="Cho hiệu lực" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_close" type="object" string="Kết thúc hợp đồng"
+                            invisible="state != 'running'"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="kind"/>
+                            <field name="probation_level" invisible="kind != 'probation'"/>
+                            <field name="job"/>
+                            <field name="date_start"/>
+                            <field name="date_end" required="kind != 'indefinite'"/>
+                        </group>
+                        <group>
+                            <field name="salary"/>
+                            <field name="official_salary" invisible="kind != 'probation'"
+                                   required="kind == 'probation'"/>
+                            <field name="insurance_salary" invisible="kind == 'probation'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Phụ lục, điều khoản riêng"/>
+                    <div class="text-muted">
+                        Khi cho hiệu lực, app kiểm tra: hợp đồng xác định thời hạn không quá 36 tháng; thời gian thử việc
+                        không quá 180, 60, 30 hoặc 6 ngày tùy tính chất công việc; lương thử việc ít nhất 85% lương chính thức
+                        (Bộ luật Lao động 2019, Điều 20, 25, 26). Hợp đồng cũ tự kết thúc; mức lương và tiền lương đóng
+                        bảo hiểm cập nhật vào hồ sơ tính lương của nhân viên.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_contract_search" model="ir.ui.view">
+        <field name="name">lfood.hr.contract.search</field>
+        <field name="model">lfood.hr.contract</field>
+        <field name="arch" type="xml">
+            <search string="Hợp đồng lao động">
+                <field name="employee_id"/>
+                <field name="name"/>
+                <filter name="f_running" string="Đang hiệu lực" domain="[('state', '=', 'running')]"/>
+                <filter name="f_end" string="Ngày kết thúc" date="date_end"/>
+                <group>
+                    <filter name="g_kind" string="Loại hợp đồng" context="{'group_by': 'kind'}"/>
+                    <filter name="g_state" string="Trạng thái" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_contract" model="ir.actions.act_window">
+        <field name="name">Hợp đồng lao động</field>
+        <field name="res_model">lfood.hr.contract</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_f_running': 1}</field>
+    </record>
+
+    <!-- Đơn nghỉ -->
+    <record id="view_leave_list" model="ir.ui.view">
+        <field name="name">lfood.hr.leave.list</field>
+        <field name="model">lfood.hr.leave</field>
+        <field name="arch" type="xml">
+            <list string="Đơn nghỉ" decoration-muted="state == 'refused'">
+                <field name="employee_id"/>
+                <field name="kind"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="days" sum="Tổng ngày"/>
+                <field name="reason" optional="show"/>
+                <field name="state"/>
+                <field name="approved_by" optional="show"/>
+                <button name="action_approve" type="object" string="Duyệt" class="btn-link"
+                        invisible="state != 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_leave_form" model="ir.ui.view">
+        <field name="name">lfood.hr.leave.form</field>
+        <field name="model">lfood.hr.leave</field>
+        <field name="arch" type="xml">
+            <form string="Đơn nghỉ">
+                <header>
+                    <button name="action_approve" type="object" string="Duyệt" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_refuse" type="object" string="Từ chối" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="kind"/>
+                            <field name="reason"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="days"/>
+                            <field name="approved_by"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        Phép năm 12, 14 hoặc 16 ngày theo điều kiện làm việc, cứ đủ 5 năm làm việc thêm 1 ngày; vào làm
+                        trong năm thì tính theo tỷ lệ số tháng làm việc (Bộ luật Lao động 2019, Điều 113, 114).
+                        Duyệt đơn phép năm bị chặn khi vượt số ngày phép còn lại.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_leave" model="ir.actions.act_window">
+        <field name="name">Đơn nghỉ</field>
+        <field name="res_model">lfood.hr.leave</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Chấm công -->
+    <record id="view_attendance_list" model="ir.ui.view">
+        <field name="name">lfood.hr.attendance.list</field>
+        <field name="model">lfood.hr.attendance</field>
+        <field name="arch" type="xml">
+            <list string="Chấm công" editable="top">
+                <field name="date"/>
+                <field name="employee_id" options="{'no_create': True}"/>
+                <field name="hours_normal" sum="Giờ công"/>
+                <field name="ot_normal" sum="Làm thêm thường"/>
+                <field name="ot_weekend" sum="Làm thêm nghỉ tuần"/>
+                <field name="ot_holiday" sum="Làm thêm lễ tết"/>
+                <field name="night_hours" optional="show" sum="Giờ đêm"/>
+                <field name="ot_night_hours" optional="show" sum="Làm thêm ban đêm"/>
+                <field name="ot_total" sum="Tổng làm thêm"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_attendance_search" model="ir.ui.view">
+        <field name="name">lfood.hr.attendance.search</field>
+        <field name="model">lfood.hr.attendance</field>
+        <field name="arch" type="xml">
+            <search string="Chấm công">
+                <field name="employee_id"/>
+                <filter name="f_date" string="Ngày" date="date"/>
+                <filter name="f_ot" string="Có làm thêm" domain="[('ot_total', '>', 0)]"/>
+                <group>
+                    <filter name="g_employee" string="Nhân viên" context="{'group_by': 'employee_id'}"/>
+                    <filter name="g_month" string="Tháng" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_attendance" model="ir.actions.act_window">
+        <field name="name">Chấm công</field>
+        <field name="res_model">lfood.hr.attendance</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html">
+            <p>Mỗi dòng là một ngày công của một nhân viên. Bảng lương tháng lấy ngày công từ giờ làm bình thường,
+            cộng ngày nghỉ phép có lương; tiền làm thêm tính theo 150%, 200%, 300%, làm đêm thêm 30%, làm thêm ban đêm
+            thêm 20% (Bộ luật Lao động 2019, Điều 98). Nhập vượt giới hạn làm thêm ngày, tháng, năm bị chặn (Điều 107).</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_hr_root" name="Nhân sự" parent="lfood_base.menu_root" sequence="31"/>
+    <menuitem id="menu_contract" name="Hợp đồng lao động" parent="menu_hr_root" action="action_contract" sequence="10"/>
+    <menuitem id="menu_attendance" name="Chấm công" parent="menu_hr_root" action="action_attendance" sequence="20"/>
+    <menuitem id="menu_leave" name="Đơn nghỉ" parent="menu_hr_root" action="action_leave" sequence="30"/>
+    <menuitem id="menu_hr_employee" name="Nhân viên" parent="menu_hr_root" action="lfood_payroll.action_employee" sequence="40"/>
+    <!-- Chấm dứt hợp đồng -->
+    <record id="view_termination_list" model="ir.ui.view">
+        <field name="name">lfood.hr.termination.list</field>
+        <field name="model">lfood.hr.termination</field>
+        <field name="arch" type="xml">
+            <list string="Chấm dứt hợp đồng">
+                <field name="employee_id"/>
+                <field name="date_end"/>
+                <field name="kind"/>
+                <field name="years_counted"/>
+                <field name="avg_salary"/>
+                <field name="amount" sum="Tổng trợ cấp"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_termination_form" model="ir.ui.view">
+        <field name="name">lfood.hr.termination.form</field>
+        <field name="model">lfood.hr.termination</field>
+        <field name="arch" type="xml">
+            <form string="Chấm dứt hợp đồng lao động">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"
+                            confirm="Ghi sổ trợ cấp, kết thúc hợp đồng và ghi ngày nghỉ việc vào hồ sơ?"/>
+                    <button name="action_cancel" type="object" string="Hủy"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="date_end"/>
+                            <field name="kind"/>
+                            <field name="reason"/>
+                        </group>
+                        <group>
+                            <field name="months_worked"/>
+                            <field name="months_ui"/>
+                            <field name="months_paid"/>
+                            <field name="months_counted"/>
+                            <field name="years_counted"/>
+                            <field name="avg_salary"/>
+                            <field name="amount"/>
+                            <field name="leave_remaining"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Hồ sơ kèm theo, ý kiến xử lý"/>
+                    <div class="text-muted">
+                        Làm việc thường xuyên từ đủ 12 tháng thì được trợ cấp: thôi việc mỗi năm 1/2 tháng lương (Điều 46),
+                        mất việc làm mỗi năm 1 tháng lương, ít nhất 2 tháng (Điều 47, Bộ luật Lao động 2019).
+                        Thời gian tính trợ cấp = thời gian làm việc thực tế trừ thời gian đã đóng BHTN và thời gian đã được
+                        chi trả; tháng lẻ đến 6 tháng tính 1/2 năm, trên 6 tháng tính 1 năm (Nghị định 145/2020/NĐ-CP, Điều 8).
+                        Lương bình quân 06 tháng gợi ý từ mức lương trên hợp đồng, kế toán cộng phụ cấp lương nếu có.
+                        Ghi sổ Nợ TK chi phí lương của nhân viên / Có 334; ngày phép chưa nghỉ trả qua bảng lương cuối.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_termination" model="ir.actions.act_window">
+        <field name="name">Chấm dứt hợp đồng</field>
+        <field name="res_model">lfood.hr.termination</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_termination" name="Chấm dứt hợp đồng" parent="menu_hr_root" action="action_termination" sequence="35"/>
+</odoo>

@@ -1,0 +1,494 @@
+<title>Phương án công nghệ ERP LiFeOOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F4F7F5; --surface:#FFFFFF; --sunk:#EAF0EC;
+  --ink:#14201A; --muted:#58665F; --rule:#D5DFD9;
+  --green:#0F7A4A; --green-soft:#DCEFE4;
+  --blue:#2C5E8F; --blue-soft:#DDE8F3;
+  --amber:#9A5B00; --amber-soft:#FBEBD0;
+  --red:#A63A32; --red-soft:#F6DEDB;
+  --sans:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1411; --surface:#151D19; --sunk:#1B2520;
+    --ink:#E2EBE6; --muted:#97A69E; --rule:#2A3831;
+    --green:#4CC48A; --green-soft:#183526;
+    --blue:#86B1DD; --blue-soft:#1A2A3B;
+    --amber:#F0B45B; --amber-soft:#3A2B12;
+    --red:#EF8A80; --red-soft:#3B1E1B;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1411; --surface:#151D19; --sunk:#1B2520;
+  --ink:#E2EBE6; --muted:#97A69E; --rule:#2A3831;
+  --green:#4CC48A; --green-soft:#183526;
+  --blue:#86B1DD; --blue-soft:#1A2A3B;
+  --amber:#F0B45B; --amber-soft:#3A2B12;
+  --red:#EF8A80; --red-soft:#3B1E1B;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.65 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+a:focus-visible{outline:2px solid var(--green);outline-offset:2px;border-radius:3px}
+code{font-family:var(--mono);font-size:.86em;background:var(--sunk);padding:1px 5px;border-radius:4px}
+.page{max-width:1200px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px}
+.toc{position:sticky;top:24px;align-self:start;font-size:13px}
+.toc b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.toc a{display:block;padding:5px 10px;border-radius:5px;color:var(--ink);text-decoration:none;border-left:2px solid transparent}
+.toc a:hover{background:var(--sunk);border-left-color:var(--green)}
+header.doc{border-bottom:1px solid var(--rule);padding-bottom:26px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:36px;line-height:1.15;margin:8px 0 14px;letter-spacing:-.02em;text-wrap:balance}
+.lede{max-width:68ch;color:var(--muted);font-size:16px;margin:0}
+section{padding-top:46px}
+h2{font-size:24px;line-height:1.25;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance;display:flex;align-items:baseline;gap:12px}
+h2 .no{font-family:var(--mono);font-size:14px;color:var(--muted);font-weight:500}
+h3{font-size:17px;margin:26px 0 8px;text-wrap:balance}
+p{max-width:70ch}
+.intro{color:var(--muted);margin:0 0 18px}
+
+.verdict{margin-top:24px;display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden}
+.verdict div{background:var(--surface);padding:16px 18px}
+.verdict .k{font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.verdict .v{font-size:17px;font-weight:700;margin-top:4px;line-height:1.35}
+.verdict .d{font-size:13px;color:var(--muted);margin-top:4px}
+
+.tbl{border:1px solid var(--rule);border-radius:8px;overflow-x:auto;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:10px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sunk);white-space:nowrap}
+td.n{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+th.n{text-align:right}
+td.b{font-weight:600;white-space:nowrap}
+tr.pick td{background:var(--green-soft)}
+tfoot td{font-weight:700;background:var(--sunk)}
+.m{font-family:var(--mono);font-size:12.5px}
+.chip{display:inline-block;font-size:11.5px;font-weight:600;padding:1px 8px;border-radius:20px;white-space:nowrap}
+.chip.ok{background:var(--green-soft);color:var(--green)}
+.chip.mid{background:var(--amber-soft);color:var(--amber)}
+.chip.no{background:var(--red-soft);color:var(--red)}
+.chip.own{background:var(--blue-soft);color:var(--blue)}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:16px 18px}
+.card h4{margin:0 0 6px;font-size:15px}
+.card p{margin:0;font-size:13.5px;color:var(--muted)}
+.card ul{margin:6px 0 0;padding-left:18px;font-size:13.5px;color:var(--muted)}
+.card li{margin:2px 0}
+
+figure{margin:0}
+.diagram{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:18px;overflow-x:auto}
+.diagram svg{width:100%;min-width:760px;height:auto;display:block}
+figcaption{font-size:13px;color:var(--muted);margin-top:10px;max-width:84ch}
+
+.checks{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:8px 22px}
+.checks li{padding:8px 0 8px 26px;border-bottom:1px solid var(--rule);position:relative;font-size:14px}
+.checks li::before{content:"";position:absolute;left:4px;top:15px;width:9px;height:9px;border-radius:2px;background:var(--green)}
+.checks b{display:block}
+.checks span{color:var(--muted);font-size:13px}
+
+.note{border-left:3px solid var(--amber);background:var(--amber-soft);padding:12px 16px;border-radius:0 6px 6px 0;font-size:14px;max-width:none;margin:16px 0}
+.note b{color:var(--amber)}
+.steps{counter-reset:s;list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.steps li{counter-increment:s;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:12px 16px 12px 54px;position:relative}
+.steps li::before{content:counter(s);position:absolute;left:16px;top:12px;width:26px;height:26px;border-radius:50%;background:var(--green);color:var(--surface);display:grid;place-items:center;font-weight:700;font-size:13px}
+.steps b{display:block}
+.steps span{color:var(--muted);font-size:14px}
+.src{font-size:13px;color:var(--muted);columns:2 320px;padding-left:18px}
+.src li{break-inside:avoid;margin-bottom:4px}
+footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+@media (max-width:960px){
+  .page{grid-template-columns:minmax(0,1fr);gap:0;padding-top:26px}
+  .toc{position:static;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px;margin-bottom:10px}
+  .toc ol{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  h1{font-size:28px}
+}
+@media print{.toc{display:none}.page{display:block;padding:0}figure,.card,.tbl{break-inside:avoid}}
+</style>
+
+<div class="page">
+<nav class="toc" aria-label="Mục lục"><b>Mục lục</b><ol>
+  <li><a href="#ket-luan">1. Kết luận</a></li>
+  <li><a href="#laptop">1b. Chạy trên laptop trước</a></li>
+  <li><a href="#phuong-an">2. So sánh 4 phương án</a></li>
+  <li><a href="#cong-nghe">3. Ngôn ngữ &amp; framework</a></li>
+  <li><a href="#lap-khoang-trong">4. Phần Community còn thiếu</a></li>
+  <li><a href="#web-desktop">5. Web app hay desktop</a></li>
+  <li><a href="#trien-khai">6. Máy chủ &amp; truy cập từ xa</a></li>
+  <li><a href="#bao-mat">7. Bảo mật</a></li>
+  <li><a href="#chi-phi">8. Chi phí</a></li>
+  <li><a href="#tscd">9. Hoàn thiện nghiệp vụ TSCĐ</a></li>
+  <li><a href="#lo-trinh">10. Lộ trình &amp; việc cần chốt</a></li>
+  <li><a href="#nguon">Nguồn tham khảo</a></li>
+</ol></nav>
+
+<main>
+<header class="doc">
+  <div class="eyebrow">Báo cáo nghiên cứu · Công ty LiFeOOD · 14/09/2026</div>
+  <h1>Phương án công nghệ ERP LiFeOOD</h1>
+  <p class="lede">Chọn nền tảng, ngôn ngữ, cách triển khai trên máy chủ tại công ty, truy cập từ xa an toàn và chi phí xây dựng cho app ERP nội bộ có chức năng tương đương Odoo. Kèm phần hoàn thiện nghiệp vụ tài sản cố định theo file <i>Thử AI.xlsx</i>. Giá và số liệu tra cứu tháng 9/2026; giá phần cứng là ước tính, cần báo giá thực tế trước khi mua.</p>
+
+  <div class="verdict">
+    <div><div class="k">Nền tảng</div><div class="v">Odoo 19 Community + module OCA + module riêng LiFeOOD</div><div class="d">Không viết lại từ đầu. Bản quyền 0đ (LGPLv3).</div></div>
+    <div><div class="k">Ngôn ngữ</div><div class="v">Python 3.12 · PostgreSQL · JavaScript (OWL)</div><div class="d">Đúng công nghệ Odoo đang dùng, đọc được mã nguồn gốc.</div></div>
+    <div><div class="k">Dạng app</div><div class="v">Web app</div><div class="d">Mở bằng trình duyệt ở văn phòng, kho, xưởng và từ xa; cài lên điện thoại được.</div></div>
+    <div><div class="k">Máy chạy lúc đầu</div><div class="v">Laptop Lenovo đang dùng</div><div class="d">Core i5-13420H 8 nhân, RAM 16GB, đã có Docker và WSL2. Chưa mua phần cứng.</div></div>
+    <div><div class="k">Cho công ty dùng thử</div><div class="v">devtunnel đã cài sẵn</div><div class="d">0đ; vượt 5GB/tháng thì chuyển Cloudflare Tunnel.</div></div>
+    <div><div class="k">Chi phí giai đoạn đánh giá</div><div class="v">0đ</div><div class="d">Chỉ đầu tư máy chủ khi công ty duyệt dùng thật (mục 6–8).</div></div>
+  </div>
+</header>
+
+<!-- ============================================================ 1 -->
+<section id="ket-luan">
+<h2><span class="no">01</span>Kết luận</h2>
+<p><b>Nên xây trên Odoo 19 Community, không viết lại từ đầu.</b> Yêu cầu là “đầy đủ chức năng như Odoo”. Odoo là sản phẩm hơn 15 năm với hàng chục phân hệ; một người viết lại từ đầu thì mất nhiều năm mới đuổi kịp phần bản miễn phí đã có sẵn. Bản Community mã nguồn mở theo giấy phép LGPLv3: được chạy, sửa, dùng nội bộ không mất phí, và chính là “mã nguồn có sẵn của Odoo” mà công ty được phép dùng hợp pháp.</p>
+<p>Phần công sức lập trình dồn vào đúng những chỗ MISA và Odoo đều không có: <b>chứng từ mua dịch vụ có phiên bản, sửa sau khi Cất mà báo cáo không đổi</b>; <b>cây khoản mục cụ – ông – cha – con tự phân bổ 2 chiều</b>; <b>hệ thống tài khoản theo Thông tư 99/2025</b>; <b>tài sản cố định theo nghiệp vụ trong file Excel</b>; và vài màn hình giao diện giống MISA cho kế toán quen tay.</p>
+<div class="note"><b>Không được dùng mã nguồn Odoo Enterprise.</b> Mã Enterprise chỉ được chạy hoặc sửa khi có thuê bao hợp lệ đủ số người dùng. “Tham khảo mã nguồn Odoo” trong tài liệu này luôn là bản Community trên GitHub và các module của hiệp hội OCA.</div>
+</section>
+
+<!-- ============================================================ 1b -->
+<section id="laptop">
+<h2><span class="no">1b</span>Chạy trên laptop trước, chưa mua phần cứng</h2>
+<p class="intro">Viết app và cho công ty dùng thử ngay trên laptop đang có. Chỉ khi công ty đánh giá xong và duyệt dùng thật mới đầu tư máy chủ hoặc thuê máy chủ ảo theo mục 6–8. Giai đoạn này tốn 0đ.</p>
+
+<h3>Laptop hiện tại đủ chạy không</h3>
+<div class="tbl"><table>
+<thead><tr><th>Thành phần</th><th>Laptop đang có</th><th>Cần cho phát triển và dùng thử</th><th>Đánh giá</th></tr></thead>
+<tbody>
+<tr><td class="b">CPU</td><td>Core i5-13420H, 8 nhân 12 luồng</td><td>4 nhân trở lên</td><td><span class="chip ok">Đủ</span> khoảng 10–15 người dùng thử cùng lúc</td></tr>
+<tr><td class="b">RAM</td><td>16GB, lúc kiểm tra chỉ còn trống 3,7GB</td><td>Dành 6–8GB cho Odoo và PostgreSQL</td><td><span class="chip mid">Vừa đủ</span> đóng bớt ứng dụng khi chạy; giới hạn RAM cho WSL2</td></tr>
+<tr><td class="b">Ổ đĩa</td><td>SSD 477GB, ổ C còn trống 49GB</td><td>Từ 60–80GB trống</td><td><span class="chip mid">Cần dọn</span> Docker, dữ liệu mẫu và bản sao lưu dễ vượt 49GB</td></tr>
+<tr><td class="b">Phần mềm</td><td>Docker Desktop, WSL2, Git đã cài</td><td>Docker, WSL2, Git, VS Code</td><td><span class="chip ok">Sẵn sàng</span></td></tr>
+</tbody></table></div>
+
+<h3>Mở link cho công ty dùng thử</h3>
+<div class="tbl"><table>
+<thead><tr><th>Cách</th><th>Chi phí</th><th>Ưu điểm</th><th>Giới hạn</th></tr></thead>
+<tbody>
+<tr class="pick"><td class="b">Microsoft devtunnel</td><td>0đ</td><td>Đã cài và đã dùng để demo; link ổn định theo tên tunnel</td><td>5GB dữ liệu truyền mỗi tháng, đủ cho nhóm nhỏ dùng thử; cần đăng nhập Microsoft hoặc GitHub trên laptop</td></tr>
+<tr><td class="b">Cloudflare Tunnel tạm (trycloudflare.com)</td><td>0đ</td><td>Không giới hạn dung lượng, không cần tên miền</td><td>Link đổi mỗi lần bật lại; không có lớp đăng nhập Cloudflare Access</td></tr>
+<tr><td class="b">Cloudflare Tunnel + tên miền riêng</td><td>~300 nghìn/năm tiền tên miền</td><td>Link cố định, có Cloudflare Access, dùng lại được khi lên máy chủ thật</td><td>Tốn tiền tên miền</td></tr>
+</tbody></table></div>
+
+<h3>Bắt buộc khi cho người khác vào laptop</h3>
+<ul class="checks">
+  <li><b>Laptop cắm sạc, tắt chế độ ngủ</b><span>Laptop ngủ hoặc tắt là app ngừng với mọi người.</span></li>
+  <li><b>Dùng dữ liệu mẫu hoặc đã che</b><span>Không đưa bảng lương, số CCCD, hồ sơ nhân viên thật lên laptop trong giai đoạn thử (Luật Bảo vệ dữ liệu cá nhân).</span></li>
+  <li><b>Bật mã hóa ổ đĩa BitLocker</b><span>Mất laptop không lộ dữ liệu công ty.</span></li>
+  <li><b>Tắt trang quản lý cơ sở dữ liệu của Odoo</b><span>Mỗi người một tài khoản riêng, mật khẩu mạnh.</span></li>
+  <li><b>Sao lưu hằng ngày ra ổ ngoài hoặc OneDrive</b><span>Laptop hỏng là mất toàn bộ dữ liệu dùng thử nếu không sao lưu.</span></li>
+  <li><b>Tách bản đang sửa và bản cho công ty dùng thử</b><span>Hai cơ sở dữ liệu riêng để sửa code không làm hỏng dữ liệu người khác đang nhập.</span></li>
+</ul>
+<div class="note"><b>Khi nào phải chuyển khỏi laptop:</b> công ty nhập dữ liệu thật hằng ngày, cần chạy liên tục khi bạn tắt máy, hoặc vượt khoảng 15 người dùng cùng lúc. Lúc đó chuyển sang máy chủ hoặc máy chủ ảo; cơ sở dữ liệu và module mang theo nguyên vẹn vì chạy trong Docker.</div>
+</section>
+
+<!-- ============================================================ 2 -->
+<section id="phuong-an">
+<h2><span class="no">02</span>So sánh 4 phương án</h2>
+<p class="intro">Dòng tô xanh là phương án khuyến nghị. Phí Enterprise tính theo bảng giá Việt Nam, giả định 20 người dùng và tỷ giá 26.000đ/USD.</p>
+<div class="tbl"><table>
+<thead><tr><th>Tiêu chí</th><th>A · Odoo Community + OCA + tự viết</th><th>B · Odoo Enterprise</th><th>C · ERPNext</th><th>D · Tự viết từ đầu</th></tr></thead>
+<tbody>
+<tr><td class="b">Phí bản quyền</td><td><span class="chip ok">0đ</span></td><td><span class="chip no">~127–159 tr/năm</span><br><span class="m">$20,40–25,50 × 20 người × 12 tháng</span></td><td><span class="chip ok">0đ</span> GPLv3</td><td><span class="chip ok">0đ</span></td></tr>
+<tr><td class="b">Độ đầy đủ chức năng</td><td><span class="chip mid">Khá</span> kế toán nâng cao, TSCĐ, duyệt, chất lượng lấy từ OCA</td><td><span class="chip ok">Đầy đủ nhất</span></td><td><span class="chip ok">Khá đầy đủ</span> có sẵn TSCĐ, chất lượng, lương</td><td><span class="chip no">Chỉ những gì tự viết</span></td></tr>
+<tr><td class="b">Chức năng trọng tâm ★</td><td><span class="chip own">Tự viết thành module</span></td><td><span class="chip own">Vẫn phải tự viết</span></td><td><span class="chip own">Tự viết</span></td><td><span class="chip own">Tự viết</span></td></tr>
+<tr><td class="b">Kế toán Việt Nam</td><td>Có sẵn hệ thống TK cũ và hóa đơn Viettel; TT99 tự bổ sung</td><td>Như A</td><td><span class="chip no">Yếu</span>, ít tài liệu tiếng Việt</td><td>Tự làm toàn bộ</td></tr>
+<tr><td class="b">Giao diện giống MISA</td><td><span class="chip mid">Làm riêng vài màn chính</span></td><td><span class="chip mid">Như A</span></td><td><span class="chip mid">Như A</span></td><td><span class="chip ok">Toàn quyền</span></td></tr>
+<tr><td class="b">Thời gian tới khi dùng được</td><td><span class="chip ok">Vài tháng</span> cho giai đoạn 1</td><td><span class="chip ok">Nhanh nhất</span></td><td><span class="chip ok">Vài tháng</span></td><td><span class="chip no">Nhiều năm</span> để đủ phân hệ</td></tr>
+<tr><td class="b">Rủi ro chính</td><td>Nâng cấp phiên bản Odoo phải chờ OCA chuyển module</td><td>Phí tăng theo người dùng hằng năm</td><td>Cộng đồng Việt Nam nhỏ, hệ Python + MariaDB khác Odoo</td><td>Một người giữ toàn bộ kiến thức; dễ bỏ dở</td></tr>
+</tbody></table></div>
+<p style="margin-top:14px">Phương án A giữ được đường lui: nếu sau này công ty cần phần Enterprise, dữ liệu và module tự viết chuyển sang Enterprise được vì cùng một nền.</p>
+</section>
+
+<!-- ============================================================ 3 -->
+<section id="cong-nghe">
+<h2><span class="no">03</span>Ngôn ngữ &amp; framework</h2>
+<p class="intro">Toàn bộ là phần mềm miễn phí. Lớp nào công ty tự viết thì ghi rõ.</p>
+<div class="tbl"><table>
+<thead><tr><th>Lớp</th><th>Công nghệ</th><th>Dùng để làm gì</th></tr></thead>
+<tbody>
+<tr><td class="b">Nền ERP</td><td><span class="m">Odoo 19.0 Community</span></td><td>Đối tác, bán, mua, kho, lô và hạn dùng, hóa đơn, bút toán, phân quyền, đa công ty cho Văn phòng và Nhà máy. Hỗ trợ tới khoảng tháng 10/2028.</td></tr>
+<tr><td class="b">Ngôn ngữ phía máy chủ</td><td><span class="m">Python 3.12</span> + ORM của Odoo</td><td>Viết model dữ liệu, quy tắc tính toán, phân bổ tự động, phiên bản chứng từ, chạy khấu hao cuối tháng.</td></tr>
+<tr><td class="b">Cơ sở dữ liệu</td><td><span class="m">PostgreSQL 16</span></td><td>Lưu toàn bộ dữ liệu; sao lưu bằng <span class="m">pg_dump</span>.</td></tr>
+<tr><td class="b">Giao diện</td><td><span class="m">OWL</span> (framework JavaScript của Odoo), XML view, SCSS</td><td>Màn hình danh sách, form, báo cáo; tự viết widget lưới chứng từ và bảng cây khoản mục kiểu MISA.</td></tr>
+<tr><td class="b">Báo cáo in &amp; Excel</td><td>QWeb PDF, module OCA <span class="m">report_xlsx</span></td><td>Thẻ TSCĐ, sổ chi tiết, báo cáo tài chính, xuất Excel cho kế toán.</td></tr>
+<tr><td class="b">Module tự viết</td><td><span class="m">lfood_base</span>, <span class="m">l10n_vn_tt99</span>, <span class="m">lfood_cost_tree</span>, <span class="m">lfood_service_voucher</span>, <span class="m">lfood_asset</span>, <span class="m">lfood_misa_ui</span></td><td>Cấu hình công ty, hệ thống TK TT99, cây khoản mục và phân bổ, chứng từ có phiên bản, TSCĐ theo Excel, giao diện kiểu MISA.</td></tr>
+<tr><td class="b">Đóng gói &amp; chạy</td><td>Docker Compose, Nginx, <span class="m">cloudflared</span></td><td>Chạy Odoo, PostgreSQL, proxy HTTPS và đường hầm truy cập từ xa trên cùng một máy.</td></tr>
+<tr><td class="b">Quản lý mã nguồn</td><td>Git + GitHub riêng tư (miễn phí), VS Code</td><td>Lưu lịch sử code, môi trường thử riêng với môi trường thật.</td></tr>
+<tr><td class="b">Giám sát &amp; sao lưu</td><td><span class="m">restic</span>, Uptime Kuma</td><td>Sao lưu mã hóa ra ngoài trụ sở; báo khi máy chủ ngừng.</td></tr>
+</tbody></table></div>
+<p style="margin-top:14px">Bản chạy thử hiện tại viết bằng JavaScript thuần chỉ để chứng minh logic. Các công thức đã kiểm chứng (phân bổ theo số dư lớn nhất, lịch khấu hao, cộng dồn cây) sẽ chuyển sang Python trong module Odoo, không bỏ đi.</p>
+</section>
+
+<!-- ============================================================ 4 -->
+<section id="lap-khoang-trong">
+<h2><span class="no">04</span>Phần Community còn thiếu và cách bù</h2>
+<p class="intro">Những ứng dụng dưới đây chỉ có trong Enterprise. Cột “Cách bù” là module miễn phí của OCA hoặc phần công ty tự viết. Mỗi module OCA phải kiểm tra đã có nhánh 19.0 trước khi chốt; nếu thiếu thì cân nhắc dùng Odoo 18.</p>
+<div class="tbl"><table>
+<thead><tr><th>Nhu cầu</th><th>Trong Community</th><th>Cách bù</th></tr></thead>
+<tbody>
+<tr><td class="b">Báo cáo tài chính, sổ chi tiết</td><td>Chỉ có bút toán và hóa đơn cơ bản</td><td>OCA <span class="m">account_financial_report</span>, <span class="m">mis_builder</span> (có nhánh 19.0)</td></tr>
+<tr><td class="b">Tài sản cố định, khấu hao</td><td>Không có</td><td>OCA <span class="m">account_asset_management</span> (có nhánh 19.0) + <span class="m">lfood_asset</span> theo mục 9</td></tr>
+<tr><td class="b">Ngân sách</td><td>Không đầy đủ</td><td>OCA <span class="m">account_budget_oca</span>, <span class="m">mis_builder_budget</span> + <span class="m">lfood_cost_tree</span> cho phân bổ 2 chiều</td></tr>
+<tr><td class="b">Luồng duyệt nhiều cấp</td><td>Không có ứng dụng Approvals</td><td>OCA <span class="m">base_tier_validation</span> và các module theo từng chứng từ</td></tr>
+<tr><td class="b">Nhật ký ai sửa gì</td><td>Chỉ theo dõi một số trường</td><td>OCA <span class="m">auditlog</span></td></tr>
+<tr><td class="b">Quét mã vạch kho</td><td>Không có ứng dụng Barcode</td><td>OCA <span class="m">stock_barcodes</span>; máy quét dạng bàn phím USB hoặc Bluetooth</td></tr>
+<tr><td class="b">Chất lượng, điểm CCP HACCP</td><td>Không có</td><td>OCA <span class="m">quality_control</span> nếu có bản 19.0, hoặc tự viết phần điểm kiểm tra</td></tr>
+<tr><td class="b">Lương Việt Nam</td><td>Không có</td><td>Tự viết: BHXH, thuế TNCN, phân bổ theo khoản mục</td></tr>
+<tr><td class="b">Hệ thống tài khoản TT99</td><td><span class="m">l10n_vn</span> theo TT200 và TT133</td><td>Tự viết <span class="m">l10n_vn_tt99</span>; TT99 có hiệu lực từ 01/01/2026 thay TT200</td></tr>
+<tr><td class="b">Hóa đơn điện tử</td><td>Có <span class="m">l10n_vn_edi_viettel</span> (Viettel SInvoice)</td><td>Dùng luôn nếu công ty dùng Viettel; nhà cung cấp khác thì viết kết nối riêng</td></tr>
+<tr><td class="b">★ Phiên bản chứng từ, sửa sau khi Cất</td><td>Không phần mềm nào có sẵn</td><td>Tự viết <span class="m">lfood_service_voucher</span></td></tr>
+</tbody></table></div>
+</section>
+
+<!-- ============================================================ 5 -->
+<section id="web-desktop">
+<h2><span class="no">05</span>Web app hay app desktop</h2>
+<div class="cards">
+  <div class="card"><h4>Chọn web app</h4><ul>
+    <li>Một máy chủ, mọi người dùng trình duyệt; cập nhật một chỗ là cả công ty dùng bản mới.</li>
+    <li>Văn phòng TP.HCM, nhà máy Tây Ninh và người đi công tác cùng vào một dữ liệu.</li>
+    <li>Thủ kho dùng tablet hoặc điện thoại quét mã; cài lên màn hình chính như app.</li>
+    <li>Odoo vốn là web app, không phải làm thêm.</li>
+  </ul></div>
+  <div class="card"><h4>Không chọn app desktop</h4><ul>
+    <li>Phải cài và cập nhật trên từng máy.</li>
+    <li>Truy cập từ xa vẫn cần máy chủ và đường truyền như web.</li>
+    <li>Chỉ đáng làm khi phải chạy mất mạng hoàn toàn, mà ERP nhiều người dùng chung dữ liệu thì không chạy offline được.</li>
+  </ul></div>
+</div>
+</section>
+
+<!-- ============================================================ 6 -->
+<section id="trien-khai">
+<h2><span class="no">06</span>Máy chủ tại công ty &amp; truy cập từ xa</h2>
+<p class="intro">Người trong văn phòng vào thẳng qua mạng nội bộ. Người ở xa phải đăng nhập Cloudflare Access trước; chỉ khi qua được lớp đó, yêu cầu mới đi qua đường hầm tới máy chủ. Router công ty không mở cổng nào.</p>
+<figure class="diagram">
+<svg viewBox="0 0 960 392" role="img" aria-label="Người dùng văn phòng và kho truy cập máy chủ qua mạng nội bộ. Người ở xa đi qua Cloudflare Access rồi Cloudflare Tunnel tới cloudflared trên máy chủ. Máy chủ gồm cloudflared, Nginx, Odoo 19 và PostgreSQL, sao lưu ra ổ ngoài và ra kho lưu trữ mã hóa ngoài trụ sở.">
+  <defs><marker id="ar" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>
+  <rect x="20" y="20" width="560" height="360" rx="10" fill="none" style="stroke:var(--green)" stroke-dasharray="4 4" stroke-opacity=".6"/>
+  <rect x="600" y="20" width="340" height="360" rx="10" fill="none" style="stroke:var(--blue)" stroke-dasharray="4 4" stroke-opacity=".6"/>
+  <text x="40" y="44" font-size="12" font-weight="700" letter-spacing=".06em" style="fill:var(--green)">MẠNG NỘI BỘ CÔNG TY</text>
+  <text x="620" y="44" font-size="12" font-weight="700" letter-spacing=".06em" style="fill:var(--blue)">INTERNET</text>
+
+  <rect x="40" y="90" width="150" height="50" rx="6" style="fill:var(--surface);stroke:var(--rule)"/>
+  <text x="115" y="111" text-anchor="middle" font-size="12.5" font-weight="600" style="fill:var(--ink)">Máy tính văn phòng</text>
+  <text x="115" y="129" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">trình duyệt</text>
+  <rect x="40" y="200" width="150" height="50" rx="6" style="fill:var(--surface);stroke:var(--rule)"/>
+  <text x="115" y="221" text-anchor="middle" font-size="12.5" font-weight="600" style="fill:var(--ink)">Kho, xưởng</text>
+  <text x="115" y="239" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">tablet, máy quét mã</text>
+  <text x="115" y="282" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">HTTPS trong mạng nội bộ</text>
+
+  <rect x="250" y="60" width="290" height="236" rx="8" style="fill:var(--sunk);stroke:var(--green)" stroke-width="1.4"/>
+  <text x="264" y="82" font-size="12" font-weight="700" style="fill:var(--ink)">Máy chủ · Ubuntu Server 24.04</text>
+  <g font-size="12.5" style="fill:var(--ink)">
+    <rect x="270" y="96" width="250" height="36" rx="5" style="fill:var(--surface);stroke:var(--rule)"/><text x="395" y="119" text-anchor="middle">cloudflared</text>
+    <rect x="270" y="146" width="250" height="36" rx="5" style="fill:var(--surface);stroke:var(--rule)"/><text x="395" y="169" text-anchor="middle">Nginx · HTTPS</text>
+    <rect x="270" y="196" width="250" height="36" rx="5" style="fill:var(--green-soft);stroke:var(--green)"/><text x="395" y="219" text-anchor="middle" font-weight="600">Odoo 19 + module LiFeOOD</text>
+    <rect x="270" y="246" width="250" height="36" rx="5" style="fill:var(--surface);stroke:var(--rule)"/><text x="395" y="269" text-anchor="middle">PostgreSQL 16</text>
+  </g>
+
+  <rect x="40" y="318" width="150" height="44" rx="6" style="fill:var(--surface);stroke:var(--rule)"/>
+  <text x="115" y="345" text-anchor="middle" font-size="12.5" style="fill:var(--ink)">UPS 1–1,5 kVA</text>
+  <rect x="250" y="318" width="150" height="44" rx="6" style="fill:var(--surface);stroke:var(--rule)"/>
+  <text x="325" y="345" text-anchor="middle" font-size="12.5" style="fill:var(--ink)">Ổ sao lưu ngoài</text>
+
+  <rect x="620" y="60" width="300" height="48" rx="6" style="fill:var(--surface);stroke:var(--rule)"/>
+  <text x="770" y="89" text-anchor="middle" font-size="12.5" font-weight="600" style="fill:var(--ink)">Làm việc từ xa · laptop, điện thoại</text>
+  <rect x="620" y="130" width="300" height="54" rx="6" style="fill:var(--blue-soft);stroke:var(--blue)" stroke-width="1.4"/>
+  <text x="770" y="153" text-anchor="middle" font-size="13" font-weight="700" style="fill:var(--ink)">Cloudflare Access</text>
+  <text x="770" y="172" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">chỉ email công ty, mã OTP, chặn người lạ</text>
+  <rect x="620" y="206" width="300" height="44" rx="6" style="fill:var(--surface);stroke:var(--blue)"/>
+  <text x="770" y="233" text-anchor="middle" font-size="12.5" style="fill:var(--ink)">Cloudflare Tunnel</text>
+  <text x="770" y="272" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">máy chủ tự kết nối ra, router không mở cổng</text>
+  <rect x="620" y="318" width="300" height="44" rx="6" style="fill:var(--surface);stroke:var(--rule)"/>
+  <text x="770" y="345" text-anchor="middle" font-size="12.5" style="fill:var(--ink)">Kho lưu trữ ngoài trụ sở · mã hóa</text>
+
+  <g fill="none" stroke="currentColor" style="color:var(--muted)" stroke-width="1.4">
+    <path d="M190 115H230V164H266" marker-end="url(#ar)"/>
+    <path d="M190 225H230V164"/>
+    <line x1="395" y1="132" x2="395" y2="144" marker-end="url(#ar)"/>
+    <line x1="395" y1="182" x2="395" y2="194" marker-end="url(#ar)"/>
+    <line x1="395" y1="232" x2="395" y2="244" marker-end="url(#ar)"/>
+    <line x1="770" y1="108" x2="770" y2="128" marker-end="url(#ar)"/>
+    <line x1="770" y1="184" x2="770" y2="204" marker-end="url(#ar)"/>
+    <path d="M620 228H572V114H524" marker-end="url(#ar)"/>
+    <line x1="325" y1="296" x2="325" y2="316" marker-end="url(#ar)"/>
+    <line x1="400" y1="340" x2="616" y2="340" marker-end="url(#ar)"/>
+  </g>
+  <text x="508" y="332" text-anchor="middle" font-size="11.5" style="fill:var(--muted)">mỗi đêm, mã hóa</text>
+</svg>
+<figcaption>Người ở xa phải qua Cloudflare Access rồi mới tới được Odoo, và vẫn phải đăng nhập Odoo có mã 2 lớp. Bản sao lưu đi ra ổ ngoài và ra kho lưu trữ ngoài trụ sở mỗi đêm.</figcaption>
+</figure>
+
+<h3>Cấu hình máy chủ</h3>
+<p>Theo hướng dẫn định cỡ Odoo 19: khoảng 4 nhân CPU cho tới 25 người dùng đồng thời, 8 nhân cho tới 100; 50 người dùng đồng thời nên có 16GB RAM. Mức dưới đây dư cho LiFeOOD và để chạy song song một bản thử.</p>
+<div class="tbl"><table>
+<thead><tr><th>Thành phần</th><th>Tối thiểu</th><th>Khuyến nghị</th><th>Lý do</th></tr></thead>
+<tbody>
+<tr><td class="b">CPU</td><td>4 nhân</td><td>6–8 nhân (Core i5/i7, Ryzen 5/7)</td><td>Mỗi nhân chạy khoảng 2 tiến trình Odoo</td></tr>
+<tr><td class="b">RAM</td><td>16GB</td><td>32GB</td><td>Odoo và PostgreSQL dùng chung; RAM thường hết trước CPU</td></tr>
+<tr><td class="b">Ổ đĩa</td><td>1 SSD 500GB</td><td>2 SSD NVMe 1TB chạy song song (RAID 1)</td><td>Một ổ hỏng, máy vẫn chạy, không mất dữ liệu</td></tr>
+<tr><td class="b">Điện</td><td>UPS 1kVA</td><td>UPS 1–1,5kVA có cổng báo tắt máy</td><td>Mất điện đột ngột dễ hỏng cơ sở dữ liệu</td></tr>
+<tr><td class="b">Sao lưu</td><td>Ổ ngoài 2TB</td><td>Ổ ngoài + kho lưu trữ đám mây mã hóa</td><td>Quy tắc 3-2-1: 3 bản, 2 nơi lưu, 1 bản ngoài trụ sở</td></tr>
+<tr><td class="b">Mạng</td><td>Internet hiện có</td><td>Thêm đường 4G dự phòng</td><td>Mất mạng thì người ở xa không vào được; nội bộ vẫn chạy</td></tr>
+</tbody></table></div>
+<p class="note" style="margin-top:14px"><b>Máy chủ tại công ty có 3 rủi ro:</b> mất điện kéo dài, mất mạng, và máy hỏng khi không có người IT trực. Nếu công ty không có ai chịu trách nhiệm máy chủ, thuê máy chủ ảo tại Việt Nam (mục 8) an toàn hơn dù tốn phí hằng tháng. devtunnel đã dùng để demo không dùng cho vận hành thật.</p>
+</section>
+
+<!-- ============================================================ 7 -->
+<section id="bao-mat">
+<h2><span class="no">07</span>Bảo mật khi cho truy cập từ xa</h2>
+<ul class="checks">
+  <li><b>Không mở cổng trên router</b><span>Cloudflare Tunnel do máy chủ chủ động kết nối ra; không ai quét được máy chủ từ Internet.</span></li>
+  <li><b>Chặn trước bằng Cloudflare Access</b><span>Chỉ email công ty được qua, xác thực mã OTP; có thể giới hạn chỉ truy cập từ Việt Nam.</span></li>
+  <li><b>Mã 2 lớp trong Odoo</b><span>Bắt buộc cho kế toán, kế toán trưởng, giám đốc.</span></li>
+  <li><b>Tắt trang quản lý cơ sở dữ liệu</b><span><span class="m">list_db = False</span>, đặt <span class="m">dbfilter</span>, mật khẩu quản trị mạnh; trang này bị lộ là mất toàn bộ dữ liệu.</span></li>
+  <li><b>Phân quyền theo nhóm và theo công ty</b><span>Người Nhà máy không thấy dữ liệu Văn phòng nếu không được cấp; quyền Sửa chứng từ đã cất cấp riêng.</span></li>
+  <li><b>Nhật ký thay đổi</b><span>Ghi ai sửa trường nào, giá trị cũ và mới, lúc nào.</span></li>
+  <li><b>Hệ điều hành cập nhật tự động</b><span>Ubuntu LTS bật cập nhật bảo mật, tường lửa UFW, SSH chỉ bằng khóa.</span></li>
+  <li><b>Mã hóa ổ đĩa và bản sao lưu</b><span>Mất máy hoặc mất ổ ngoài cũng không đọc được dữ liệu.</span></li>
+  <li><b>Thử khôi phục mỗi tháng</b><span>Bản sao lưu chưa từng khôi phục thử thì chưa chắc dùng được.</span></li>
+  <li><b>Tách bản thử và bản thật</b><span>Sửa code trên bản thử, kiểm tra xong mới đưa lên bản thật.</span></li>
+</ul>
+</section>
+
+<!-- ============================================================ 8 -->
+<section id="chi-phi">
+<h2><span class="no">08</span>Chi phí</h2>
+<p class="intro">Giá phần cứng là ước tính thị trường 2026, cần báo giá thực tế. Tỷ giá giả định 26.000đ/USD.</p>
+
+<h3>Chi phí một lần · phương án nâng cấp máy có sẵn</h3>
+<div class="tbl"><table>
+<thead><tr><th>Hạng mục</th><th class="n">Ước tính</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>RAM lên 32GB</td><td class="n">1,5 – 2,5 tr</td><td>Tùy loại DDR4/DDR5 của bo mạch</td></tr>
+<tr><td>2 SSD NVMe 1TB</td><td class="n">3 – 4 tr</td><td>Chạy song song; cần bo mạch có 2 khe hoặc thêm card</td></tr>
+<tr><td>UPS 1–1,5kVA</td><td class="n">2,5 – 4 tr</td><td></td></tr>
+<tr><td>Ổ cứng ngoài 2TB</td><td class="n">1,8 – 2,5 tr</td><td>Sao lưu tại chỗ</td></tr>
+<tr><td>Phần mềm: Odoo Community, OCA, Ubuntu, PostgreSQL, Docker</td><td class="n">0</td><td>Mã nguồn mở</td></tr>
+</tbody>
+<tfoot><tr><td>Cộng</td><td class="n">≈ 9 – 13 tr</td><td>Máy hiện tại cần CPU từ 6 nhân; nếu yếu hơn thì mua máy mới ≈ 20 – 40 tr</td></tr></tfoot>
+</table></div>
+
+<h3>Chi phí hằng tháng</h3>
+<div class="tbl"><table>
+<thead><tr><th>Hạng mục</th><th class="n">Ước tính / tháng</th><th>Ghi chú</th></tr></thead>
+<tbody>
+<tr><td>Điện máy chạy 24/7</td><td class="n">250 – 350 nghìn</td><td>~120W trung bình ≈ 86 kWh/tháng</td></tr>
+<tr><td>Tên miền</td><td class="n">~25 nghìn</td><td>Tên miền .com ~300 nghìn/năm; Cloudflare Tunnel cần tên miền</td></tr>
+<tr><td>Cloudflare Tunnel + Access</td><td class="n">0</td><td>Miễn phí tới 50 người dùng</td></tr>
+<tr><td>Sao lưu đám mây</td><td class="n">0 – 150 nghìn</td><td>Dữ liệu vài GB; nhiều tệp đính kèm thì tăng</td></tr>
+<tr><td>4G dự phòng (tùy chọn)</td><td class="n">100 – 200 nghìn</td><td></td></tr>
+</tbody>
+<tfoot><tr><td>Cộng</td><td class="n">≈ 0,3 – 0,7 tr</td><td></td></tr></tfoot>
+</table></div>
+
+<h3>So với các cách khác</h3>
+<div class="tbl"><table>
+<thead><tr><th>Cách chạy</th><th class="n">Chi phí</th><th>Đổi lại</th></tr></thead>
+<tbody>
+<tr class="pick"><td class="b">Máy chủ tại công ty + Community</td><td class="n">~10 tr + ~0,5 tr/tháng</td><td>Rẻ nhất; công ty tự lo điện, mạng, hỏng hóc</td></tr>
+<tr><td class="b">Thuê máy chủ ảo tại Việt Nam + Community</td><td class="n">~0,6 – 1,5 tr/tháng</td><td>Không lo điện mạng; dữ liệu nằm ở nhà cung cấp</td></tr>
+<tr><td class="b">Odoo Enterprise, 20 người dùng</td><td class="n">~127 – 159 tr/năm</td><td>Đủ ứng dụng sẵn; vẫn phải tự viết chức năng trọng tâm</td></tr>
+</tbody></table></div>
+
+<div class="note"><b>“Chi phí bằng 0” chỉ đúng với tiền bản quyền.</b> Khoản lớn nhất là thời gian lập trình. Ước tính thô cho một lập trình viên đã quen Python, làm toàn thời gian: giai đoạn 1 khoảng 4–6 tháng, giai đoạn 2 thêm 3–4 tháng, giai đoạn 3 thêm 3–5 tháng. Người mới học Odoo cần cộng thêm thời gian làm quen. Thuê đối tác triển khai Odoo thì rút ngắn thời gian nhưng tốn tiền công.</div>
+</section>
+
+<!-- ============================================================ 9 -->
+<section id="tscd">
+<h2><span class="no">09</span>Hoàn thiện nghiệp vụ tài sản cố định theo file Excel</h2>
+<p class="intro">File <i>Thử AI.xlsx</i> đúng hướng nhưng còn thiếu các quy định bắt buộc và vài chỗ hạch toán ngược. Căn cứ: Thông tư 45/2013/TT-BTC về khấu hao, đã sửa đổi bởi Thông tư 30/2025/TT-BTC; chế độ kế toán Thông tư 99/2025/TT-BTC. Kế toán trưởng cần đối chiếu văn bản hợp nhất trước khi chốt công thức.</p>
+
+<h3>Chỗ cần sửa trong 4 sheet</h3>
+<div class="tbl"><table>
+<thead><tr><th>Sheet · ô</th><th>Excel đang ghi</th><th>Vấn đề</th><th>Hoàn thiện</th></tr></thead>
+<tbody>
+<tr><td class="b">1 · Mua hàng</td><td>Mọi dòng mua đều là tài sản</td><td>Tài sản cố định phải có nguyên giá từ 30 triệu và dùng trên 1 năm</td><td>Tự kiểm tra: dưới 30 triệu chuyển thành công cụ dụng cụ, phân bổ qua TK 242</td></tr>
+<tr><td class="b">1 · Thành tiền</td><td>= Số lượng × Đơn giá</td><td>Nguyên giá còn gồm vận chuyển, lắp đặt, chạy thử, lệ phí trước bạ (xe), trừ chiết khấu</td><td>Thêm các khoản cấu thành nguyên giá, lấy từ chứng từ mua dịch vụ liên quan</td></tr>
+<tr><td class="b">1 · Số lượng</td><td>1 dòng, số lượng 2</td><td>Mỗi tài sản cần thẻ riêng (2 xe là 2 biển số)</td><td>Số lượng lớn hơn 1 thì tách thành từng mã tài sản khi ghi tăng</td></tr>
+<tr><td class="b">2 · Khấu hao tháng</td><td>Tháng đầu tính trọn tháng</td><td>Trích hoặc thôi trích khấu hao tính từ ngày tài sản tăng hoặc giảm, theo số ngày trong tháng</td><td>Tháng đầu và tháng cuối tính theo số ngày; các tháng giữa tính trọn</td></tr>
+<tr><td class="b">2 · Thời gian sử dụng</td><td>Tự nhập</td><td>Phải nằm trong khung thời gian quy định cho từng loại tài sản</td><td>Lưu khung tối thiểu – tối đa theo loại, cảnh báo khi nhập ngoài khung</td></tr>
+<tr><td class="b">2 · Giá trị khấu hao</td><td>= Nguyên giá</td><td>Không trừ giá trị thu hồi dự kiến và không xét phương pháp</td><td>Chọn phương pháp đường thẳng (mặc định), số dư giảm dần hoặc theo sản lượng</td></tr>
+<tr><td class="b">4 · TK công nợ / TK kho</td><td>627 / 214</td><td>Khấu hao không phải công nợ hay kho; 627 chỉ đúng cho bộ phận sản xuất</td><td>Nợ TK chi phí theo đơn vị sử dụng: 627 sản xuất, 641 bán hàng, 642 quản lý; Có 214</td></tr>
+<tr><td class="b">4 · Khoản mục CP</td><td>1 = Chi phí, 2 = Khấu hao</td><td>Không lên được báo cáo chi phí theo cây</td><td>Gắn vào cây khoản mục, ví dụ II.4 Chi phí khấu hao, sửa chữa</td></tr>
+<tr><td class="b">Chứng từ kết quả</td><td>Thuế GTGT 8%</td><td>Chứng từ khấu hao không có thuế; thuế nằm ở chứng từ mua</td><td>Bỏ thuế trên chứng từ khấu hao; khi mua ghi Nợ 211, Nợ 1332, Có 331</td></tr>
+</tbody></table></div>
+
+<h3>Nghiệp vụ bổ sung</h3>
+<div class="cards">
+  <div class="card"><h4>Ghi tăng</h4><p>Từ chứng từ mua hoặc đơn mua; tự tạo thẻ tài sản, lịch khấu hao; Nợ 211, Nợ 1332 / Có 331 hoặc 112.</p></div>
+  <div class="card"><h4>Chạy khấu hao cuối tháng</h4><p>Tự động cho mọi tài sản đang khấu hao; Nợ 627 / 641 / 642 theo đơn vị sử dụng, Có 214; gắn khoản mục.</p></div>
+  <div class="card"><h4>Điều chỉnh nguyên giá</h4><p>Nâng cấp, sửa chữa lớn làm tăng nguyên giá; tính lại lịch khấu hao phần còn lại.</p></div>
+  <div class="card"><h4>Điều chuyển</h4><p>Đổi đơn vị sử dụng (chi phí chuyển từ 642 sang 627) hoặc chuyển giữa Văn phòng và Nhà máy.</p></div>
+  <div class="card"><h4>Thanh lý, nhượng bán</h4><p>Dừng khấu hao theo ngày; ghi giảm 211 và 214, giá trị còn lại vào 811, tiền thu vào 711.</p></div>
+  <div class="card"><h4>Kiểm kê tài sản</h4><p>Đối chiếu sổ với thực tế theo đơn vị sử dụng, xử lý thừa thiếu.</p></div>
+  <div class="card"><h4>Sổ sách và báo cáo</h4><p>Thẻ tài sản cố định, sổ tài sản cố định, bảng tính và phân bổ khấu hao, báo cáo tăng giảm.</p></div>
+  <div class="card"><h4>Phân quyền</h4><p>Nhân viên kho nhập mua; kế toán tài sản ghi tăng, chạy khấu hao; kế toán trưởng duyệt và khóa kỳ.</p></div>
+</div>
+</section>
+
+<!-- ============================================================ 10 -->
+<section id="lo-trinh">
+<h2><span class="no">10</span>Lộ trình &amp; việc cần chốt</h2>
+<h3>Lộ trình đề xuất</h3>
+<ol class="steps">
+  <li><b>Chuẩn bị (2–4 tuần)</b><span>Nâng cấp máy chủ, cài Ubuntu, Docker, Odoo 19 Community, bản thử và bản thật, sao lưu, Cloudflare. Kiểm tra từng module OCA đã có bản 19.0.</span></li>
+  <li><b>Giai đoạn 1 · thay MISA phần kế toán</b><span>Hai công ty, phân quyền, hệ thống TK TT99, cây khoản mục và ngân sách, chứng từ mua dịch vụ có phiên bản, tài sản cố định theo mục 9, báo cáo chi phí, màn hình kiểu MISA, chuyển danh mục và số dư đầu kỳ từ MISA.</span></li>
+  <li><b>Chạy song song với MISA 1–2 tháng</b><span>Nhập cả hai nơi, so số cuối tháng; chỉ tắt MISA khi số khớp.</span></li>
+  <li><b>Giai đoạn 2</b><span>Kho theo lô và hạn dùng, quét mã, bán hàng, công nợ, hóa đơn điện tử, chất lượng.</span></li>
+  <li><b>Giai đoạn 3</b><span>R&amp;D tách riêng (kế toán không truy cập), lương Việt Nam, bảo trì, đội xe, sàn TMĐT, hợp nhất. ERP không quản lý khâu sản xuất.</span></li>
+</ol>
+
+<h3>Cần sếp trả lời trước khi viết code</h3>
+<div class="tbl"><table>
+<thead><tr><th>Câu hỏi</th><th>Vì sao ảnh hưởng</th></tr></thead>
+<tbody>
+<tr><td class="b">Bao nhiêu người dùng, bao nhiêu người làm từ xa?</td><td>Cấu hình máy chủ; vượt 50 người thì Cloudflare Access có phí</td></tr>
+<tr><td class="b">Ai lập trình: một mình bạn, thêm người, hay thuê đối tác?</td><td>Thời gian các giai đoạn ở mục 8</td></tr>
+<tr><td class="b">Có người chịu trách nhiệm máy chủ không?</td><td>Tự đặt máy tại công ty hay thuê máy chủ ảo</td></tr>
+<tr><td class="b">Đang dùng nhà cung cấp hóa đơn điện tử nào?</td><td>Viettel có sẵn kết nối; nhà cung cấp khác phải viết thêm</td></tr>
+<tr><td class="b">Máy tính định nâng cấp đang có CPU, RAM, bo mạch gì?</td><td>Nâng cấp được hay phải mua máy mới</td></tr>
+<tr><td class="b">Cần chuyển dữ liệu MISA từ năm nào?</td><td>Chỉ danh mục và số dư đầu kỳ, hay cả chứng từ các năm trước</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="nguon">
+<h2>Nguồn tham khảo</h2>
+<ul class="src">
+  <li><a href="https://www.odoo.com/documentation/19.0/legal/licenses.html">Odoo 19 — Giấy phép Community (LGPLv3) và Enterprise</a></li>
+  <li><a href="https://ecosire.com/blog/latest-odoo-version">Phiên bản Odoo mới nhất và thời gian hỗ trợ</a></li>
+  <li><a href="https://oec.sh/odoo-pricing/vietnam">Bảng giá Odoo tại Việt Nam 2026</a></li>
+  <li><a href="https://www.odoo.com/documentation/19.0/applications/finance/fiscal_localizations/vietnam.html">Odoo 19 — Bản địa hóa Việt Nam, hóa đơn Viettel SInvoice</a></li>
+  <li><a href="https://apps.odoo.com/apps/modules/16.0/l10n_vn_viin">Hệ thống tài khoản Việt Nam theo TT200 và TT133</a></li>
+  <li><a href="https://thuvienphapluat.vn/phap-luat/toan-van-thong-tu-992025ttbtc-che-do-ke-toan-doanh-nghiep-thay-the-thong-tu-200-tu-01012026-ra-sao-239165.html">Thông tư 99/2025/TT-BTC thay Thông tư 200 từ 01/01/2026</a></li>
+  <li><a href="https://amis.misa.vn/252761/tai-khoan-133-theo-thong-tu-99/">Tài khoản 133 (1331, 1332) theo Thông tư 99</a></li>
+  <li><a href="https://thuvienphapluat.vn/chinh-sach-phap-luat-moi/vn/ho-tro-phap-luat/tu-van-phap-luat/107490/thong-tu-45-khau-hao-tai-san-co-dinh-moi-nhat-2026-va-cac-van-ban-sua-doi-bo-sung">Thông tư 45/2013 và văn bản sửa đổi 2026</a></li>
+  <li><a href="https://vanban.chinhphu.vn/?pageid=27160&docid=213853&classid=1&typegroupid=6">Thông tư 30/2025/TT-BTC sửa đổi Thông tư 45/2013</a></li>
+  <li><a href="https://github.com/OCA/account-financial-tools/tree/19.0/account_asset_management">OCA account_asset_management nhánh 19.0</a></li>
+  <li><a href="https://github.com/OCA/mis-builder/tree/19.0/mis_builder">OCA mis_builder nhánh 19.0</a></li>
+  <li><a href="https://github.com/OCA/account-budgeting/tree/19.0/account_budget_oca">OCA account_budget_oca nhánh 19.0</a></li>
+  <li><a href="https://apps.odoo-community.org/modules/base_tier_validation">OCA base_tier_validation</a></li>
+  <li><a href="https://www.cudio.com/blog/odoo-community-vs-enterprise">So sánh Odoo Community và Enterprise</a></li>
+  <li><a href="https://www.erpresearch.com/compare/erpnext-vs-odoo">So sánh ERPNext và Odoo 2026</a></li>
+  <li><a href="https://oec.sh/blog/odoo-server-requirements-2026">Định cỡ máy chủ Odoo 2026</a></li>
+  <li><a href="https://costbench.com/software/business-vpn/cloudflare-zero-trust/free-plan/">Giới hạn gói miễn phí Cloudflare Zero Trust</a></li>
+  <li><a href="https://toolradar.com/tools/cloudflare-tunnel/pricing">Giá Cloudflare Tunnel</a></li>
+  <li><a href="https://github.com/MicrosoftDocs/azure-docs/blob/main/includes/dev-tunnels/dev-tunnels-service-limits.md">Giới hạn Microsoft dev tunnels</a></li>
+  <li><a href="https://learn.microsoft.com/en-us/azure/developer/dev-tunnels/overview">Microsoft dev tunnels là gì</a></li>
+</ul>
+</section>
+
+<footer>Tài liệu nghiên cứu, chưa kèm mã nguồn. Bản thiết kế dữ liệu và quy trình chi tiết nằm ở tài liệu “Bản thiết kế ERP LiFeOOD”.</footer>
+</main>
+</div>

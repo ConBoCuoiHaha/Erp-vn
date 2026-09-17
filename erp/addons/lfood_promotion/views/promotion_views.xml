@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_promotion_list" model="ir.ui.view">
+        <field name="name">lfood.promotion.list</field>
+        <field name="model">lfood.promotion</field>
+        <field name="arch" type="xml">
+            <list string="Chương trình khuyến mại" decoration-muted="state == 'closed'">
+                <field name="name"/>
+                <field name="title"/>
+                <field name="kind"/>
+                <field name="channel_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="notice_ref" optional="show"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_promotion_form" model="ir.ui.view">
+        <field name="name">lfood.promotion.form</field>
+        <field name="model">lfood.promotion</field>
+        <field name="arch" type="xml">
+            <form string="Chương trình khuyến mại">
+                <header>
+                    <button name="action_activate" type="object" string="Áp dụng" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_issue" type="object" string="Xuất kho hàng tặng"
+                            invisible="state != 'active' or kind not in ('free_gift', 'sample')"/>
+                    <button name="action_close" type="object" string="Kết thúc" invisible="state != 'active'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="title" readonly="state != 'draft'"/>
+                            <field name="kind" readonly="state != 'draft'"/>
+                            <field name="channel_id" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="needs_notice" invisible="1"/>
+                            <field name="notice_ref" invisible="not needs_notice"/>
+                            <field name="notice_date" invisible="not needs_notice" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="kind" column_invisible="1"/>
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="price_before" column_invisible="parent.kind not in ('gift', 'discount')"/>
+                            <field name="buy_qty" column_invisible="parent.kind != 'gift'"/>
+                            <field name="gift_product_id" column_invisible="parent.kind != 'gift'" options="{'no_create': True}"/>
+                            <field name="gift_price_before" column_invisible="parent.kind != 'gift'"/>
+                            <field name="gift_qty" column_invisible="parent.kind == 'discount'"/>
+                            <field name="ratio" column_invisible="parent.kind != 'gift'"/>
+                            <field name="discount" column_invisible="parent.kind != 'discount'"/>
+                        </list>
+                    </field>
+                    <field name="picking_ids" invisible="not picking_ids" readonly="1">
+                        <list>
+                            <field name="name"/>
+                            <field name="date"/>
+                            <field name="partner_id"/>
+                            <field name="amount"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Căn cứ Nghị định 81/2018/NĐ-CP, sửa đổi bởi Nghị định 128/2024/NĐ-CP và 239/2026/NĐ-CP:
+                        giá trị hàng tặng cho một đơn vị hàng được khuyến mại và mức giảm giá không quá 50% giá bán ngay trước
+                        khuyến mại; tặng hàng kèm mua phải thông báo Sở Công Thương trước ít nhất 3 ngày làm việc (trừ ngày nghỉ
+                        trong lịch nghỉ lễ, Tết). Tặng không kèm mua, hàng mẫu, giảm giá không phải thông báo. Không khuyến mại rượu, thuốc lá,
+                        sữa thay thế sữa mẹ, thuốc kê đơn.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_promotion" model="ir.actions.act_window">
+        <field name="name">Chương trình khuyến mại</field>
+        <field name="res_model">lfood.promotion</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_promotion" name="Khuyến mại" parent="lfood_sale.menu_sale_root" action="action_promotion" sequence="20"/>
+
+    <record id="view_sale_order_form_promo" model="ir.ui.view">
+        <field name="name">lfood.sale.order.form.promo</field>
+        <field name="model">lfood.sale.order</field>
+        <field name="inherit_id" ref="lfood_salesorder.view_sale_order_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_apply_prices']" position="after">
+                <button name="action_apply_promotions" type="object" string="Áp khuyến mại" invisible="state != 'draft'"/>
+            </xpath>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='product_id']" position="after">
+                <field name="is_promo_gift" optional="show"/>
+                <field name="promotion_id" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_picking_form_promo" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.form.promo</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="inherit_id" ref="lfood_stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='purpose']" position="after">
+                <field name="promotion_id" invisible="purpose != 'promotion'" required="purpose == 'promotion'"
+                       readonly="state != 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

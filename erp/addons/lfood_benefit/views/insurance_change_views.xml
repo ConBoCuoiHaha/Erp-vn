@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_ins_change_company" model="ir.rule">
+        <field name="name">Tăng, giảm bảo hiểm theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_insurance_change"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_ins_change_list" model="ir.ui.view">
+        <field name="name">lfood.insurance.change.list</field>
+        <field name="model">lfood.insurance.change</field>
+        <field name="arch" type="xml">
+            <list string="Tăng, giảm lao động đóng bảo hiểm">
+                <field name="year"/><field name="month"/><field name="summary"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_ins_change_form" model="ir.ui.view">
+        <field name="name">lfood.insurance.change.form</field>
+        <field name="model">lfood.insurance.change</field>
+        <field name="arch" type="xml">
+            <form string="Tăng, giảm lao động đóng bảo hiểm">
+                <header>
+                    <button name="action_compute" type="object" string="Lập danh sách" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="month"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="summary"/>
+                            <field name="export_file" filename="export_name"/>
+                            <field name="export_name" invisible="1"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">So phiếu lương tháng này với tháng trước. Dùng số liệu để lập mẫu D02-LT trên phần mềm kê khai
+                        bảo hiểm (kiểm tra phiên bản mẫu hiện hành của BHXH Việt Nam).</div>
+                    <field name="line_ids" readonly="1">
+                        <list decoration-success="kind == 'increase'" decoration-danger="kind == 'decrease'">
+                            <field name="kind"/><field name="employee_id"/><field name="social_insurance_code"/>
+                            <field name="old_si"/><field name="new_si"/><field name="old_ui"/><field name="new_ui"/><field name="note"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_ins_change" model="ir.actions.act_window">
+        <field name="name">Tăng, giảm bảo hiểm</field>
+        <field name="res_model">lfood.insurance.change</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_ins_change" name="Tăng, giảm lao động đóng bảo hiểm" parent="lfood_hr.menu_hr_root" action="action_ins_change" sequence="33"/>
+</odoo>

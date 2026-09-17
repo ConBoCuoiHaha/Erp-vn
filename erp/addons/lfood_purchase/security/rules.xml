@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_request_company" model="ir.rule">
+        <field name="name">Yêu cầu mua theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_purchase_request"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_order_company" model="ir.rule">
+        <field name="name">Đơn mua theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_purchase_order"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <!-- Quy tắc theo nhóm là phép HOẶC: nhân viên thường chỉ thấy yêu cầu của mình,
+         kế toán và giám đốc thấy mọi yêu cầu của công ty được phép. -->
+    <record id="rule_request_own" model="ir.rule">
+        <field name="name">Nhân viên chỉ thấy yêu cầu mua của mình</field>
+        <field name="model_id" ref="model_lfood_purchase_request"/>
+        <field name="groups" eval="[(4, ref('lfood_base.group_employee'))]"/>
+        <field name="domain_force">[('user_id', '=', user.id)]</field>
+    </record>
+    <record id="rule_request_all" model="ir.rule">
+        <field name="name">Kế toán, giám đốc thấy mọi yêu cầu mua</field>
+        <field name="model_id" ref="model_lfood_purchase_request"/>
+        <field name="groups" eval="[(4, ref('lfood_base.group_accountant')), (4, ref('lfood_base.group_director'))]"/>
+        <field name="domain_force">[(1, '=', 1)]</field>
+    </record>
+    <record id="rule_adjust_company" model="ir.rule">
+        <field name="name">Điều chỉnh giá nhập theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_purchase_adjust"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_quote_company" model="ir.rule">
+        <field name="name">Báo giá theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_purchase_quote"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_tally_company" model="ir.rule">
+        <field name="name">Bảng kê thu mua theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_purchase_tally"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

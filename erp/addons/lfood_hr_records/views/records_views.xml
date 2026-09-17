@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_department_list" model="ir.ui.view">
+        <field name="name">lfood.department.list</field>
+        <field name="model">lfood.department</field>
+        <field name="arch" type="xml">
+            <list string="Phòng ban" editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="parent_id"/>
+                <field name="manager_id"/>
+                <field name="cost_item_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_department" model="ir.actions.act_window">
+        <field name="name">Phòng ban</field>
+        <field name="res_model">lfood.department</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="view_position_list" model="ir.ui.view">
+        <field name="name">lfood.job.position.list</field>
+        <field name="model">lfood.job.position</field>
+        <field name="arch" type="xml">
+            <list string="Chức danh" editable="bottom">
+                <field name="name"/>
+                <field name="probation_level"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_position" model="ir.actions.act_window">
+        <field name="name">Chức danh</field>
+        <field name="res_model">lfood.job.position</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_transfer_list" model="ir.ui.view">
+        <field name="name">lfood.hr.transfer.list</field>
+        <field name="model">lfood.hr.transfer</field>
+        <field name="arch" type="xml">
+            <list string="Điều chuyển, điều chỉnh lương">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="kind"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="new_job"/>
+                <field name="new_salary"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_transfer_form" model="ir.ui.view">
+        <field name="name">lfood.hr.transfer.form</field>
+        <field name="model">lfood.hr.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Điều chuyển, điều chỉnh lương">
+                <header>
+                    <button name="action_done" type="object" string="Thực hiện" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="kind" readonly="state != 'draft'"/>
+                            <field name="reason" readonly="state != 'draft'"/>
+                            <field name="notice_date" readonly="state != 'draft'" invisible="kind != 'temporary'"/>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'" required="kind == 'temporary'"/>
+                            <field name="work_days"/>
+                        </group>
+                        <group>
+                            <field name="old_department_id"/>
+                            <field name="old_job"/>
+                            <field name="old_salary"/>
+                            <field name="new_department_id" readonly="state != 'draft'"/>
+                            <field name="new_job_id" readonly="state != 'draft'"/>
+                            <field name="new_job" readonly="state != 'draft'"/>
+                            <field name="new_salary" readonly="state != 'draft'"/>
+                            <field name="keep_old_until" invisible="not keep_old_until"/>
+                            <field name="consent" readonly="state != 'draft'"/>
+                            <field name="consent_file" filename="consent_name" readonly="state != 'draft'"/>
+                            <field name="consent_name" invisible="1"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Bộ luật Lao động 2019, Điều 29: tạm chuyển không quá 60 ngày làm việc cộng dồn trong năm
+                        (quá thì cần văn bản đồng ý), báo trước ít nhất 3 ngày làm việc, lương mới ít nhất 85% lương cũ và không thấp
+                        hơn lương tối thiểu vùng; lương mới thấp hơn thì giữ lương cũ 30 ngày làm việc. Thay đổi lâu dài phải có
+                        phụ lục hợp đồng.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_transfer" model="ir.actions.act_window">
+        <field name="name">Điều chuyển, điều chỉnh lương</field>
+        <field name="res_model">lfood.hr.transfer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_discipline_list" model="ir.ui.view">
+        <field name="name">lfood.hr.discipline.list</field>
+        <field name="model">lfood.hr.discipline</field>
+        <field name="arch" type="xml">
+            <list string="Xử lý kỷ luật lao động" decoration-danger="state == 'draft' and deadline &lt; current_date">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="violation_date"/>
+                <field name="deadline"/>
+                <field name="form"/>
+                <field name="decision_ref"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_discipline_form" model="ir.ui.view">
+        <field name="name">lfood.hr.discipline.form</field>
+        <field name="model">lfood.hr.discipline</field>
+        <field name="arch" type="xml">
+            <form string="Xử lý kỷ luật lao động">
+                <header>
+                    <button name="action_decide" type="object" string="Ra quyết định" class="btn-primary"
+                            invisible="state != 'draft'" groups="lfood_base.group_director"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="violation_date" readonly="state != 'draft'"/>
+                            <field name="finance_related" readonly="state != 'draft'"/>
+                            <field name="deadline"/>
+                            <field name="meeting_date" readonly="state != 'draft'"/>
+                            <field name="union_attended" readonly="state != 'draft'"/>
+                            <field name="employee_attended" readonly="state != 'draft'"/>
+                            <field name="minutes" filename="minutes_name" readonly="state != 'draft'"/>
+                            <field name="minutes_name" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="form" readonly="state != 'draft'"/>
+                            <field name="delay_months" invisible="form != 'delay'" readonly="state != 'draft'"/>
+                            <field name="dismiss_reason" invisible="form != 'dismiss'" readonly="state != 'draft'"/>
+                            <field name="decision_ref" readonly="state != 'draft'"/>
+                            <field name="decision_date" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="violation" placeholder="Hành vi vi phạm, điều khoản nội quy" readonly="state != 'draft'"/>
+                    <div class="text-muted">Bộ luật Lao động 2019, Điều 122-125, 127: thời hiệu 6 tháng (12 tháng với vi phạm về tài
+                        chính, tài sản, bí mật); họp xử lý có tổ chức đại diện người lao động; kéo dài nâng lương không quá 6 tháng;
+                        sa thải chỉ trong các trường hợp luật định; không phạt tiền, cắt lương thay cho kỷ luật.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_discipline" model="ir.actions.act_window">
+        <field name="name">Xử lý kỷ luật lao động</field>
+        <field name="res_model">lfood.hr.discipline</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_reward_list" model="ir.ui.view">
+        <field name="name">lfood.hr.reward.list</field>
+        <field name="model">lfood.hr.reward</field>
+        <field name="arch" type="xml">
+            <list string="Khen thưởng" editable="bottom">
+                <field name="date"/>
+                <field name="employee_id" options="{'no_create': True}"/>
+                <field name="reason"/>
+                <field name="decision_ref"/>
+                <field name="amount" sum="Tổng"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_reward" model="ir.actions.act_window">
+        <field name="name">Khen thưởng</field>
+        <field name="res_model">lfood.hr.reward</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_employee_form_dept" model="ir.ui.view">
+        <field name="name">lfood.employee.form.dept</field>
+        <field name="model">lfood.employee</field>
+        <field name="inherit_id" ref="lfood_payroll.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department']" position="before">
+                <field name="department_id" options="{'no_create': True}"/>
+                <field name="job_id" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <menuitem id="menu_transfer" name="Điều chuyển, điều chỉnh lương" parent="lfood_hr.menu_hr_root" action="action_transfer" sequence="36"/>
+    <menuitem id="menu_discipline" name="Kỷ luật lao động" parent="lfood_hr.menu_hr_root" action="action_discipline" sequence="37"/>
+    <menuitem id="menu_reward" name="Khen thưởng" parent="lfood_hr.menu_hr_root" action="action_reward" sequence="38"/>
+    <menuitem id="menu_department" name="Phòng ban" parent="lfood_hr.menu_hr_root" action="action_department" sequence="50"/>
+    <menuitem id="menu_position" name="Chức danh" parent="lfood_hr.menu_hr_root" action="action_position" sequence="55"/>
+</odoo>

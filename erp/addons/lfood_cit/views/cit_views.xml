@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_provisional_list" model="ir.ui.view">
+        <field name="name">lfood.cit.provisional.list</field>
+        <field name="model">lfood.cit.provisional</field>
+        <field name="arch" type="xml">
+            <list string="Tạm nộp thuế TNDN quý">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="quarter"/>
+                <field name="profit"/>
+                <field name="rate"/>
+                <field name="tax" sum="Thuế tạm nộp"/>
+                <field name="date_due"/>
+                <field name="state"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_provisional_form" model="ir.ui.view">
+        <field name="name">lfood.cit.provisional.form</field>
+        <field name="model">lfood.cit.provisional</field>
+        <field name="arch" type="xml">
+            <form string="Tạm nộp thuế TNDN quý">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy chứng từ"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="quarter"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="date_due"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="profit"/>
+                            <field name="adjust"/>
+                            <field name="rate"/>
+                            <field name="tax"/>
+                        </group>
+                    </group>
+                    <field name="memo" placeholder="Diễn giải"/>
+                    <div class="text-muted">
+                        Lợi nhuận lấy từ B02-DN của quý, kế toán sửa lại được nếu có ước tính khác.
+                        Thuế suất tự chọn theo tổng doanh thu của năm liền kề trước (Luật Thuế TNDN 67/2025/QH15:
+                        15% nếu không quá 3 tỷ, 17% nếu trên 3 tỷ đến 50 tỷ, còn lại 20%).
+                        Ghi sổ Nợ 8211 / Có 3334; nộp tiền bằng phiếu chi hoặc ủy nhiệm chi.
+                        Tổng tạm nộp 4 quý phải đạt tỷ lệ tối thiểu so với số quyết toán, nếu không sẽ bị tính
+                        tiền chậm nộp từ ngày tiếp sau hạn nộp thuế quý IV.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_provisional" model="ir.actions.act_window">
+        <field name="name">Tạm nộp thuế TNDN quý</field>
+        <field name="res_model">lfood.cit.provisional</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_finalization_list" model="ir.ui.view">
+        <field name="name">lfood.cit.finalization.list</field>
+        <field name="model">lfood.cit.finalization</field>
+        <field name="arch" type="xml">
+            <list string="Quyết toán thuế TNDN">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="accounting_profit"/>
+                <field name="assessable_income"/>
+                <field name="rate"/>
+                <field name="tax" sum="Thuế phải nộp"/>
+                <field name="provisional_tax"/>
+                <field name="tax_remaining" sum="Còn phải nộp"/>
+                <field name="shortfall_amount" decoration-danger="shortfall_amount &gt; 0"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_finalization_form" model="ir.ui.view">
+        <field name="name">lfood.cit.finalization.form</field>
+        <field name="model">lfood.cit.finalization</field>
+        <field name="arch" type="xml">
+            <form string="Quyết toán thuế TNDN năm">
+                <header>
+                    <button name="action_load" type="object" string="Lấy số gợi ý"
+                            invisible="state != 'draft'"
+                            help="Lấy chi phí không được trừ đã biết và lỗ các năm trước còn trong hạn chuyển"/>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy bản quyết toán"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Kỳ tính thuế">
+                            <field name="year"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="date_due"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Căn cứ tính thuế">
+                            <field name="accounting_profit"/>
+                            <field name="revenue_prior"/>
+                            <field name="rate"/>
+                            <field name="taxable_income"/>
+                            <field name="assessable_income"/>
+                            <field name="tax"/>
+                            <field name="provisional_tax"/>
+                            <field name="tax_remaining"/>
+                            <field name="shortfall_amount" decoration-danger="shortfall_amount &gt; 0"/>
+                            <field name="loss_carry"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Điều chỉnh thu nhập chịu thuế">
+                            <field name="adjust_line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="kind"/>
+                                    <field name="name"/>
+                                    <field name="amount" sum="Cộng"/>
+                                    <field name="source" readonly="1"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Nút Lấy số gợi ý tự thêm khoản không được trừ đã biết, ví dụ thu mua không có hóa đơn
+                                trả tiền mặt từ mức quy định trở lên trên bảng kê 02/TNDN. Các khoản khác kế toán tự nhập
+                                và chịu trách nhiệm đối chiếu với quy định về chi phí được trừ.
+                            </div>
+                        </page>
+                        <page string="Chuyển lỗ">
+                            <field name="loss_line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="loss_year"/>
+                                    <field name="amount_available" readonly="1"/>
+                                    <field name="amount_used" sum="Tổng chuyển"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Lỗ được chuyển liên tục không quá 5 năm kể từ năm tiếp theo năm phát sinh lỗ
+                                (Luật Thuế TNDN 67/2025/QH15); lỗ cũ dùng trước.
+                            </div>
+                        </page>
+                        <page string="Bảng tính thuế">
+                            <field name="summary_html" readonly="1" nolabel="1"/>
+                        </page>
+                        <page string="Ghi chú">
+                            <field name="note" placeholder="Ghi chú khi nhập tờ khai 03/TNDN"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_finalization_search" model="ir.ui.view">
+        <field name="name">lfood.cit.finalization.search</field>
+        <field name="model">lfood.cit.finalization</field>
+        <field name="arch" type="xml">
+            <search string="Quyết toán thuế TNDN">
+                <field name="name"/>
+                <field name="year"/>
+                <filter name="f_short" string="Tạm nộp còn thiếu" domain="[('shortfall_amount', '>', 0)]"/>
+                <group>
+                    <filter name="g_state" string="Trạng thái" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_finalization" model="ir.actions.act_window">
+        <field name="name">Quyết toán thuế TNDN năm</field>
+        <field name="res_model">lfood.cit.finalization</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_cit_root" name="Thuế TNDN" parent="lfood_base.menu_root" sequence="34"/>
+    <menuitem id="menu_provisional" name="Tạm nộp theo quý" parent="menu_cit_root" action="action_provisional" sequence="10"/>
+    <menuitem id="menu_finalization" name="Quyết toán năm" parent="menu_cit_root" action="action_finalization" sequence="20"/>
+</odoo>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_holiday_list" model="ir.ui.view">
+        <field name="name">lfood.holiday.list</field>
+        <field name="model">lfood.holiday</field>
+        <field name="arch" type="xml">
+            <list string="Lịch nghỉ lễ, Tết" editable="bottom">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="legal_ref"/>
+                <field name="year" optional="hide"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_holiday_search" model="ir.ui.view">
+        <field name="name">lfood.holiday.search</field>
+        <field name="model">lfood.holiday</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="year"/>
+                <group>
+                    <filter name="by_year" string="Năm" context="{'group_by': 'year'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_holiday" model="ir.actions.act_window">
+        <field name="name">Lịch nghỉ lễ, Tết</field>
+        <field name="res_model">lfood.holiday</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html"><p>Nhập các ngày nghỉ lễ, Tết, nghỉ bù theo thông báo hằng năm (Bộ luật Lao động 2019,
+            Điều 112). Các hạn tính theo ngày làm việc trong app bỏ qua các ngày này.</p></field>
+    </record>
+    <menuitem id="menu_holiday" name="Lịch nghỉ lễ, Tết" parent="lfood_base.menu_config" action="action_holiday" sequence="25"/>
+</odoo>

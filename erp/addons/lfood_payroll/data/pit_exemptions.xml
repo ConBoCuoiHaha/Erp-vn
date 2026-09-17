@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Miễn thuế TNCN theo Luật Thuế thu nhập cá nhân 109/2025/QH15: miễn toàn bộ tiền lương làm việc ban đêm,
+     làm thêm giờ; miễn tiền lương, tiền công trả cho những ngày không nghỉ phép theo quy định của pháp luật.
+     Áp dụng từ kỳ tính thuế 2026 với cá nhân cư trú (cá nhân không cư trú từ 01/7/2026; app không tự tính thuế
+     cho cá nhân không cư trú). Trước 2026 chỉ miễn phần chênh lệch, app không tự tách phần này. -->
+<odoo>
+    <data noupdate="1">
+        <record id="p_pit_exempt_ot" model="lfood.legal.param">
+            <field name="code">TNCN_MIEN_LAM_THEM_BAN_DEM</field>
+            <field name="name">Miễn thuế TNCN toàn bộ tiền lương làm thêm giờ, làm việc ban đêm, ngày không nghỉ phép</field>
+            <field name="group">pit</field>
+            <field name="value_type">number</field>
+            <field name="description">1 là miễn toàn bộ khoản; 0 là tính vào thu nhập chịu thuế. Gắn vào khoản lương bằng ô Mã tham số miễn thuế TNCN.</field>
+        </record>
+        <record id="pv_pit_exempt_ot" model="lfood.legal.param.value">
+            <field name="param_id" ref="p_pit_exempt_ot"/>
+            <field name="value">1</field>
+            <field name="date_from">2026-01-01</field>
+            <field name="legal_ref">Luật Thuế thu nhập cá nhân 109/2025/QH15: miễn thuế toàn bộ tiền lương làm việc ban đêm, làm thêm giờ và tiền lương trả cho những ngày không nghỉ phép; áp dụng từ kỳ tính thuế 2026 với cá nhân cư trú</field>
+            <field name="state">approved</field>
+        </record>
+        <record id="comp_untaken_leave" model="lfood.payroll.component">
+            <field name="sequence">5</field>
+            <field name="code">PHEP_CHUA_NGHI</field>
+            <field name="name">Tiền lương những ngày không nghỉ phép</field>
+        </record>
+    </data>
+    <!-- comp_ot khai báo noupdate ở legal_params.xml nên dùng function để ghi khi cài và khi cập nhật module -->
+    <function model="lfood.payroll.component" name="write">
+        <value eval="[ref('comp_ot')]"/>
+        <value eval="{'name': 'Tiền lương làm thêm giờ, làm việc ban đêm', 'pit_exempt_code': 'TNCN_MIEN_LAM_THEM_BAN_DEM'}"/>
+    </function>
+    <function model="lfood.payroll.component" name="write">
+        <value eval="[ref('comp_untaken_leave')]"/>
+        <value eval="{'pit_exempt_code': 'TNCN_MIEN_LAM_THEM_BAN_DEM'}"/>
+    </function>
+</odoo>

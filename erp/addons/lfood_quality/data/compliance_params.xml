@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="p_decl_test_months" model="lfood.legal.param"><field name="code">CONG_BO_KIEM_NGHIEM_THANG</field><field name="name">Công bố sản phẩm: phiếu kiểm nghiệm có giá trị trong (tháng)</field><field name="group">other</field><field name="value_type">number</field></record>
+    <record id="pv_decl_test_months" model="lfood.legal.param.value"><field name="param_id" ref="p_decl_test_months"/><field name="value">12</field><field name="date_from">2026-01-27</field><field name="legal_ref">Nghị quyết 66.13/2026/NQ-CP (phiếu kết quả kiểm nghiệm trong 12 tháng, phòng thử nghiệm đạt ISO/IEC 17025)</field><field name="state">approved</field></record>
+    <record id="p_conformity_years" model="lfood.legal.param"><field name="code">CONG_BO_HOP_QUY_TOI_DA_NAM</field><field name="name">Bản công bố hợp quy: thời hạn tối đa (năm)</field><field name="group">other</field><field name="value_type">number</field></record>
+    <record id="pv_conformity_years" model="lfood.legal.param.value"><field name="param_id" ref="p_conformity_years"/><field name="value">3</field><field name="date_from">2026-01-26</field><field name="legal_ref">Nghị định 46/2026/NĐ-CP, khoản 1 Điều 6</field><field name="state">approved</field></record>
+    <record id="p_health_months" model="lfood.legal.param"><field name="code">KHAM_SUC_KHOE_DINH_KY_THANG</field><field name="name">Khám sức khỏe định kỳ người lao động: tối đa giữa hai lần (tháng)</field><field name="group">labor</field><field name="value_type">number</field></record>
+    <record id="pv_health_months" model="lfood.legal.param.value"><field name="param_id" ref="p_health_months"/><field name="value">12</field><field name="date_from">2016-07-01</field><field name="legal_ref">Luật An toàn, vệ sinh lao động 2015, khoản 1 Điều 21: ít nhất 1 lần/năm; nghề nặng nhọc, độc hại ít nhất 6 tháng/lần</field><field name="state">approved</field></record>
+</odoo>

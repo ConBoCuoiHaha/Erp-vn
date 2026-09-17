@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payroll_simulation_form" model="ir.ui.view">
+        <field name="name">lfood.payroll.simulation.form</field>
+        <field name="model">lfood.payroll.simulation</field>
+        <field name="arch" type="xml">
+            <form string="Tính thử tham số mới">
+                <group>
+                    <group>
+                        <field name="run_id" options="{'no_create': True}"/>
+                        <field name="value_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                    </group>
+                    <group>
+                        <field name="diff_net"/>
+                        <field name="diff_pit"/>
+                        <field name="diff_employer"/>
+                    </group>
+                </group>
+                <div class="text-muted">Thêm mức mới (Chờ duyệt) trong Tham số pháp lý, chọn ở đây để tính thử. Bảng lương không bị thay đổi.</div>
+                <field name="result_html"/>
+                <footer>
+                    <button name="action_simulate" type="object" string="Tính thử" class="btn-primary"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_payroll_simulation" model="ir.actions.act_window">
+        <field name="name">Tính thử tham số mới</field>
+        <field name="res_model">lfood.payroll.simulation</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_payroll_simulation" name="Tính thử tham số mới (bảng lương)" parent="lfood_base.menu_config"
+              action="action_payroll_simulation" sequence="22"/>
+</odoo>

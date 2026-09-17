@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_backup_list" model="ir.ui.view">
+        <field name="name">lfood.backup.list</field>
+        <field name="model">lfood.backup</field>
+        <field name="arch" type="xml">
+            <list string="Bản sao lưu" create="false" decoration-danger="verify_state == 'bad'">
+                <header>
+                    <button name="action_request_now" type="object" string="Sao lưu ngay" class="btn-primary" display="always"/>
+                    <button name="action_sync" type="object" string="Làm mới" display="always"/>
+                    <button name="action_verify" type="object" string="Kiểm tra tệp"/>
+                </header>
+                <field name="created"/>
+                <field name="kind"/>
+                <field name="name"/>
+                <field name="reason"/>
+                <field name="size_display"/>
+                <field name="count_vouchers"/>
+                <field name="count_audit"/>
+                <field name="verify_state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_backup_form" model="ir.ui.view">
+        <field name="name">lfood.backup.form</field>
+        <field name="model">lfood.backup</field>
+        <field name="arch" type="xml">
+            <form string="Bản sao lưu" create="false">
+                <header>
+                    <button name="action_verify" type="object" string="Kiểm tra tệp" class="btn-primary"/>
+                    <button name="action_download" type="object" string="Tải về (.zip)"/>
+                    <field name="verify_state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="alert alert-danger" role="alert" invisible="verify_state != 'bad'">
+                        Bản sao lưu này không nguyên vẹn, không dùng để khôi phục.
+                    </div>
+                    <group>
+                        <group string="Bản sao lưu">
+                            <field name="name"/>
+                            <field name="kind"/>
+                            <field name="created"/>
+                            <field name="reason"/>
+                            <field name="size_display"/>
+                        </group>
+                        <group string="Số liệu tại thời điểm sao lưu">
+                            <field name="count_vouchers"/>
+                            <field name="count_lines"/>
+                            <field name="count_audit"/>
+                            <field name="count_users"/>
+                            <field name="last_audit_hash"/>
+                        </group>
+                    </group>
+                    <group string="Kiểm tra">
+                        <field name="verify_time"/>
+                        <field name="verify_note"/>
+                        <field name="note"/>
+                    </group>
+                    <div class="text-muted">
+                        Khôi phục chạy trên máy chủ bằng lệnh: tools\restore.ps1 -Backup "đường dẫn thư mục".
+                        Mặc định khôi phục ra CSDL riêng lfood_restore để đối chiếu, không ghi đè dữ liệu đang dùng.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_backup_search" model="ir.ui.view">
+        <field name="name">lfood.backup.search</field>
+        <field name="model">lfood.backup</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="daily" string="Hằng ngày" domain="[('kind', '=', 'daily')]"/>
+                <filter name="weekly" string="Hằng tuần" domain="[('kind', '=', 'weekly')]"/>
+                <filter name="monthly" string="Hằng tháng" domain="[('kind', '=', 'monthly')]"/>
+                <separator/>
+                <filter name="bad" string="Không nguyên vẹn" domain="[('verify_state', '=', 'bad')]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_backup" model="ir.actions.act_window">
+        <field name="name">Bản sao lưu</field>
+        <field name="res_model">lfood.backup</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="action_backup_open" model="ir.actions.server">
+        <field name="name">Bản sao lưu</field>
+        <field name="model_id" ref="model_lfood_backup"/>
+        <field name="state">code</field>
+        <field name="group_ids" eval="[(4, ref('lfood_base.group_sysadmin'))]"/>
+        <field name="code">action = model.action_open_list()</field>
+    </record>
+
+    <record id="view_backup_status_form" model="ir.ui.view">
+        <field name="name">lfood.backup.status.form</field>
+        <field name="model">lfood.backup.status</field>
+        <field name="arch" type="xml">
+            <form string="Sao lưu dữ liệu" create="false" delete="false">
+                <header>
+                    <button name="action_request_now" type="object" string="Sao lưu ngay" class="btn-primary"/>
+                    <button name="action_open_list" type="object" string="Xem các bản sao lưu"/>
+                </header>
+                <sheet>
+                    <h2>Sao lưu dữ liệu</h2>
+                    <field name="html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_backup_status" model="ir.actions.act_window">
+        <field name="name">Sao lưu dữ liệu</field>
+        <field name="res_model">lfood.backup.status</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_backup_status" name="Sao lưu dữ liệu" parent="menu_admin"
+              action="action_backup_status" sequence="40"/>
+    <menuitem id="menu_backup_list" name="Bản sao lưu" parent="menu_admin"
+              action="action_backup_open" sequence="45"/>
+</odoo>

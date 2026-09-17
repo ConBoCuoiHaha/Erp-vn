@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_stock_count_list" model="ir.ui.view">
+        <field name="name">lfood.stock.count.list</field>
+        <field name="model">lfood.stock.count</field>
+        <field name="arch" type="xml">
+            <list string="Kiểm kê kho">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="warehouse_id"/>
+                <field name="surplus_value" sum="Thừa"/>
+                <field name="shortage_value" sum="Thiếu"/>
+                <field name="state"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_stock_count_form" model="ir.ui.view">
+        <field name="name">lfood.stock.count.form</field>
+        <field name="model">lfood.stock.count</field>
+        <field name="arch" type="xml">
+            <form string="Kiểm kê kho">
+                <header>
+                    <button name="action_load" type="object" string="Lấy số sổ sách" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Duyệt và điều chỉnh kho"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"
+                            confirm="Duyệt kết quả kiểm kê và ghi phiếu điều chỉnh thừa, thiếu?"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="warehouse_id" options="{'no_create': True}" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="members" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="surplus_value"/>
+                            <field name="shortage_value"/>
+                            <field name="approved_by"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Số đếm">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" create="false"
+                                      decoration-success="diff_qty &gt; 0" decoration-danger="diff_qty &lt; 0">
+                                    <field name="product_id" readonly="1"/>
+                                    <field name="lot_id" readonly="1"/>
+                                    <field name="uom"/>
+                                    <field name="book_qty"/>
+                                    <field name="real_qty"/>
+                                    <field name="diff_qty"/>
+                                    <field name="unit_cost" optional="show"/>
+                                    <field name="diff_value" sum="Chênh lệch"/>
+                                    <field name="note"/>
+                                </list>
+                            </field>
+                            <field name="conclusion" placeholder="Ý kiến xử lý chênh lệch: bắt bồi thường, ghi vào chi phí, ghi thu nhập..."/>
+                        </page>
+                        <page string="Biên bản kiểm kê">
+                            <field name="report_html" nolabel="1"/>
+                        </page>
+                        <page string="Phiếu điều chỉnh" invisible="state != 'done'">
+                            <field name="picking_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="kind"/>
+                                    <field name="date"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">
+                        Bấm Lấy số sổ sách để chốt tồn theo từng mặt hàng, từng lô tại ngày kiểm kê; tổ kiểm kê sửa cột Số thực tế.
+                        Khi Kế toán trưởng duyệt, app lập phiếu nhập hàng thừa (Nợ kho / Có 3381) và phiếu xuất hàng thiếu
+                        (Nợ 1381 / Có kho). Xử lý 1381, 3381 theo quyết định của giám đốc bằng phiếu kế toán.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_stock_count" model="ir.actions.act_window">
+        <field name="name">Kiểm kê kho</field>
+        <field name="res_model">lfood.stock.count</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_stock_count" name="Kiểm kê kho" parent="menu_stock_root" action="action_stock_count" sequence="15"/>
+</odoo>

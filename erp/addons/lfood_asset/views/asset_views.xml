@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================= loại tài sản -->
+    <record id="view_category_list" model="ir.ui.view">
+        <field name="name">lfood.asset.category.list</field>
+        <field name="model">lfood.asset.category</field>
+        <field name="arch" type="xml">
+            <list string="Loại tài sản" editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="account_asset"/>
+                <field name="account_depreciation"/>
+                <field name="life_min_months"/>
+                <field name="life_max_months"/>
+                <field name="cost_item_id"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_category" model="ir.actions.act_window">
+        <field name="name">Loại tài sản cố định</field>
+        <field name="res_model">lfood.asset.category</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- ================================================= tài sản -->
+    <record id="view_asset_list" model="ir.ui.view">
+        <field name="name">lfood.asset.list</field>
+        <field name="model">lfood.asset</field>
+        <field name="arch" type="xml">
+            <list string="Tài sản cố định" decoration-muted="state in ('disposed', 'closed')">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="usage" optional="show"/>
+                <field name="date_start"/>
+                <field name="original_value" sum="Tổng"/>
+                <field name="life_months" optional="show"/>
+                <field name="monthly_depreciation" sum="Tổng"/>
+                <field name="accumulated_value" sum="Tổng"/>
+                <field name="residual_value" sum="Tổng"/>
+                <field name="voucher_id" optional="hide"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'running'" decoration-info="state == 'draft'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_asset_search" model="ir.ui.view">
+        <field name="name">lfood.asset.search</field>
+        <field name="model">lfood.asset</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Tên, mã, số hiệu"
+                       filter_domain="['|', '|', ('name', 'ilike', self), ('code', 'ilike', self), ('serial', 'ilike', self)]"/>
+                <field name="category_id"/>
+                <field name="voucher_id"/>
+                <filter name="f_draft" string="Nháp" domain="[('state', '=', 'draft')]"/>
+                <filter name="f_running" string="Đang khấu hao" domain="[('state', '=', 'running')]"/>
+                <filter name="f_closed" string="Đã khấu hao hết" domain="[('state', '=', 'closed')]"/>
+                <filter name="f_disposed" string="Đã thanh lý" domain="[('state', '=', 'disposed')]"/>
+                <group>
+                    <filter name="g_cat" string="Loại tài sản" context="{'group_by': 'category_id'}"/>
+                    <filter name="g_usage" string="Bộ phận sử dụng" context="{'group_by': 'usage'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_asset_form" model="ir.ui.view">
+        <field name="name">lfood.asset.form</field>
+        <field name="model">lfood.asset</field>
+        <field name="arch" type="xml">
+            <form string="Tài sản cố định">
+                <header>
+                    <button name="action_confirm" type="object" string="Ghi tăng" class="btn-primary"
+                            invisible="state != 'draft'" groups="lfood_base.group_accountant"/>
+                    <button name="action_reset_draft" type="object" string="Hủy ghi tăng"
+                            invisible="state != 'running' or posted_months" groups="lfood_base.group_accountant"
+                            confirm="Xóa lịch khấu hao và đưa tài sản về Nháp?"/>
+                    <button name="action_open_transfer" type="object" string="Điều chuyển"
+                            invisible="state != 'running'" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_open_dispose" type="object" string="Thanh lý"
+                            invisible="state not in ('running', 'closed')" groups="lfood_base.group_chief_accountant"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,running,closed"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_audit" type="object" class="oe_stat_button" icon="fa-history"
+                                string="Nhật ký" groups="lfood_base.group_chief_accountant,lfood_base.group_director"/>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not below_threshold or state != 'draft'">
+                        Nguyên giá thấp hơn ngưỡng tài sản cố định (30.000.000đ theo tham số NGUONG_TSCD).
+                        Khoản này hạch toán là công cụ dụng cụ, phân bổ qua TK 242, không ghi tăng được.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not life_out_of_range or state != 'draft'">
+                        Thời gian sử dụng nằm ngoài khung của loại tài sản đã chọn.
+                    </div>
+                    <div class="alert alert-secondary" role="alert" invisible="state != 'disposed'">
+                        Đã thanh lý ngày <field name="dispose_date" readonly="1" class="oe_inline"/>:
+                        <field name="dispose_reason" readonly="1" class="oe_inline"/>
+                    </div>
+                    <div class="oe_title">
+                        <h1><field name="code" readonly="1" invisible="not code"/></h1>
+                        <h2><field name="name" placeholder="Tên tài sản" readonly="state != 'draft'"/></h2>
+                    </div>
+                    <group>
+                        <group string="Thông tin chung">
+                            <field name="category_id" readonly="state != 'draft'"/>
+                            <field name="serial"/>
+                            <field name="usage" readonly="state != 'draft'"/>
+                            <field name="location"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Nguồn gốc">
+                            <field name="voucher_id" readonly="state != 'draft'"/>
+                            <field name="partner_id"/>
+                            <field name="purchase_date"/>
+                            <field name="confirmed_by" invisible="not confirmed_by"/>
+                            <field name="confirmed_on" invisible="not confirmed_on"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Thông tin khấu hao" name="depr">
+                            <group>
+                                <group>
+                                    <field name="quantity" readonly="state != 'draft'"/>
+                                    <field name="original_value" readonly="state != 'draft'"/>
+                                    <field name="salvage_value" readonly="state != 'draft'"/>
+                                    <field name="depreciable_value"/>
+                                    <field name="life_months" readonly="state != 'draft'"/>
+                                    <field name="date_start" readonly="state != 'draft'"/>
+                                </group>
+                                <group>
+                                    <field name="monthly_depreciation" class="o_lfood_big_total"/>
+                                    <field name="yearly_depreciation"/>
+                                    <field name="accumulated_value"/>
+                                    <field name="residual_value"/>
+                                    <field name="posted_months"/>
+                                    <field name="below_threshold" invisible="1"/>
+                                    <field name="life_out_of_range" invisible="1"/>
+                                </group>
+                            </group>
+                        </page>
+                        <page string="Hạch toán" name="accounts">
+                            <group>
+                                <group>
+                                    <field name="account_asset" readonly="state != 'draft'"/>
+                                    <field name="account_depreciation" readonly="state != 'draft'"/>
+                                </group>
+                                <group>
+                                    <field name="account_expense"/>
+                                    <field name="cost_item_id"/>
+                                </group>
+                            </group>
+                            <div class="text-muted">
+                                Ghi tăng: Nợ TK nguyên giá, Nợ 1332 / Có 331 hoặc 112 (thuế lấy từ chứng từ mua).
+                                Khấu hao hằng tháng: Nợ TK chi phí khấu hao / Có TK hao mòn.
+                                Thanh lý: Nợ 214 hao mòn, Nợ 811 giá trị còn lại / Có TK nguyên giá; tiền thu ghi Có 711.
+                            </div>
+                        </page>
+                        <page string="Lịch khấu hao" name="schedule" invisible="state == 'draft'">
+                            <field name="schedule_ids">
+                                <list decoration-success="posted" create="false" delete="false">
+                                    <field name="date" string="Kỳ"/>
+                                    <field name="amount" sum="Tổng"/>
+                                    <field name="accumulated"/>
+                                    <field name="residual"/>
+                                    <field name="depreciation_line_id" string="Chứng từ" optional="show"/>
+                                    <field name="posted"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Tháng đầu tính theo số ngày kể từ ngày bắt đầu khấu hao; tháng cuối nhận phần còn lại
+                                để tổng khấu hao bằng đúng giá trị phải khấu hao. Dòng xanh là kỳ đã ghi chứng từ.
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_asset" model="ir.actions.act_window">
+        <field name="name">Tài sản cố định</field>
+        <field name="res_model">lfood.asset</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_f_running': 1}</field>
+        <field name="help" type="html">
+            <p>Chưa có tài sản. Bấm Mới, hoặc mở chứng từ mua dịch vụ đã cất và bấm Ghi tăng TSCĐ.</p>
+        </field>
+    </record>
+
+    <record id="view_asset_dispose_form" model="ir.ui.view">
+        <field name="name">lfood.asset.dispose.form</field>
+        <field name="model">lfood.asset.dispose</field>
+        <field name="arch" type="xml">
+            <form string="Thanh lý tài sản">
+                <group>
+                    <field name="asset_id" readonly="1"/>
+                    <field name="dispose_date"/>
+                    <field name="reason"/>
+                    <field name="proceeds"/>
+                </group>
+                <div class="text-muted">Tháng thanh lý chỉ trích khấu hao tới ngày trước ngày thanh lý; các kỳ sau bị bỏ.</div>
+                <footer>
+                    <button name="action_apply" type="object" string="Thanh lý" class="btn-primary"
+                            confirm="Thanh lý không hoàn tác được. Tiếp tục?"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_asset_transfer_form" model="ir.ui.view">
+        <field name="name">lfood.asset.transfer.form</field>
+        <field name="model">lfood.asset.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Điều chuyển tài sản">
+                <group>
+                    <field name="asset_id" readonly="1"/>
+                    <field name="usage"/>
+                    <field name="cost_item_id"/>
+                    <field name="reason"/>
+                </group>
+                <div class="text-muted">Các kỳ khấu hao chưa ghi chứng từ sẽ hạch toán vào TK chi phí của bộ phận mới (6274, 6414, 6424).</div>
+                <footer>
+                    <button name="action_apply" type="object" string="Điều chuyển" class="btn-primary"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================= báo cáo lịch khấu hao -->
+    <record id="view_schedule_pivot" model="ir.ui.view">
+        <field name="name">lfood.asset.schedule.pivot</field>
+        <field name="model">lfood.asset.schedule</field>
+        <field name="arch" type="xml">
+            <pivot string="Bảng tính khấu hao">
+                <field name="asset_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_schedule_search" model="ir.ui.view">
+        <field name="name">lfood.asset.schedule.search</field>
+        <field name="model">lfood.asset.schedule</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="asset_id"/>
+                <filter name="f_posted" string="Đã ghi chứng từ" domain="[('posted', '=', True)]"/>
+                <filter name="f_planned" string="Kế hoạch" domain="[('posted', '=', False)]"/>
+                <filter name="f_date" string="Kỳ" date="date"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_schedule" model="ir.actions.act_window">
+        <field name="name">Bảng tính khấu hao</field>
+        <field name="res_model">lfood.asset.schedule</field>
+        <field name="view_mode">pivot</field>
+    </record>
+</odoo>

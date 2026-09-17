@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Khung thời gian trích khấu hao theo Phụ lục I Thông tư 45/2013/TT-BTC (sửa đổi bởi Thông tư 30/2025/TT-BTC).
+     Khung ghi ở đây là mức rộng của cả nhóm; kế toán trưởng đối chiếu nhóm con trong Phụ lục I và sửa lại khi cần. -->
+<odoo noupdate="1">
+    <record id="cat_building" model="lfood.asset.category">
+        <field name="code">211.1</field><field name="name">Nhà cửa, vật kiến trúc</field>
+        <field name="account_asset">2111</field><field name="account_depreciation">2141</field>
+        <field name="life_min_months">60</field><field name="life_max_months">600</field>
+        <field name="cost_item_id" ref="lfood_voucher.ci_II_4"/>
+        <field name="note">Phụ lục I TT45/2013: nhóm nhà cửa, vật kiến trúc</field>
+    </record>
+    <record id="cat_machine" model="lfood.asset.category">
+        <field name="code">211.2</field><field name="name">Máy móc, thiết bị</field>
+        <field name="account_asset">2112</field><field name="account_depreciation">2141</field>
+        <field name="life_min_months">24</field><field name="life_max_months">240</field>
+        <field name="cost_item_id" ref="lfood_voucher.ci_II_4"/>
+        <field name="note">Phụ lục I TT45/2013: nhóm máy móc, thiết bị</field>
+    </record>
+    <record id="cat_vehicle" model="lfood.asset.category">
+        <field name="code">211.3</field><field name="name">Phương tiện vận tải, truyền dẫn</field>
+        <field name="account_asset">2113</field><field name="account_depreciation">2141</field>
+        <field name="life_min_months">60</field><field name="life_max_months">360</field>
+        <field name="cost_item_id" ref="lfood_voucher.ci_II_4"/>
+        <field name="note">Phụ lục I TT45/2013: nhóm phương tiện vận tải; xe ô tô đường bộ 6–10 năm</field>
+    </record>
+    <record id="cat_office" model="lfood.asset.category">
+        <field name="code">211.4</field><field name="name">Thiết bị, dụng cụ quản lý</field>
+        <field name="account_asset">2114</field><field name="account_depreciation">2141</field>
+        <field name="life_min_months">36</field><field name="life_max_months">120</field>
+        <field name="cost_item_id" ref="lfood_voucher.ci_II_4"/>
+        <field name="note">Phụ lục I TT45/2013: nhóm dụng cụ quản lý</field>
+    </record>
+</odoo>

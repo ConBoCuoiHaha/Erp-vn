@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_admin" name="Quản trị" parent="lfood_base.menu_root" sequence="95"
+              groups="lfood_base.group_sysadmin"/>
+    <menuitem id="menu_catalog" name="Danh mục" parent="lfood_base.menu_root" sequence="40"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+</odoo>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_product_company" model="ir.rule">
+        <field name="name">Hàng hóa chung hoặc theo công ty</field>
+        <field name="model_id" ref="model_lfood_product"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_warehouse_company" model="ir.rule">
+        <field name="name">Kho theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_warehouse"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_picking_company" model="ir.rule">
+        <field name="name">Phiếu kho theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_stock_picking"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_valuation_company" model="ir.rule">
+        <field name="name">Thẻ kho theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_stock_valuation"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_stock_count_company" model="ir.rule">
+        <field name="name">Đợt kiểm kê theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_stock_count"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

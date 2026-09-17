@@ -1,0 +1,14 @@
+; Sao chép thành odoo.conf rồi điền mật khẩu thật. Không đưa odoo.conf lên git.
+[options]
+addons_path = /mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons
+data_dir = /var/lib/odoo
+db_host = db
+db_user = odoo
+db_password = doi-mat-khau-nay
+; mật khẩu quản trị cơ sở dữ liệu - đặt chuỗi dài, ngẫu nhiên
+admin_passwd = doi-mat-khau-nay
+; False khi mở hệ thống cho người khác truy cập
+list_db = False
+proxy_mode = True
+without_demo = True
+workers = 0

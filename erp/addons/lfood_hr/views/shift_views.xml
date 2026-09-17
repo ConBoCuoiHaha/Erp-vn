@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_shift_company" model="ir.rule">
+        <field name="name">Ca làm việc theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_shift"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_roster_company" model="ir.rule">
+        <field name="name">Lịch phân ca theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_roster"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_shift_list" model="ir.ui.view">
+        <field name="name">lfood.hr.shift.list</field>
+        <field name="model">lfood.hr.shift</field>
+        <field name="arch" type="xml">
+            <list string="Ca làm việc" editable="bottom">
+                <field name="name"/>
+                <field name="hour_start" widget="float_time"/>
+                <field name="hour_end" widget="float_time"/>
+                <field name="break_hours" widget="float_time"/>
+                <field name="work_hours"/>
+                <field name="night_hours"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_shift" model="ir.actions.act_window">
+        <field name="name">Ca làm việc</field>
+        <field name="res_model">lfood.hr.shift</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="view_roster_list" model="ir.ui.view">
+        <field name="name">lfood.hr.roster.list</field>
+        <field name="model">lfood.hr.roster</field>
+        <field name="arch" type="xml">
+            <list string="Lịch phân ca" editable="bottom">
+                <header>
+                    <button name="action_to_attendance" type="object" string="Tạo chấm công"/>
+                </header>
+                <field name="date"/>
+                <field name="employee_id" options="{'no_create': True}"/>
+                <field name="shift_id" options="{'no_create': True}"/>
+                <field name="attendance_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_roster_search" model="ir.ui.view">
+        <field name="name">lfood.hr.roster.search</field>
+        <field name="model">lfood.hr.roster</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="employee_id"/>
+                <field name="shift_id"/>
+                <filter name="no_att" string="Chưa tạo chấm công" domain="[('attendance_id', '=', False)]"/>
+                <group>
+                    <filter name="g_date" string="Ngày" context="{'group_by': 'date:day'}"/>
+                    <filter name="g_shift" string="Ca" context="{'group_by': 'shift_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_roster" model="ir.actions.act_window">
+        <field name="name">Lịch phân ca</field>
+        <field name="res_model">lfood.hr.roster</field>
+        <field name="view_mode">list</field>
+    </record>
+    <menuitem id="menu_roster" name="Lịch phân ca" parent="menu_hr_root" action="action_roster" sequence="18"/>
+    <menuitem id="menu_shift" name="Ca làm việc" parent="lfood_base.menu_config" action="action_shift" sequence="62"/>
+</odoo>

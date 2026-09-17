@@ -1,0 +1,903 @@
+<title>Danh mục nghiệp vụ ERP LiFeOOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>:root{
+  --ground:#F4F7F5; --surface:#FFFFFF; --sunk:#EAF0EC;
+  --ink:#14201A; --muted:#58665F; --rule:#D5DFD9;
+  --green:#0F7A4A; --green-soft:#DCEFE4;
+  --blue:#2C5E8F; --blue-soft:#DDE8F3;
+  --amber:#9A5B00; --amber-soft:#FBEBD0;
+  --sans:"Be Vietnam Pro","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Consolas,"Courier New",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#0E1411; --surface:#151D19; --sunk:#1B2520;
+    --ink:#E2EBE6; --muted:#97A69E; --rule:#2A3831;
+    --green:#4CC48A; --green-soft:#183526;
+    --blue:#86B1DD; --blue-soft:#1A2A3B;
+    --amber:#F0B45B; --amber-soft:#3A2B12;
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#0E1411; --surface:#151D19; --sunk:#1B2520;
+  --ink:#E2EBE6; --muted:#97A69E; --rule:#2A3831;
+  --green:#4CC48A; --green-soft:#183526;
+  --blue:#86B1DD; --blue-soft:#1A2A3B;
+  --amber:#F0B45B; --amber-soft:#3A2B12;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{margin:0;background:var(--ground);color:var(--ink);font:15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+a{color:var(--blue)}
+a:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--green);outline-offset:2px}
+.page{max-width:1200px;margin:0 auto;padding:40px 24px 80px;display:grid;grid-template-columns:220px minmax(0,1fr);gap:48px}
+.toc{position:sticky;top:24px;align-self:start;font-size:13px;max-height:calc(100vh - 48px);overflow:auto}
+.toc b{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 10px}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;gap:1px}
+.toc a{display:block;padding:4px 10px;border-radius:5px;color:var(--ink);text-decoration:none;border-left:2px solid transparent}
+.toc a:hover{background:var(--sunk);border-left-color:var(--green)}
+.toc .sub a{padding-left:22px;color:var(--muted);font-size:12.5px}
+header.doc{border-bottom:1px solid var(--rule);padding-bottom:26px}
+.eyebrow{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:600}
+h1{font-size:36px;line-height:1.15;margin:8px 0 14px;letter-spacing:-.02em;text-wrap:balance}
+.lede{max-width:70ch;color:var(--muted);font-size:16px;margin:0}
+.big{display:grid;grid-template-columns:1.3fr repeat(4,minmax(0,1fr));gap:1px;background:var(--rule);border:1px solid var(--rule);border-radius:10px;overflow:hidden;margin-top:22px}
+.big div{background:var(--surface);padding:14px 18px;display:flex;flex-direction:column;justify-content:flex-end}
+.big strong{font-size:22px;font-variant-numeric:tabular-nums;line-height:1.1}
+.big span{font-size:12.5px;color:var(--muted);margin-top:4px}
+.big .hero{background:var(--green-soft)}
+.big .hero strong{font-size:44px;color:var(--green);letter-spacing:-.02em}
+section{padding-top:46px}
+h2{font-size:24px;line-height:1.25;margin:0 0 6px;letter-spacing:-.01em;text-wrap:balance;display:flex;align-items:baseline;gap:12px}
+h2 .no{font-family:var(--mono);font-size:14px;color:var(--muted);font-weight:500}
+h3{font-size:17px;margin:0 0 10px;display:flex;align-items:center;gap:10px}
+.intro{color:var(--muted);margin:0 0 18px;max-width:72ch}
+.tbl{border:1px solid var(--rule);border-radius:8px;overflow-x:auto;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:13.5px}
+th,td{text-align:left;padding:9px 14px;border-bottom:1px solid var(--rule);vertical-align:top}
+tbody tr:last-child td{border-bottom:0}
+th{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600;background:var(--sunk);white-space:nowrap}
+td.n,th.n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+td.b{font-weight:600;min-width:140px}
+td.b a{color:var(--ink);text-decoration:none}
+td.b a:hover{color:var(--blue);text-decoration:underline}
+td.d{white-space:nowrap;font-variant-numeric:tabular-nums}
+td.m{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+tfoot td{font-weight:700;background:var(--sunk);border-top:1px solid var(--rule);border-bottom:0}
+.chip{display:inline-block;font-size:11px;font-weight:600;padding:1px 8px;border-radius:20px;white-space:nowrap;vertical-align:1px}
+.chip.p1{background:var(--green-soft);color:var(--green)}
+.chip.p2{background:var(--blue-soft);color:var(--blue)}
+.chip.p3{background:var(--sunk);color:var(--muted);border:1px solid var(--rule)}
+.chip.new{background:var(--amber-soft);color:var(--amber)}
+
+.calc{border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface);max-width:760px}
+.calc .tbl{border:0;border-radius:0}
+.calc-h{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--rule);background:var(--sunk)}
+.calc-h span{color:var(--muted);font-size:13px}
+.calc td.f{font-family:var(--mono);font-size:12px;color:var(--muted);white-space:nowrap}
+.calc tr.sub td{font-weight:600;background:var(--sunk)}
+.calc tr.tot td{font-weight:700;border-top:1px solid var(--ink)}
+.calc td.n{font-size:14px}
+.rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:14px;margin-top:16px}
+.rule{background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px 16px}
+.rule h4{margin:0 0 8px;font-size:15px}
+.rule p{margin:0;font-size:13.5px;color:var(--muted)}
+.formula{font-family:var(--mono);font-size:12.5px;background:var(--sunk);border-radius:5px;padding:7px 10px;margin-top:8px;overflow-x:auto;white-space:nowrap}
+table.mini td{padding:5px 0;font-size:13.5px}
+table.mini td.n{font-weight:600}
+
+.filters{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center;margin:0 0 18px;position:sticky;top:0;z-index:5;background:var(--ground);padding:10px 0;border-bottom:1px solid var(--rule)}
+.filters input[type=search]{flex:1 1 240px;min-width:0;height:36px;border:1px solid var(--rule);border-radius:6px;padding:0 12px;background:var(--surface);color:var(--ink);font:inherit}
+.seg{display:inline-flex;border:1px solid var(--rule);border-radius:6px;overflow:hidden}
+.seg button{border:0;background:var(--surface);color:var(--ink);padding:0 12px;height:34px;cursor:pointer;font:inherit;font-size:13px}
+.seg button+button{border-left:1px solid var(--rule)}
+.seg button.on{background:var(--green);color:var(--surface);font-weight:600}
+.chk{display:inline-flex;gap:7px;align-items:center;font-size:13.5px;cursor:pointer}
+.chk input{accent-color:var(--green)}
+.shown{margin-left:auto;font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.grp{margin-top:26px}
+.grp[hidden]{display:none}
+.cnt{font-family:var(--mono);font-size:12px;font-weight:500;color:var(--muted);background:var(--sunk);border-radius:10px;padding:1px 8px}
+table.list td.code{font-family:var(--mono);font-size:12.5px;color:var(--muted);white-space:nowrap;padding-top:11px}
+table.list .nm{font-weight:600}
+table.list .ds{color:var(--muted);font-size:13px;margin-top:1px}
+table.list .law{font-size:12px;color:var(--blue);margin-top:3px}
+table.list td.ph{padding-top:10px}
+tr[hidden]{display:none}
+
+.gaps{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.gaps li{background:var(--surface);border:1px solid var(--rule);border-left:3px solid var(--amber);border-radius:6px;padding:12px 16px}
+.gaps b{display:block;margin-bottom:2px}
+.gaps span{color:var(--muted);font-size:14px}
+.src{font-size:13px;color:var(--muted);columns:2 320px;padding-left:18px}
+.src li{break-inside:avoid;margin-bottom:4px}
+footer{margin-top:50px;padding-top:16px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted)}
+@media (max-width:960px){
+  .page{grid-template-columns:minmax(0,1fr);gap:0;padding-top:26px}
+  .toc{position:static;max-height:none;background:var(--surface);border:1px solid var(--rule);border-radius:8px;padding:14px;margin-bottom:10px}
+  .toc ol{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+  .toc .sub{display:none}
+  h1{font-size:28px}
+  .big{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .big .hero{grid-column:1 / -1}
+}
+@media print{.toc,.filters{display:none}.page{display:block;padding:0}.grp,.rule,.calc{break-inside:avoid}}
+.cfg{border:1px solid var(--rule);border-radius:10px;overflow:hidden;background:var(--surface);margin:0 0 18px;max-width:820px}
+.cfg .tbl{border:0;border-radius:0}
+.cfg-h{display:flex;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--sunk);border-bottom:1px solid var(--rule)}
+.cfg-h span{color:var(--muted);font-size:12.5px}
+.cfg-n{margin:0;padding:10px 16px;font-size:13.5px;color:var(--muted);border-top:1px solid var(--rule)}
+</style>
+<div class="page">
+<nav class="toc" aria-label="Mục lục"><b>Mục lục</b><ol>
+<li><a href="#tong">1. Tổng số nghiệp vụ</a></li>
+<li><a href="#phap-ly">2. Thay đổi pháp luật 2026</a></li>
+<li><a href="#tinh">3. Cách tính lương, bảo hiểm, thuế</a></li>
+<li><a href="#danh-sach">4. Danh sách 173 nghiệp vụ</a></li>
+<li class="sub"><a href="#g-ht">Nền tảng &amp; quản trị hệ thống</a></li><li class="sub"><a href="#g-ch">Cấu hình pháp lý</a></li><li class="sub"><a href="#g-dm">Danh mục dùng chung</a></li><li class="sub"><a href="#g-mh">Mua hàng</a></li><li class="sub"><a href="#g-bh">Bán hàng, CRM &amp; TMĐT</a></li><li class="sub"><a href="#g-kho">Kho, lô &amp; mã vạch</a></li><li class="sub"><a href="#g-rd">Nghiên cứu &amp; phát triển (R&amp;D, tách riêng)</a></li><li class="sub"><a href="#g-cl">Chất lượng &amp; an toàn thực phẩm</a></li><li class="sub"><a href="#g-ts">Tài sản, công cụ, bảo trì &amp; xe</a></li><li class="sub"><a href="#g-kt">Kế toán tổng hợp, tiền &amp; công nợ</a></li><li class="sub"><a href="#g-ns">Khoản mục chi phí &amp; ngân sách</a></li><li class="sub"><a href="#g-thue">Thuế</a></li><li class="sub"><a href="#g-nsu">Lao động &amp; nhân sự</a></li><li class="sub"><a href="#g-luong">Tiền lương &amp; bảo hiểm</a></li><li class="sub"><a href="#g-bc">Báo cáo</a></li>
+<li><a href="#luu-y">5. Lưu ý</a></li>
+<li><a href="#nguon">Nguồn</a></li>
+</ol></nav>
+<main>
+<header class="doc">
+  <div class="eyebrow">Danh mục nghiệp vụ · Công ty LiFeOOD · 14/09/2026</div>
+  <h1>Danh mục nghiệp vụ ERP LiFeOOD</h1>
+  <p class="lede">Toàn bộ nghiệp vụ app ERP nội bộ sẽ đảm nhận sau khi bổ sung phần thuế, tiền lương, bảo hiểm, lao động, an toàn thực phẩm và bảo vệ dữ liệu cá nhân theo quy định có hiệu lực năm 2026. Mỗi nghiệp vụ là một quy trình có chứng từ hoặc thao tác riêng mà người dùng thực hiện trên app.</p>
+  <div class="big">
+    <div class="hero"><strong>173</strong><span>nghiệp vụ</span></div>
+    <div><strong>15</strong><span>nhóm</span></div>
+    <div><strong>98</strong><span>bổ sung lần này</span></div>
+    <div><strong>65</strong><span>gắn căn cứ pháp lý</span></div>
+    <div><strong>86 · 72 · 15</strong><span>giai đoạn 1 · 2 · 3</span></div>
+  </div>
+</header>
+
+<section id="tong">
+<h2><span class="no">01</span>Tổng số nghiệp vụ theo nhóm</h2>
+<p class="intro">Giai đoạn 1 là phần thay MISA về kế toán và thuế. So với lộ trình trước, <b>tiền lương, bảo hiểm và lao động được đưa lên giai đoạn 2</b> vì đây là nghĩa vụ phải làm hằng tháng và vừa có nhiều thay đổi luật.</p>
+<div class="tbl"><table>
+<thead><tr><th>Nhóm</th><th class="n">Tổng</th><th class="n">GĐ1</th><th class="n">GĐ2</th><th class="n">GĐ3</th><th class="n">Mới bổ sung</th></tr></thead>
+<tbody><tr><td class="b"><a href="#g-ht">Nền tảng &amp; quản trị hệ thống</a></td>
+<td class="n">13</td><td class="n">13</td><td class="n">–</td><td class="n">–</td><td class="n">4</td></tr><tr><td class="b"><a href="#g-ch">Cấu hình pháp lý</a></td>
+<td class="n">8</td><td class="n">8</td><td class="n">–</td><td class="n">–</td><td class="n">8</td></tr><tr><td class="b"><a href="#g-dm">Danh mục dùng chung</a></td>
+<td class="n">12</td><td class="n">11</td><td class="n">1</td><td class="n">–</td><td class="n">3</td></tr><tr><td class="b"><a href="#g-mh">Mua hàng</a></td>
+<td class="n">13</td><td class="n">11</td><td class="n">1</td><td class="n">1</td><td class="n">6</td></tr><tr><td class="b"><a href="#g-bh">Bán hàng, CRM &amp; TMĐT</a></td>
+<td class="n">14</td><td class="n">–</td><td class="n">12</td><td class="n">2</td><td class="n">7</td></tr><tr><td class="b"><a href="#g-kho">Kho, lô &amp; mã vạch</a></td>
+<td class="n">11</td><td class="n">–</td><td class="n">11</td><td class="n">–</td><td class="n">4</td></tr><tr><td class="b"><a href="#g-rd">Nghiên cứu &amp; phát triển (R&amp;D, tách riêng)</a></td>
+<td class="n">4</td><td class="n">–</td><td class="n">–</td><td class="n">4</td><td class="n">4</td></tr><tr><td class="b"><a href="#g-cl">Chất lượng &amp; an toàn thực phẩm</a></td>
+<td class="n">9</td><td class="n">–</td><td class="n">8</td><td class="n">1</td><td class="n">3</td></tr><tr><td class="b"><a href="#g-ts">Tài sản, công cụ, bảo trì &amp; xe</a></td>
+<td class="n">13</td><td class="n">10</td><td class="n">1</td><td class="n">2</td><td class="n">9</td></tr><tr><td class="b"><a href="#g-kt">Kế toán tổng hợp, tiền &amp; công nợ</a></td>
+<td class="n">18</td><td class="n">16</td><td class="n">1</td><td class="n">1</td><td class="n">11</td></tr><tr><td class="b"><a href="#g-ns">Khoản mục chi phí &amp; ngân sách</a></td>
+<td class="n">5</td><td class="n">4</td><td class="n">1</td><td class="n">–</td><td class="n">1</td></tr><tr><td class="b"><a href="#g-thue">Thuế</a></td>
+<td class="n">13</td><td class="n">8</td><td class="n">4</td><td class="n">1</td><td class="n">13</td></tr><tr><td class="b"><a href="#g-nsu">Lao động &amp; nhân sự</a></td>
+<td class="n">17</td><td class="n">–</td><td class="n">15</td><td class="n">2</td><td class="n">13</td></tr><tr><td class="b"><a href="#g-luong">Tiền lương &amp; bảo hiểm</a></td>
+<td class="n">13</td><td class="n">–</td><td class="n">13</td><td class="n">–</td><td class="n">8</td></tr><tr><td class="b"><a href="#g-bc">Báo cáo</a></td>
+<td class="n">10</td><td class="n">5</td><td class="n">4</td><td class="n">1</td><td class="n">4</td></tr></tbody>
+<tfoot><tr><td>Cộng</td><td class="n">173</td><td class="n">86</td><td class="n">72</td><td class="n">15</td><td class="n">98</td></tr></tfoot>
+</table></div>
+</section>
+
+<section id="phap-ly">
+<h2><span class="no">02</span>Thay đổi pháp luật 2026 app phải theo</h2>
+<p class="intro">Các tham số dưới đây không viết cứng trong code mà nằm trong phân hệ <a href="#g-ch">Cấu hình pháp lý</a>, mỗi giá trị kèm ngày hiệu lực và văn bản căn cứ. Cột cuối là nghiệp vụ dùng tham số đó.</p>
+<div class="cfg">
+  <div class="cfg-h"><b>Màn hình Cấu hình pháp lý · Lương cơ sở</b><span>ví dụ</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Giá trị</th><th>Áp dụng từ</th><th>Đến</th><th>Văn bản</th><th>Trạng thái</th></tr></thead>
+    <tbody>
+      <tr><td class="n">2.340.000</td><td class="d">01/07/2024</td><td class="d">30/06/2026</td><td>Lương cơ sở 2024</td><td><span class="chip p3">đã hết hiệu lực</span></td></tr>
+      <tr><td class="n">2.530.000</td><td class="d">01/07/2026</td><td class="d">—</td><td>Nghị định 161/2026/NĐ-CP</td><td><span class="chip p1">đang áp dụng</span></td></tr>
+    </tbody></table></div>
+  <p class="cfg-n">Bảng lương tháng 6/2026 tự lấy 2.340.000đ, tháng 7/2026 tự lấy 2.530.000đ. Luật đổi thì kế toán thêm một dòng, kế toán trưởng duyệt, không cần lập trình viên. Kỳ đã khóa sổ không bị tính lại.</p>
+</div>
+<div class="tbl"><table>
+<thead><tr><th>Nội dung</th><th>Quy định áp dụng</th><th>Hiệu lực</th><th>Căn cứ</th><th>Dùng ở</th></tr></thead>
+<tbody>
+<tr><td class="b">Chế độ kế toán</td><td>Hệ thống tài khoản và sổ, báo cáo mới; thay Thông tư 200/2014</td><td class="d">01/01/2026</td><td>Thông tư 99/2025/TT-BTC</td><td class="m">DM05, KT17, BC01</td></tr>
+<tr><td class="b">Thuế GTGT giảm</td><td>Nhóm hàng hóa, dịch vụ 10% được giảm còn 8%, trừ viễn thông, tài chính, bất động sản, kim loại, khai khoáng, hàng chịu thuế tiêu thụ đặc biệt</td><td class="d">01/7/2025 – 31/12/2026</td><td>Nghị quyết 204/2025/QH15, Nghị định 174/2025/NĐ-CP</td><td class="m">DM07, THUE01</td></tr>
+<tr><td class="b">Khấu trừ GTGT đầu vào</td><td>Phải có chứng từ thanh toán không dùng tiền mặt cho khoản mua từ 5 triệu đồng đã gồm thuế (trước đây 20 triệu)</td><td class="d">01/7/2025</td><td>Luật Thuế GTGT 48/2024/QH15, Nghị định 181/2025/NĐ-CP</td><td class="m">KT15, THUE02</td></tr>
+<tr><td class="b">Thuế TNDN</td><td>20%; 17% nếu doanh thu năm trên 3 tỷ tới 50 tỷ; 15% nếu doanh thu không quá 3 tỷ. Khoản chi từ 5 triệu phải thanh toán không dùng tiền mặt mới được trừ</td><td class="d">01/10/2025; Nghị định từ 15/12/2025</td><td>Luật Thuế TNDN 67/2025/QH15, Nghị định 320/2025/NĐ-CP</td><td class="m">THUE05, THUE06, KT15</td></tr>
+<tr><td class="b">Lệ phí môn bài</td><td>Chấm dứt thu, nộp</td><td class="d">01/01/2026</td><td>Nghị quyết 198/2025/QH15</td><td class="m">bỏ khỏi app</td></tr>
+<tr><td class="b">Thuế TNCN tiền lương</td><td>Biểu lũy tiến 5 bậc: 5%, 10%, 20%, 30%, 35% (Điều 9 Luật 109/2025/QH15)</td><td class="d">Luật từ 01/7/2026; tiền lương áp dụng từ kỳ tính thuế 2026</td><td>Luật Thuế TNCN 109/2025/QH15</td><td class="m">THUE07, LUONG08</td></tr>
+<tr><td class="b">Giảm trừ gia cảnh</td><td>Bản thân 15.500.000đ/tháng; mỗi người phụ thuộc 6.200.000đ/tháng</td><td class="d">01/01/2026</td><td>Theo Luật Thuế TNCN 2025 và nghị quyết điều chỉnh mức giảm trừ</td><td class="m">THUE07</td></tr>
+<tr><td class="b">Lương tối thiểu vùng</td><td>Vùng I 5.310.000đ · II 4.730.000đ · III 4.140.000đ · IV 3.700.000đ/tháng</td><td class="d">01/01/2026</td><td>Nghị định 293/2025/NĐ-CP</td><td class="m">LUONG01, NSU04</td></tr>
+<tr><td class="b">Lương cơ sở, trần đóng BHXH và BHYT</td><td>2.340.000đ tới 30/6/2026, trần 20 lần = 46.800.000đ. Từ 01/7/2026 là 2.530.000đ, trần = 50.600.000đ</td><td class="d">01/7/2026</td><td>Luật Bảo hiểm xã hội 2024, Nghị định 161/2026/NĐ-CP</td><td class="m">LUONG05</td></tr>
+<tr><td class="b">Tỷ lệ đóng bảo hiểm</td><td>Người lao động: BHXH 8%, BHYT 1,5%, BHTN 1% = 10,5%. Doanh nghiệp: hưu trí tử tuất 14%, ốm đau thai sản 3%, tai nạn lao động 0,5%, BHYT 3%, BHTN 1% = 21,5%</td><td class="d">đang áp dụng 2026</td><td>Luật Bảo hiểm xã hội 2024, Luật Việc làm 2025, Nghị định 188/2025/NĐ-CP, Nghị định 158/2025/NĐ-CP</td><td class="m">LUONG05, LUONG07</td></tr>
+<tr><td class="b">Kinh phí công đoàn</td><td>2% quỹ tiền lương làm căn cứ đóng BHXH</td><td class="d">2026</td><td>Luật Công đoàn 2024, Nghị định 105/2026/NĐ-CP</td><td class="m">LUONG06</td></tr>
+<tr><td class="b">Làm thêm giờ</td><td>Không quá 40 giờ/tháng; 200 giờ/năm, một số ngành tới 300 giờ. Lương làm thêm tối thiểu 150%, 200%, 300%; làm đêm thêm ít nhất 30%</td><td class="d">đang áp dụng</td><td>Bộ luật Lao động 2019, Nghị định 145/2020/NĐ-CP</td><td class="m">NSU07, LUONG04</td></tr>
+<tr><td class="b">Hóa đơn, chứng từ điện tử</td><td>Sửa 40 điều của Nghị định 123/2020; chứng từ khấu trừ thuế TNCN điện tử phải truyền dữ liệu tới cơ quan thuế</td><td class="d">01/6/2025</td><td>Nghị định 70/2025/NĐ-CP</td><td class="m">BH08, BH09, MH06, THUE08</td></tr>
+<tr><td class="b">Quản lý thuế</td><td>Luật sửa đổi: phân nhóm người nộp thuế, quản lý bằng dữ liệu; mẫu kê khai có thể đổi</td><td class="d">01/7/2026</td><td>Luật 108/2025/QH15</td><td class="m">THUE03, THUE12</td></tr>
+<tr><td class="b">Khấu hao tài sản cố định</td><td>Nguyên giá từ 30 triệu; trích khấu hao theo ngày tăng, giảm</td><td class="d">đang áp dụng, sửa đổi 2025</td><td>Thông tư 45/2013/TT-BTC, Thông tư 30/2025/TT-BTC</td><td class="m">TS01, TS03, TS09</td></tr>
+<tr><td class="b">Dữ liệu cá nhân</td><td>Nghĩa vụ khi xử lý dữ liệu nhân viên, người phụ thuộc, khách hàng cá nhân</td><td class="d">01/01/2026</td><td>Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15</td><td class="m">HT11, NSU02</td></tr>
+</tbody></table></div>
+</section>
+
+<section id="tinh">
+<h2><span class="no">03</span>Cách app tính lương, bảo hiểm và thuế</h2>
+<p class="intro">Ví dụ minh họa, không phải số liệu thật của công ty. Giả định toàn bộ thu nhập là lương chịu thuế và là căn cứ đóng bảo hiểm.</p>
+
+<div class="calc">
+  <div class="calc-h"><b>Phiếu lương tháng 8/2026</b><span>Lương 40.000.000đ · 1 người phụ thuộc · làm ở Nhà máy</span></div>
+  <div class="tbl"><table>
+  <tbody>
+    <tr><td>Tổng thu nhập</td><td class="f"></td><td class="n">40.000.000</td></tr>
+    <tr><td>BHXH 8% + BHYT 1,5% + BHTN 1% người lao động đóng</td><td class="f">40.000.000 × 10,5%</td><td class="n">− 4.200.000</td></tr>
+    <tr><td>Giảm trừ bản thân</td><td class="f"></td><td class="n">− 15.500.000</td></tr>
+    <tr><td>Giảm trừ 1 người phụ thuộc</td><td class="f"></td><td class="n">− 6.200.000</td></tr>
+    <tr class="sub"><td>Thu nhập tính thuế</td><td class="f"></td><td class="n">14.100.000</td></tr>
+    <tr><td>Bậc 1: tới 10 triệu</td><td class="f">10.000.000 × 5%</td><td class="n">500.000</td></tr>
+    <tr><td>Bậc 2: trên 10 tới 30 triệu</td><td class="f">4.100.000 × 10%</td><td class="n">410.000</td></tr>
+    <tr class="sub"><td>Thuế TNCN khấu trừ</td><td class="f"></td><td class="n">− 910.000</td></tr>
+    <tr class="tot"><td>Người lao động thực nhận</td><td class="f">40.000.000 − 4.200.000 − 910.000</td><td class="n">34.890.000</td></tr>
+    <tr><td>Doanh nghiệp đóng bảo hiểm</td><td class="f">40.000.000 × 21,5%</td><td class="n">8.600.000</td></tr>
+    <tr><td>Kinh phí công đoàn</td><td class="f">40.000.000 × 2%</td><td class="n">800.000</td></tr>
+    <tr class="tot"><td>Tổng chi phí lương của doanh nghiệp</td><td class="f">40.000.000 + 8.600.000 + 800.000</td><td class="n">49.400.000</td></tr>
+  </tbody></table></div>
+</div>
+
+<div class="rules">
+  <div class="rule"><h4>Biểu thuế TNCN 5 bậc (tháng)</h4>
+    <table class="mini"><tbody>
+      <tr><td>Tới 10 triệu</td><td class="n">5%</td></tr>
+      <tr><td>Trên 10 tới 30 triệu</td><td class="n">10%</td></tr>
+      <tr><td>Trên 30 tới 60 triệu</td><td class="n">20%</td></tr>
+      <tr><td>Trên 60 tới 100 triệu</td><td class="n">30%</td></tr>
+      <tr><td>Trên 100 triệu</td><td class="n">35%</td></tr>
+    </tbody></table></div>
+  <div class="rule"><h4>Mức trần theo tháng lương</h4>
+    <p>Lương đóng BHXH, BHYT tối đa 20 lần lương cơ sở: <b>46.800.000đ</b> cho kỳ lương tới tháng 6/2026, <b>50.600.000đ</b> từ tháng 7/2026. App tự chọn mức theo tháng của bảng lương. Mức thấp nhất không dưới lương tối thiểu vùng.</p></div>
+  <div class="rule"><h4>Thuế GTGT trên chứng từ mua</h4>
+    <p>Chứng từ MDV00433 tiền cơm ca tháng 7/2026: dịch vụ ăn uống thuộc nhóm được giảm.</p>
+    <div class="formula">97.505.000 × 8% = 7.800.400</div>
+    <p style="margin-top:6px">Tổng thanh toán 105.305.400đ. Thanh toán bằng tiền mặt thì app cảnh báo không đủ điều kiện khấu trừ vì vượt 5 triệu.</p></div>
+  <div class="rule"><h4>Làm thêm giờ</h4>
+    <p>Lương giờ = lương tháng ÷ số giờ làm việc bình thường của tháng.</p>
+    <div class="formula">Ngày thường 150% · Nghỉ tuần 200% · Lễ Tết 300%</div>
+    <p style="margin-top:6px">Đơn đăng ký làm thêm bị chặn khi người lao động đã đủ 40 giờ trong tháng.</p></div>
+</div>
+</section>
+
+
+<section id="danh-sach">
+<h2><span class="no">04</span>Danh sách 173 nghiệp vụ</h2>
+<p class="intro">Lọc theo giai đoạn hoặc chỉ xem phần mới bổ sung. Dòng có căn cứ pháp lý ghi văn bản bên dưới.</p>
+<div class="filters">
+  <input id="q" type="search" placeholder="Tìm nghiệp vụ, mã, văn bản..." aria-label="Tìm nghiệp vụ">
+  <div class="seg" role="group" aria-label="Giai đoạn">
+    <button data-ph="0" class="on">Tất cả</button><button data-ph="1">GĐ1</button><button data-ph="2">GĐ2</button><button data-ph="3">GĐ3</button>
+  </div>
+  <label class="chk"><input type="checkbox" id="onlynew"> Chỉ mục mới bổ sung</label>
+  <span class="shown" id="shown">173 nghiệp vụ</span>
+</div>
+<div class="grp" id="g-ht" data-grp>
+<h3>Nền tảng &amp; quản trị hệ thống <span class="cnt" data-cnt>13</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="0" data-q="ht01 quản lý 2 pháp nhân và kỳ kế toán văn phòng tp.hcm và nhà máy tây ninh dùng chung hệ thống, dữ liệu tách theo công ty ">
+<td class="code">HT01</td>
+<td><div class="nm">Quản lý 2 pháp nhân và kỳ kế toán </div><div class="ds">Văn phòng TP.HCM và Nhà máy Tây Ninh dùng chung hệ thống, dữ liệu tách theo công ty</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht02 người dùng, nhóm quyền, phân quyền theo dòng dữ liệu quyền đọc, tạo, sửa, xóa theo chức năng và theo công ty; quyền sửa chứng từ đã cất cấp riêng ">
+<td class="code">HT02</td>
+<td><div class="nm">Người dùng, nhóm quyền, phân quyền theo dòng dữ liệu </div><div class="ds">Quyền đọc, tạo, sửa, xóa theo chức năng và theo công ty; quyền Sửa chứng từ đã cất cấp riêng</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht03 đăng nhập an toàn mã 2 lớp, khóa tài khoản khi nhập sai nhiều lần, hết phiên tự đăng xuất ">
+<td class="code">HT03</td>
+<td><div class="nm">Đăng nhập an toàn </div><div class="ds">Mã 2 lớp, khóa tài khoản khi nhập sai nhiều lần, hết phiên tự đăng xuất</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht04 luồng duyệt nhiều cấp theo hạn mức tiền dùng chung cho chứng từ, đơn mua, ngân sách, đề nghị thanh toán, tín dụng, nghỉ phép ">
+<td class="code">HT04</td>
+<td><div class="nm">Luồng duyệt nhiều cấp theo hạn mức tiền </div><div class="ds">Dùng chung cho chứng từ, đơn mua, ngân sách, đề nghị thanh toán, tín dụng, nghỉ phép</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht05 nhật ký thay đổi và dấu vết kiểm toán ai sửa trường nào, giá trị cũ và mới, lúc nào ">
+<td class="code">HT05</td>
+<td><div class="nm">Nhật ký thay đổi và dấu vết kiểm toán </div><div class="ds">Ai sửa trường nào, giá trị cũ và mới, lúc nào</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht06 chuỗi đánh số chứng từ cấp số tự động theo loại chứng từ, theo công ty, theo năm ">
+<td class="code">HT06</td>
+<td><div class="nm">Chuỗi đánh số chứng từ </div><div class="ds">Cấp số tự động theo loại chứng từ, theo công ty, theo năm</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht07 tìm kiếm nhanh toàn hệ thống tìm theo số chứng từ, mã số thuế, mã hàng, số lô, tên nhân viên ">
+<td class="code">HT07</td>
+<td><div class="nm">Tìm kiếm nhanh toàn hệ thống </div><div class="ds">Tìm theo số chứng từ, mã số thuế, mã hàng, số lô, tên nhân viên</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ht08 lưu trữ chứng từ điện tử đính kèm hóa đơn, hợp đồng; khóa không cho xóa trong thời hạn lưu trữ luật kế toán 2015">
+<td class="code">HT08</td>
+<td><div class="nm">Lưu trữ chứng từ điện tử <span class="chip new">mới</span></div><div class="ds">Đính kèm hóa đơn, hợp đồng; khóa không cho xóa trong thời hạn lưu trữ</div><div class="law">Luật Kế toán 2015</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht09 nhập, xuất excel và chuyển dữ liệu từ misa danh mục, số dư đầu kỳ, công nợ, tồn kho, tài sản ">
+<td class="code">HT09</td>
+<td><div class="nm">Nhập, xuất Excel và chuyển dữ liệu từ MISA </div><div class="ds">Danh mục, số dư đầu kỳ, công nợ, tồn kho, tài sản</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ht10 sao lưu và khôi phục sao lưu mã hóa hằng đêm, thử khôi phục hằng tháng ">
+<td class="code">HT10</td>
+<td><div class="nm">Sao lưu và khôi phục </div><div class="ds">Sao lưu mã hóa hằng đêm, thử khôi phục hằng tháng</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ht11 bảo vệ dữ liệu cá nhân ghi nhận đồng ý xử lý dữ liệu, giới hạn người xem hồ sơ nhân sự và lương, nhật ký truy cập, yêu cầu xem, sửa, xóa dữ liệu luật bảo vệ dữ liệu cá nhân 91/2025/qh15 (từ 01/01/2026)">
+<td class="code">HT11</td>
+<td><div class="nm">Bảo vệ dữ liệu cá nhân <span class="chip new">mới</span></div><div class="ds">Ghi nhận đồng ý xử lý dữ liệu, giới hạn người xem hồ sơ nhân sự và lương, nhật ký truy cập, yêu cầu xem, sửa, xóa dữ liệu</div><div class="law">Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15 (từ 01/01/2026)</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ht12 nhắc hạn tự động hạn nộp tờ khai thuế, nộp bảo hiểm, hợp đồng lao động hết hạn, lô sắp hết hạn dùng, đăng kiểm xe ">
+<td class="code">HT12</td>
+<td><div class="nm">Nhắc hạn tự động <span class="chip new">mới</span></div><div class="ds">Hạn nộp tờ khai thuế, nộp bảo hiểm, hợp đồng lao động hết hạn, lô sắp hết hạn dùng, đăng kiểm xe</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ht13 ký số chứng từ điện tử ký số trên hóa đơn, chứng từ khấu trừ thuế, hồ sơ bảo hiểm ">
+<td class="code">HT13</td>
+<td><div class="nm">Ký số chứng từ điện tử <span class="chip new">mới</span></div><div class="ds">Ký số trên hóa đơn, chứng từ khấu trừ thuế, hồ sơ bảo hiểm</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-ch" data-grp>
+<h3>Cấu hình pháp lý <span class="cnt" data-cnt>8</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="1" data-q="ch01 bảng tham số pháp lý theo ngày hiệu lực mỗi mức thuế suất, giảm trừ, lương tối thiểu, lương cơ sở, tỷ lệ bảo hiểm, giới hạn làm thêm, ngưỡng tài sản lưu thành dòng có ngày bắt đầu và kết thúc áp dụng; không viết cứng trong code theo từng văn bản gắn với tham số">
+<td class="code">CH01</td>
+<td><div class="nm">Bảng tham số pháp lý theo ngày hiệu lực <span class="chip new">mới</span></div><div class="ds">Mỗi mức thuế suất, giảm trừ, lương tối thiểu, lương cơ sở, tỷ lệ bảo hiểm, giới hạn làm thêm, ngưỡng tài sản lưu thành dòng có ngày bắt đầu và kết thúc áp dụng; không viết cứng trong code</div><div class="law">Theo từng văn bản gắn với tham số</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch02 cập nhật tham số khi có văn bản mới nhập giá trị mới, số hiệu và tệp văn bản, ngày hiệu lực; kế toán nhập, kế toán trưởng duyệt; không sửa đè giá trị cũ ">
+<td class="code">CH02</td>
+<td><div class="nm">Cập nhật tham số khi có văn bản mới <span class="chip new">mới</span></div><div class="ds">Nhập giá trị mới, số hiệu và tệp văn bản, ngày hiệu lực; kế toán nhập, kế toán trưởng duyệt; không sửa đè giá trị cũ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch03 mô phỏng ảnh hưởng trước khi áp dụng tính thử bảng lương, tờ khai, khấu hao với tham số mới và so với tham số cũ ">
+<td class="code">CH03</td>
+<td><div class="nm">Mô phỏng ảnh hưởng trước khi áp dụng <span class="chip new">mới</span></div><div class="ds">Tính thử bảng lương, tờ khai, khấu hao với tham số mới và so với tham số cũ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch04 biểu thuế lũy tiến và bảng bậc sửa số bậc, ngưỡng, thuế suất mà không cần sửa code luật thuế tncn 109/2025/qh15">
+<td class="code">CH04</td>
+<td><div class="nm">Biểu thuế lũy tiến và bảng bậc <span class="chip new">mới</span></div><div class="ds">Sửa số bậc, ngưỡng, thuế suất mà không cần sửa code</div><div class="law">Luật Thuế TNCN 109/2025/QH15</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch05 địa bàn và vùng lương tối thiểu gán xã, phường nơi đặt văn phòng, nhà máy, kho vào vùng i–iv; nhân viên lấy vùng theo nơi làm việc nghị định 293/2025/nđ-cp">
+<td class="code">CH05</td>
+<td><div class="nm">Địa bàn và vùng lương tối thiểu <span class="chip new">mới</span></div><div class="ds">Gán xã, phường nơi đặt văn phòng, nhà máy, kho vào vùng I–IV; nhân viên lấy vùng theo nơi làm việc</div><div class="law">Nghị định 293/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch06 lịch nghỉ lễ tết và ngày làm việc theo năm ngày lễ, ngày nghỉ bù, số giờ làm việc chuẩn của tháng để tính lương giờ và làm thêm bộ luật lao động 2019">
+<td class="code">CH06</td>
+<td><div class="nm">Lịch nghỉ lễ Tết và ngày làm việc theo năm <span class="chip new">mới</span></div><div class="ds">Ngày lễ, ngày nghỉ bù, số giờ làm việc chuẩn của tháng để tính lương giờ và làm thêm</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch07 nhắc rà soát tham số nhắc trước các mốc thay đổi đã biết (01/01, 01/7) và khi một chính sách sắp hết hạn, ví dụ giảm thuế gtgt hết 31/12/2026 ">
+<td class="code">CH07</td>
+<td><div class="nm">Nhắc rà soát tham số <span class="chip new">mới</span></div><div class="ds">Nhắc trước các mốc thay đổi đã biết (01/01, 01/7) và khi một chính sách sắp hết hạn, ví dụ giảm thuế GTGT hết 31/12/2026</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ch08 lịch sử tham số và gói cập nhật xem tham số nào áp dụng cho kỳ nào; xuất, nhập gói tham số giữa bản thử và bản thật ">
+<td class="code">CH08</td>
+<td><div class="nm">Lịch sử tham số và gói cập nhật <span class="chip new">mới</span></div><div class="ds">Xem tham số nào áp dụng cho kỳ nào; xuất, nhập gói tham số giữa bản thử và bản thật</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-dm" data-grp>
+<h3>Danh mục dùng chung <span class="cnt" data-cnt>12</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="0" data-q="dm01 đối tác khách hàng, nhà phân phối, nhà cung cấp, sàn tmđt; kiểm tra trạng thái mã số thuế ">
+<td class="code">DM01</td>
+<td><div class="nm">Đối tác </div><div class="ds">Khách hàng, nhà phân phối, nhà cung cấp, sàn TMĐT; kiểm tra trạng thái mã số thuế</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm02 sản phẩm, nguyên liệu, dịch vụ theo 5 nhãn hàng; tài khoản mặc định theo nhóm ">
+<td class="code">DM02</td>
+<td><div class="nm">Sản phẩm, nguyên liệu, dịch vụ </div><div class="ds">Theo 5 nhãn hàng; tài khoản mặc định theo nhóm</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm03 đơn vị tính và quy đổi hũ, lốc, thùng, kg, lít ">
+<td class="code">DM03</td>
+<td><div class="nm">Đơn vị tính và quy đổi </div><div class="ds">Hũ, lốc, thùng, kg, lít</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm04 kho và vị trí kho kho nguyên liệu, thành phẩm, cách ly, đang vận chuyển ">
+<td class="code">DM04</td>
+<td><div class="nm">Kho và vị trí kho </div><div class="ds">Kho nguyên liệu, thành phẩm, cách ly, đang vận chuyển</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="dm05 hệ thống tài khoản theo chế độ kế toán mới thông tư 99/2025/tt-btc (từ 01/01/2026)">
+<td class="code">DM05</td>
+<td><div class="nm">Hệ thống tài khoản <span class="chip new">mới</span></div><div class="ds">Theo chế độ kế toán mới</div><div class="law">Thông tư 99/2025/TT-BTC (từ 01/01/2026)</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm06 cây khoản mục chi phí cụ – ông – cha – con, gắn tài khoản ">
+<td class="code">DM06</td>
+<td><div class="nm">Cây khoản mục chi phí </div><div class="ds">Cụ – ông – cha – con, gắn tài khoản</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="dm07 thuế suất gtgt 0%, 5%, 8%, 10%, không chịu thuế; bảng tham số có ngày hiệu lực nghị quyết 204/2025/qh15, nghị định 174/2025/nđ-cp">
+<td class="code">DM07</td>
+<td><div class="nm">Thuế suất <span class="chip new">mới</span></div><div class="ds">GTGT 0%, 5%, 8%, 10%, không chịu thuế; bảng tham số có ngày hiệu lực</div><div class="law">Nghị quyết 204/2025/QH15, Nghị định 174/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm08 điều khoản thanh toán số ngày được nợ, chiết khấu thanh toán sớm ">
+<td class="code">DM08</td>
+<td><div class="nm">Điều khoản thanh toán </div><div class="ds">Số ngày được nợ, chiết khấu thanh toán sớm</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm09 tiền tệ và tỷ giá tỷ giá theo ngày ">
+<td class="code">DM09</td>
+<td><div class="nm">Tiền tệ và tỷ giá </div><div class="ds">Tỷ giá theo ngày</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="dm10 phòng ban, chức danh cây phòng ban, gắn khoản mục chi phí ">
+<td class="code">DM10</td>
+<td><div class="nm">Phòng ban, chức danh </div><div class="ds">Cây phòng ban, gắn khoản mục chi phí</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="dm11 tài khoản ngân hàng của công ty, nhà cung cấp, nhân viên nhận lương ">
+<td class="code">DM11</td>
+<td><div class="nm">Tài khoản ngân hàng <span class="chip new">mới</span></div><div class="ds">Của công ty, nhà cung cấp, nhân viên nhận lương</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="2" data-new="0" data-q="dm12 vùng và kênh bán hàng miền nam, trung, bắc; kênh gt, mt, online ">
+<td class="code">DM12</td>
+<td><div class="nm">Vùng và kênh bán hàng </div><div class="ds">Miền Nam, Trung, Bắc; kênh GT, MT, Online</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-mh" data-grp>
+<h3>Mua hàng <span class="cnt" data-cnt>13</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="0" data-q="mh01 yêu cầu mua phòng ban đề nghị, kiểm soát ngân sách, trình duyệt ">
+<td class="code">MH01</td>
+<td><div class="nm">Yêu cầu mua </div><div class="ds">Phòng ban đề nghị, kiểm soát ngân sách, trình duyệt</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="mh02 đề nghị báo giá và so sánh báo giá gửi nhiều nhà cung cấp, chọn giá tốt ">
+<td class="code">MH02</td>
+<td><div class="nm">Đề nghị báo giá và so sánh báo giá </div><div class="ds">Gửi nhiều nhà cung cấp, chọn giá tốt</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="mh03 đơn mua hàng theo dõi số đã nhận, đã lập hóa đơn ">
+<td class="code">MH03</td>
+<td><div class="nm">Đơn mua hàng </div><div class="ds">Theo dõi số đã nhận, đã lập hóa đơn</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="mh04 hợp đồng mua khung suất ăn, vận tải, bốc xếp; theo dõi giá trị đã thực hiện ">
+<td class="code">MH04</td>
+<td><div class="nm">Hợp đồng mua khung </div><div class="ds">Suất ăn, vận tải, bốc xếp; theo dõi giá trị đã thực hiện</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="mh05 đối chiếu 3 bên đơn mua, phiếu nhận hàng, hóa đơn phải khớp trước khi ghi sổ ">
+<td class="code">MH05</td>
+<td><div class="nm">Đối chiếu 3 bên </div><div class="ds">Đơn mua, phiếu nhận hàng, hóa đơn phải khớp trước khi ghi sổ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="mh06 nhận và kiểm tra hóa đơn đầu vào tải hóa đơn điện tử, kiểm tra hóa đơn hợp lệ và mã số thuế người bán nghị định 70/2025/nđ-cp">
+<td class="code">MH06</td>
+<td><div class="nm">Nhận và kiểm tra hóa đơn đầu vào <span class="chip new">mới</span></div><div class="ds">Tải hóa đơn điện tử, kiểm tra hóa đơn hợp lệ và mã số thuế người bán</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="mh07 ★ chứng từ mua dịch vụ có phiên bản sau khi cất vẫn sửa được, lưu thành phiên bản, báo cáo không đổi ">
+<td class="code">MH07</td>
+<td><div class="nm">★ Chứng từ mua dịch vụ có phiên bản </div><div class="ds">Sau khi Cất vẫn Sửa được, lưu thành phiên bản, báo cáo không đổi</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="mh08 ★ tự động tính lại số liệu chứng từ sửa tổng thì phân bổ các dòng; sửa dòng thì cộng dồn theo cây khoản mục ">
+<td class="code">MH08</td>
+<td><div class="nm">★ Tự động tính lại số liệu chứng từ </div><div class="ds">Sửa tổng thì phân bổ các dòng; sửa dòng thì cộng dồn theo cây khoản mục</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="mh09 trả lại hàng mua, giảm giá hàng mua nhận hóa đơn điều chỉnh, xuất trả theo lô nghị định 70/2025/nđ-cp">
+<td class="code">MH09</td>
+<td><div class="nm">Trả lại hàng mua, giảm giá hàng mua <span class="chip new">mới</span></div><div class="ds">Nhận hóa đơn điều chỉnh, xuất trả theo lô</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="mh10 phân bổ chi phí mua hàng vận chuyển, bốc xếp cộng vào giá nhập kho ">
+<td class="code">MH10</td>
+<td><div class="nm">Phân bổ chi phí mua hàng <span class="chip new">mới</span></div><div class="ds">Vận chuyển, bốc xếp cộng vào giá nhập kho</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="mh11 thu mua nông sản không có hóa đơn lập bảng kê thu mua từ người trực tiếp sản xuất, ví dụ yến sào, hạt luật thuế tndn 67/2025/qh15, nghị định 320/2025/nđ-cp">
+<td class="code">MH11</td>
+<td><div class="nm">Thu mua nông sản không có hóa đơn <span class="chip new">mới</span></div><div class="ds">Lập bảng kê thu mua từ người trực tiếp sản xuất, ví dụ yến sào, hạt</div><div class="law">Luật Thuế TNDN 67/2025/QH15, Nghị định 320/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="3" data-new="1" data-q="mh12 mua hàng nhập khẩu tờ khai hải quan, thuế nhập khẩu, thuế gtgt hàng nhập khẩu, chi phí nhập khẩu ">
+<td class="code">MH12</td>
+<td><div class="nm">Mua hàng nhập khẩu <span class="chip new">mới</span></div><div class="ds">Tờ khai hải quan, thuế nhập khẩu, thuế GTGT hàng nhập khẩu, chi phí nhập khẩu</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="2" data-new="1" data-q="mh13 đánh giá nhà cung cấp chất lượng, đúng hạn, hồ sơ an toàn thực phẩm; yêu cầu của iso 22000 ">
+<td class="code">MH13</td>
+<td><div class="nm">Đánh giá nhà cung cấp <span class="chip new">mới</span></div><div class="ds">Chất lượng, đúng hạn, hồ sơ an toàn thực phẩm; yêu cầu của ISO 22000</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-bh" data-grp>
+<h3>Bán hàng, CRM &amp; TMĐT <span class="cnt" data-cnt>14</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="2" data-new="0" data-q="bh01 cơ hội bán hàng nhà phân phối, siêu thị tiềm năng; giai đoạn chăm sóc ">
+<td class="code">BH01</td>
+<td><div class="nm">Cơ hội bán hàng </div><div class="ds">Nhà phân phối, siêu thị tiềm năng; giai đoạn chăm sóc</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="bh02 báo giá áp bảng giá theo kênh và khuyến mãi ">
+<td class="code">BH02</td>
+<td><div class="nm">Báo giá </div><div class="ds">Áp bảng giá theo kênh và khuyến mãi</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="bh03 đơn bán hàng giữ chỗ tồn kho, theo dõi đã giao, đã lập hóa đơn ">
+<td class="code">BH03</td>
+<td><div class="nm">Đơn bán hàng </div><div class="ds">Giữ chỗ tồn kho, theo dõi đã giao, đã lập hóa đơn</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="bh04 bảng giá theo kênh giá gt, mt, online; theo số lượng ">
+<td class="code">BH04</td>
+<td><div class="nm">Bảng giá theo kênh </div><div class="ds">Giá GT, MT, Online; theo số lượng</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="bh05 chương trình khuyến mãi, chiết khấu thương mại chiết khấu, tặng hàng, combo; thể hiện đúng trên hóa đơn nghị định 70/2025/nđ-cp">
+<td class="code">BH05</td>
+<td><div class="nm">Chương trình khuyến mãi, chiết khấu thương mại <span class="chip new">mới</span></div><div class="ds">Chiết khấu, tặng hàng, combo; thể hiện đúng trên hóa đơn</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="bh06 kiểm soát hạn mức công nợ khách hàng vượt hạn mức thì chặn đơn chờ duyệt ">
+<td class="code">BH06</td>
+<td><div class="nm">Kiểm soát hạn mức công nợ khách hàng </div><div class="ds">Vượt hạn mức thì chặn đơn chờ duyệt</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="bh07 hợp đồng và chính sách nhà phân phối thưởng doanh số, hỗ trợ trưng bày ">
+<td class="code">BH07</td>
+<td><div class="nm">Hợp đồng và chính sách nhà phân phối <span class="chip new">mới</span></div><div class="ds">Thưởng doanh số, hỗ trợ trưng bày</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="bh08 hóa đơn bán hàng điện tử có mã cơ quan thuế phát hành, ký số, gửi khách nghị định 70/2025/nđ-cp">
+<td class="code">BH08</td>
+<td><div class="nm">Hóa đơn bán hàng điện tử có mã cơ quan thuế </div><div class="ds">Phát hành, ký số, gửi khách</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="bh09 hóa đơn điều chỉnh, thay thế xử lý hóa đơn sai sau khi đã gửi cơ quan thuế nghị định 70/2025/nđ-cp">
+<td class="code">BH09</td>
+<td><div class="nm">Hóa đơn điều chỉnh, thay thế <span class="chip new">mới</span></div><div class="ds">Xử lý hóa đơn sai sau khi đã gửi cơ quan thuế</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="bh10 hàng bán bị trả lại nhận lại theo lô, kiểm tra chất lượng, hóa đơn điều chỉnh ">
+<td class="code">BH10</td>
+<td><div class="nm">Hàng bán bị trả lại <span class="chip new">mới</span></div><div class="ds">Nhận lại theo lô, kiểm tra chất lượng, hóa đơn điều chỉnh</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="bh11 hàng khuyến mãi, biếu tặng, hàng mẫu xuất kho và lập hóa đơn theo quy định nghị định 70/2025/nđ-cp">
+<td class="code">BH11</td>
+<td><div class="nm">Hàng khuyến mãi, biếu tặng, hàng mẫu <span class="chip new">mới</span></div><div class="ds">Xuất kho và lập hóa đơn theo quy định</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="bh12 chi phí trade marketing, trưng bày ghi theo khoản mục của nhãn hàng và kênh ">
+<td class="code">BH12</td>
+<td><div class="nm">Chi phí trade marketing, trưng bày <span class="chip new">mới</span></div><div class="ds">Ghi theo khoản mục của nhãn hàng và kênh</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="3" data-new="0" data-q="bh13 đơn sàn thương mại điện tử đồng bộ đơn, tồn khả dụng, đối soát tiền về, phí sàn ">
+<td class="code">BH13</td>
+<td><div class="nm">Đơn sàn thương mại điện tử </div><div class="ds">Đồng bộ đơn, tồn khả dụng, đối soát tiền về, phí sàn</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="3" data-new="1" data-q="bh14 bán hàng xuất khẩu thuế suất 0%, tờ khai, chứng từ thanh toán qua ngân hàng ">
+<td class="code">BH14</td>
+<td><div class="nm">Bán hàng xuất khẩu <span class="chip new">mới</span></div><div class="ds">Thuế suất 0%, tờ khai, chứng từ thanh toán qua ngân hàng</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-kho" data-grp>
+<h3>Kho, lô &amp; mã vạch <span class="cnt" data-cnt>11</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="2" data-new="0" data-q="kho01 nhập kho mua hàng theo lô ghi số lô, ngày sản xuất, hạn dùng; kiểm tra chất lượng trước khi nhập ">
+<td class="code">KHO01</td>
+<td><div class="nm">Nhập kho mua hàng theo lô </div><div class="ds">Ghi số lô, ngày sản xuất, hạn dùng; kiểm tra chất lượng trước khi nhập</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="kho02 xuất kho bán hàng theo hạn dùng lô hết hạn trước xuất trước; chặn lô còn hạn ít hơn yêu cầu của khách ">
+<td class="code">KHO02</td>
+<td><div class="nm">Xuất kho bán hàng theo hạn dùng </div><div class="ds">Lô hết hạn trước xuất trước; chặn lô còn hạn ít hơn yêu cầu của khách</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="kho03 chuyển kho nội bộ có vị trí đang vận chuyển ">
+<td class="code">KHO03</td>
+<td><div class="nm">Chuyển kho nội bộ </div><div class="ds">Có vị trí đang vận chuyển</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="kho04 chuyển hàng giữa 2 pháp nhân nhà máy xuất cho văn phòng: chứng từ vận chuyển nội bộ hoặc hóa đơn bán nội bộ nghị định 70/2025/nđ-cp">
+<td class="code">KHO04</td>
+<td><div class="nm">Chuyển hàng giữa 2 pháp nhân <span class="chip new">mới</span></div><div class="ds">Nhà máy xuất cho Văn phòng: chứng từ vận chuyển nội bộ hoặc hóa đơn bán nội bộ</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="kho06 nhập kho thành phẩm từ nhà máy ghi số lượng theo lô, ngày sản xuất, hạn dùng; erp không quản lý lệnh sản xuất ">
+<td class="code">KHO06</td>
+<td><div class="nm">Nhập kho thành phẩm từ nhà máy <span class="chip new">mới</span></div><div class="ds">Ghi số lượng theo lô, ngày sản xuất, hạn dùng; ERP không quản lý lệnh sản xuất</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="kho07 kiểm kê kho đếm bằng máy quét, duyệt và xử lý chênh lệch ">
+<td class="code">KHO07</td>
+<td><div class="nm">Kiểm kê kho </div><div class="ds">Đếm bằng máy quét, duyệt và xử lý chênh lệch</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="kho08 hàng cận hạn, hết hạn, tiêu hủy cảnh báo cận hạn, lập biên bản hủy, hạch toán ">
+<td class="code">KHO08</td>
+<td><div class="nm">Hàng cận hạn, hết hạn, tiêu hủy <span class="chip new">mới</span></div><div class="ds">Cảnh báo cận hạn, lập biên bản hủy, hạch toán</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="kho09 cách ly hàng không đạt khóa tồn lô, chờ quyết định xử lý ">
+<td class="code">KHO09</td>
+<td><div class="nm">Cách ly hàng không đạt </div><div class="ds">Khóa tồn lô, chờ quyết định xử lý</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="kho10 tồn tối thiểu và đề xuất đặt hàng dưới mức thì đề xuất mua hoặc báo nhà máy ">
+<td class="code">KHO10</td>
+<td><div class="nm">Tồn tối thiểu và đề xuất đặt hàng </div><div class="ds">Dưới mức thì đề xuất mua hoặc báo nhà máy</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="kho11 quét mã vạch và in tem lô nhập, xuất, kiểm kê bằng máy quét; in tem nhãn lô ">
+<td class="code">KHO11</td>
+<td><div class="nm">Quét mã vạch và in tem lô </div><div class="ds">Nhập, xuất, kiểm kê bằng máy quét; in tem nhãn lô</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="kho12 tính giá xuất kho bình quân hoặc nhập trước xuất trước; sổ chi tiết vật tư hàng hóa thông tư 99/2025/tt-btc">
+<td class="code">KHO12</td>
+<td><div class="nm">Tính giá xuất kho <span class="chip new">mới</span></div><div class="ds">Bình quân hoặc nhập trước xuất trước; sổ chi tiết vật tư hàng hóa</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-rd" data-grp>
+<h3>Nghiên cứu &amp; phát triển (R&amp;D, tách riêng) <span class="cnt" data-cnt>4</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="3" data-new="1" data-q="rd01 dự án sản phẩm mới ý tưởng, thử mẫu, đánh giá, chuyển giao; chỉ nhóm r&amp;d và giám đốc truy cập, kế toán không xem được ">
+<td class="code">RD01</td>
+<td><div class="nm">Dự án sản phẩm mới <span class="chip new">mới</span></div><div class="ds">Ý tưởng, thử mẫu, đánh giá, chuyển giao; chỉ nhóm R&amp;D và Giám đốc truy cập, kế toán không xem được</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="3" data-new="1" data-q="rd02 công thức theo phiên bản nguyên liệu, tỷ lệ, quy trình; mỗi lần sửa tạo phiên bản mới, chốt thì khóa ">
+<td class="code">RD02</td>
+<td><div class="nm">Công thức theo phiên bản <span class="chip new">mới</span></div><div class="ds">Nguyên liệu, tỷ lệ, quy trình; mỗi lần sửa tạo phiên bản mới, chốt thì khóa</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="3" data-new="1" data-q="rd03 mẫu thử và đánh giá kết quả cảm quan, chỉ tiêu kiểm nghiệm từng mẫu ">
+<td class="code">RD03</td>
+<td><div class="nm">Mẫu thử và đánh giá <span class="chip new">mới</span></div><div class="ds">Kết quả cảm quan, chỉ tiêu kiểm nghiệm từng mẫu</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="3" data-new="1" data-q="rd04 duyệt chốt công thức giám đốc duyệt, nhật ký ghi người duyệt ">
+<td class="code">RD04</td>
+<td><div class="nm">Duyệt chốt công thức <span class="chip new">mới</span></div><div class="ds">Giám đốc duyệt, nhật ký ghi người duyệt</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-cl" data-grp>
+<h3>Chất lượng &amp; an toàn thực phẩm <span class="cnt" data-cnt>9</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="2" data-new="0" data-q="cl01 kiểm tra nguyên liệu đầu vào theo điểm kiểm tra khi nhận hàng ">
+<td class="code">CL01</td>
+<td><div class="nm">Kiểm tra nguyên liệu đầu vào </div><div class="ds">Theo điểm kiểm tra khi nhận hàng</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="3" data-new="0" data-q="cl02 giám sát điểm kiểm soát tới hạn haccp đo nhiệt độ, thời gian; ngoài giới hạn thì giữ lô ">
+<td class="code">CL02</td>
+<td><div class="nm">Giám sát điểm kiểm soát tới hạn HACCP </div><div class="ds">Đo nhiệt độ, thời gian; ngoài giới hạn thì giữ lô</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="2" data-new="0" data-q="cl03 kiểm tra thành phẩm trước khi xuất lô chưa đạt không cho xuất ">
+<td class="code">CL03</td>
+<td><div class="nm">Kiểm tra thành phẩm trước khi xuất </div><div class="ds">Lô chưa đạt không cho xuất</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="cl04 cảnh báo và hành động khắc phục nguyên nhân, biện pháp, hạn xử lý ">
+<td class="code">CL04</td>
+<td><div class="nm">Cảnh báo và hành động khắc phục </div><div class="ds">Nguyên nhân, biện pháp, hạn xử lý</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="cl05 truy xuất nguồn gốc lô truy ngược nguyên liệu, nhà cung cấp; truy xuôi khách hàng ">
+<td class="code">CL05</td>
+<td><div class="nm">Truy xuất nguồn gốc lô </div><div class="ds">Truy ngược nguyên liệu, nhà cung cấp; truy xuôi khách hàng</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="cl06 thu hồi sản phẩm khóa tồn, danh sách khách, nhận hàng trả về, hủy ">
+<td class="code">CL06</td>
+<td><div class="nm">Thu hồi sản phẩm </div><div class="ds">Khóa tồn, danh sách khách, nhận hàng trả về, hủy</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="cl07 hồ sơ công bố sản phẩm theo dõi hồ sơ tự công bố, nhãn, hạn giấy tờ an toàn thực phẩm luật an toàn thực phẩm 2010 và văn bản hướng dẫn">
+<td class="code">CL07</td>
+<td><div class="nm">Hồ sơ công bố sản phẩm <span class="chip new">mới</span></div><div class="ds">Theo dõi hồ sơ tự công bố, nhãn, hạn giấy tờ an toàn thực phẩm</div><div class="law">Luật An toàn thực phẩm 2010 và văn bản hướng dẫn</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="cl08 lưu mẫu và kiểm nghiệm định kỳ lịch gửi mẫu, kết quả kiểm nghiệm theo lô ">
+<td class="code">CL08</td>
+<td><div class="nm">Lưu mẫu và kiểm nghiệm định kỳ <span class="chip new">mới</span></div><div class="ds">Lịch gửi mẫu, kết quả kiểm nghiệm theo lô</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="cl09 sức khỏe và tập huấn người sản xuất trực tiếp khám sức khỏe, xác nhận kiến thức an toàn thực phẩm luật an toàn thực phẩm 2010 và văn bản hướng dẫn">
+<td class="code">CL09</td>
+<td><div class="nm">Sức khỏe và tập huấn người sản xuất trực tiếp <span class="chip new">mới</span></div><div class="ds">Khám sức khỏe, xác nhận kiến thức an toàn thực phẩm</div><div class="law">Luật An toàn thực phẩm 2010 và văn bản hướng dẫn</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-ts" data-grp>
+<h3>Tài sản, công cụ, bảo trì &amp; xe <span class="cnt" data-cnt>13</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="0" data-q="ts01 ghi tăng tài sản cố định ngưỡng 30 triệu, nguyên giá gồm chi phí liên quan; nợ 211, nợ 1332 thông tư 45/2013/tt-btc, sửa đổi bởi thông tư 30/2025/tt-btc">
+<td class="code">TS01</td>
+<td><div class="nm">Ghi tăng tài sản cố định </div><div class="ds">Ngưỡng 30 triệu, nguyên giá gồm chi phí liên quan; Nợ 211, Nợ 1332</div><div class="law">Thông tư 45/2013/TT-BTC, sửa đổi bởi Thông tư 30/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts02 tách tài sản khi số lượng lớn hơn 1 mỗi tài sản một thẻ, một mã ">
+<td class="code">TS02</td>
+<td><div class="nm">Tách tài sản khi số lượng lớn hơn 1 <span class="chip new">mới</span></div><div class="ds">Mỗi tài sản một thẻ, một mã</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ts03 tính và ghi sổ khấu hao hằng tháng tính theo ngày ở tháng tăng, giảm; nợ 627/641/642, có 214 thông tư 45/2013/tt-btc, sửa đổi bởi thông tư 30/2025/tt-btc">
+<td class="code">TS03</td>
+<td><div class="nm">Tính và ghi sổ khấu hao hằng tháng </div><div class="ds">Tính theo ngày ở tháng tăng, giảm; Nợ 627/641/642, Có 214</div><div class="law">Thông tư 45/2013/TT-BTC, sửa đổi bởi Thông tư 30/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts04 điều chỉnh nguyên giá, thời gian sử dụng nâng cấp, sửa chữa lớn; tính lại khấu hao còn lại thông tư 45/2013/tt-btc">
+<td class="code">TS04</td>
+<td><div class="nm">Điều chỉnh nguyên giá, thời gian sử dụng <span class="chip new">mới</span></div><div class="ds">Nâng cấp, sửa chữa lớn; tính lại khấu hao còn lại</div><div class="law">Thông tư 45/2013/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts05 điều chuyển tài sản đổi bộ phận sử dụng hoặc chuyển giữa 2 pháp nhân ">
+<td class="code">TS05</td>
+<td><div class="nm">Điều chuyển tài sản <span class="chip new">mới</span></div><div class="ds">Đổi bộ phận sử dụng hoặc chuyển giữa 2 pháp nhân</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts06 thanh lý, nhượng bán tài sản dừng khấu hao, giá trị còn lại vào 811, tiền thu vào 711, lập hóa đơn ">
+<td class="code">TS06</td>
+<td><div class="nm">Thanh lý, nhượng bán tài sản <span class="chip new">mới</span></div><div class="ds">Dừng khấu hao, giá trị còn lại vào 811, tiền thu vào 711, lập hóa đơn</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts07 kiểm kê tài sản cố định đối chiếu sổ và thực tế ">
+<td class="code">TS07</td>
+<td><div class="nm">Kiểm kê tài sản cố định <span class="chip new">mới</span></div><div class="ds">Đối chiếu sổ và thực tế</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts08 thẻ tài sản và sổ tài sản cố định in thẻ, sổ theo đơn vị sử dụng thông tư 99/2025/tt-btc">
+<td class="code">TS08</td>
+<td><div class="nm">Thẻ tài sản và sổ tài sản cố định <span class="chip new">mới</span></div><div class="ds">In thẻ, sổ theo đơn vị sử dụng</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts09 công cụ dụng cụ dưới 30 triệu: xuất dùng, phân bổ qua 242 thông tư 99/2025/tt-btc">
+<td class="code">TS09</td>
+<td><div class="nm">Công cụ dụng cụ <span class="chip new">mới</span></div><div class="ds">Dưới 30 triệu: xuất dùng, phân bổ qua 242</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="ts10 xây dựng cơ bản dở dang tập hợp chi phí xây dựng nhà máy qua 241, quyết toán và ghi tăng thông tư 99/2025/tt-btc">
+<td class="code">TS10</td>
+<td><div class="nm">Xây dựng cơ bản dở dang <span class="chip new">mới</span></div><div class="ds">Tập hợp chi phí xây dựng nhà máy qua 241, quyết toán và ghi tăng</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="3" data-new="0" data-q="ts11 bảo trì thiết bị bảo trì định kỳ, sửa chữa, thời gian dừng máy ">
+<td class="code">TS11</td>
+<td><div class="nm">Bảo trì thiết bị </div><div class="ds">Bảo trì định kỳ, sửa chữa, thời gian dừng máy</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="3" data-new="0" data-q="ts12 quản lý đội xe nhiên liệu, bảo dưỡng, chành xe, đăng kiểm, bảo hiểm xe theo vùng ">
+<td class="code">TS12</td>
+<td><div class="nm">Quản lý đội xe </div><div class="ds">Nhiên liệu, bảo dưỡng, chành xe, đăng kiểm, bảo hiểm xe theo vùng</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="2" data-new="1" data-q="ts13 thuê tài sản thuê kho, thuê xe; tiền thuê trả trước phân bổ ">
+<td class="code">TS13</td>
+<td><div class="nm">Thuê tài sản <span class="chip new">mới</span></div><div class="ds">Thuê kho, thuê xe; tiền thuê trả trước phân bổ</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-kt" data-grp>
+<h3>Kế toán tổng hợp, tiền &amp; công nợ <span class="cnt" data-cnt>18</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="1" data-q="kt01 thu chi tiền mặt phiếu thu, phiếu chi, sổ quỹ thông tư 99/2025/tt-btc">
+<td class="code">KT01</td>
+<td><div class="nm">Thu chi tiền mặt <span class="chip new">mới</span></div><div class="ds">Phiếu thu, phiếu chi, sổ quỹ</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt02 thu chi qua ngân hàng ủy nhiệm chi, giấy báo có, báo nợ ">
+<td class="code">KT02</td>
+<td><div class="nm">Thu chi qua ngân hàng <span class="chip new">mới</span></div><div class="ds">Ủy nhiệm chi, giấy báo có, báo nợ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="kt03 đối soát ngân hàng khớp sao kê với chứng từ ">
+<td class="code">KT03</td>
+<td><div class="nm">Đối soát ngân hàng </div><div class="ds">Khớp sao kê với chứng từ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="kt04 công nợ phải thu tuổi nợ, đối chiếu công nợ, nhắc nợ ">
+<td class="code">KT04</td>
+<td><div class="nm">Công nợ phải thu </div><div class="ds">Tuổi nợ, đối chiếu công nợ, nhắc nợ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="kt05 công nợ phải trả lịch thanh toán theo hạn, đối chiếu với nhà cung cấp ">
+<td class="code">KT05</td>
+<td><div class="nm">Công nợ phải trả </div><div class="ds">Lịch thanh toán theo hạn, đối chiếu với nhà cung cấp</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt06 bù trừ công nợ đối tác vừa mua vừa bán ">
+<td class="code">KT06</td>
+<td><div class="nm">Bù trừ công nợ <span class="chip new">mới</span></div><div class="ds">Đối tác vừa mua vừa bán</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt07 tạm ứng và hoàn ứng tạm ứng công tác, mua hàng; quyết toán tạm ứng ">
+<td class="code">KT07</td>
+<td><div class="nm">Tạm ứng và hoàn ứng <span class="chip new">mới</span></div><div class="ds">Tạm ứng công tác, mua hàng; quyết toán tạm ứng</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="kt08 bút toán tổng hợp và điều chỉnh nhập tay có duyệt; không sửa bút toán đã khóa kỳ ">
+<td class="code">KT08</td>
+<td><div class="nm">Bút toán tổng hợp và điều chỉnh </div><div class="ds">Nhập tay có duyệt; không sửa bút toán đã khóa kỳ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt09 chi phí trả trước phân bổ nhiều kỳ qua 242 thông tư 99/2025/tt-btc">
+<td class="code">KT09</td>
+<td><div class="nm">Chi phí trả trước <span class="chip new">mới</span></div><div class="ds">Phân bổ nhiều kỳ qua 242</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt10 chi phí trích trước trích trước chi phí qua 335 thông tư 99/2025/tt-btc">
+<td class="code">KT10</td>
+<td><div class="nm">Chi phí trích trước <span class="chip new">mới</span></div><div class="ds">Trích trước chi phí qua 335</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt11 đánh giá chênh lệch tỷ giá cuối kỳ số dư ngoại tệ ">
+<td class="code">KT11</td>
+<td><div class="nm">Đánh giá chênh lệch tỷ giá cuối kỳ <span class="chip new">mới</span></div><div class="ds">Số dư ngoại tệ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt12 dự phòng giảm giá hàng tồn kho, nợ phải thu khó đòi ">
+<td class="code">KT12</td>
+<td><div class="nm">Dự phòng <span class="chip new">mới</span></div><div class="ds">Giảm giá hàng tồn kho, nợ phải thu khó đòi</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="kt13 kết chuyển và xác định kết quả kinh doanh kết chuyển doanh thu, chi phí cuối kỳ thông tư 99/2025/tt-btc">
+<td class="code">KT13</td>
+<td><div class="nm">Kết chuyển và xác định kết quả kinh doanh </div><div class="ds">Kết chuyển doanh thu, chi phí cuối kỳ</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="kt14 khóa sổ kỳ và chốt báo cáo chốt số liệu báo cáo, khóa không cho ghi vào kỳ cũ ">
+<td class="code">KT14</td>
+<td><div class="nm">Khóa sổ kỳ và chốt báo cáo </div><div class="ds">Chốt số liệu báo cáo, khóa không cho ghi vào kỳ cũ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="kt15 kiểm tra điều kiện chứng từ khoản mua từ 5 triệu phải có thanh toán không dùng tiền mặt để khấu trừ gtgt và tính chi phí được trừ luật thuế gtgt 48/2024/qh15, nghị định 181/2025/nđ-cp, nghị định 320/2025/nđ-cp">
+<td class="code">KT15</td>
+<td><div class="nm">Kiểm tra điều kiện chứng từ <span class="chip new">mới</span></div><div class="ds">Khoản mua từ 5 triệu phải có thanh toán không dùng tiền mặt để khấu trừ GTGT và tính chi phí được trừ</div><div class="law">Luật Thuế GTGT 48/2024/QH15, Nghị định 181/2025/NĐ-CP, Nghị định 320/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="2" data-new="1" data-q="kt16 vay và lãi vay hợp đồng vay, lịch trả, trích lãi ">
+<td class="code">KT16</td>
+<td><div class="nm">Vay và lãi vay <span class="chip new">mới</span></div><div class="ds">Hợp đồng vay, lịch trả, trích lãi</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="1" data-new="1" data-q="kt17 sổ kế toán sổ nhật ký chung, sổ cái, sổ chi tiết thông tư 99/2025/tt-btc">
+<td class="code">KT17</td>
+<td><div class="nm">Sổ kế toán <span class="chip new">mới</span></div><div class="ds">Sổ nhật ký chung, sổ cái, sổ chi tiết</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="3" data-new="0" data-q="kt18 giao dịch nội bộ và hợp nhất 2 pháp nhân nối hóa đơn mua bán nội bộ, loại trừ khi hợp nhất ">
+<td class="code">KT18</td>
+<td><div class="nm">Giao dịch nội bộ và hợp nhất 2 pháp nhân </div><div class="ds">Nối hóa đơn mua bán nội bộ, loại trừ khi hợp nhất</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-ns" data-grp>
+<h3>Khoản mục chi phí &amp; ngân sách <span class="cnt" data-cnt>5</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="0" data-q="ns01 lập ngân sách trên cây khoản mục sửa cha chia xuống, sửa con cộng lên, khóa khoản ">
+<td class="code">NS01</td>
+<td><div class="nm">Lập ngân sách trên cây khoản mục </div><div class="ds">Sửa cha chia xuống, sửa con cộng lên, khóa khoản</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ns02 duyệt và phiên bản ngân sách đã duyệt thì khóa, sửa phải tạo phiên bản mới ">
+<td class="code">NS02</td>
+<td><div class="nm">Duyệt và phiên bản ngân sách </div><div class="ds">Đã duyệt thì khóa, sửa phải tạo phiên bản mới</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ns03 kiểm soát ngân sách khi phát sinh chi phí cảnh báo hoặc bắt duyệt khi vượt ">
+<td class="code">NS03</td>
+<td><div class="nm">Kiểm soát ngân sách khi phát sinh chi phí </div><div class="ds">Cảnh báo hoặc bắt duyệt khi vượt</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="ns04 so sánh kế hoạch và thực tế theo khoản mục, tháng, phòng ban ">
+<td class="code">NS04</td>
+<td><div class="nm">So sánh kế hoạch và thực tế </div><div class="ds">Theo khoản mục, tháng, phòng ban</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="2" data-new="1" data-q="ns05 phân bổ chi phí chung chia chi phí chung cho nhãn hàng, kênh, bộ phận theo tiêu thức ">
+<td class="code">NS05</td>
+<td><div class="nm">Phân bổ chi phí chung <span class="chip new">mới</span></div><div class="ds">Chia chi phí chung cho nhãn hàng, kênh, bộ phận theo tiêu thức</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-thue" data-grp>
+<h3>Thuế <span class="cnt" data-cnt>13</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="1" data-q="thue01 tính thuế gtgt theo thuế suất tự áp 8% cho nhóm được giảm từ 10% tới hết 31/12/2026, loại trừ nhóm không được giảm nghị quyết 204/2025/qh15, nghị định 174/2025/nđ-cp">
+<td class="code">THUE01</td>
+<td><div class="nm">Tính thuế GTGT theo thuế suất <span class="chip new">mới</span></div><div class="ds">Tự áp 8% cho nhóm được giảm từ 10% tới hết 31/12/2026, loại trừ nhóm không được giảm</div><div class="law">Nghị quyết 204/2025/QH15, Nghị định 174/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="thue02 kiểm tra điều kiện khấu trừ gtgt đầu vào hóa đơn hợp lệ; thanh toán không dùng tiền mặt từ 5 triệu đã gồm thuế luật thuế gtgt 48/2024/qh15, nghị định 181/2025/nđ-cp">
+<td class="code">THUE02</td>
+<td><div class="nm">Kiểm tra điều kiện khấu trừ GTGT đầu vào <span class="chip new">mới</span></div><div class="ds">Hóa đơn hợp lệ; thanh toán không dùng tiền mặt từ 5 triệu đã gồm thuế</div><div class="law">Luật Thuế GTGT 48/2024/QH15, Nghị định 181/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="thue03 tờ khai thuế gtgt tháng hoặc quý tổng hợp từ hóa đơn, xuất tệp xml nộp qua cổng thuế điện tử luật quản lý thuế, sửa đổi bởi luật 108/2025/qh15 (từ 01/7/2026)">
+<td class="code">THUE03</td>
+<td><div class="nm">Tờ khai thuế GTGT tháng hoặc quý <span class="chip new">mới</span></div><div class="ds">Tổng hợp từ hóa đơn, xuất tệp XML nộp qua cổng thuế điện tử</div><div class="law">Luật Quản lý thuế, sửa đổi bởi Luật 108/2025/QH15 (từ 01/7/2026)</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="thue04 đối chiếu hóa đơn với cơ quan thuế so hóa đơn trong sổ với dữ liệu hóa đơn điện tử của cơ quan thuế nghị định 70/2025/nđ-cp">
+<td class="code">THUE04</td>
+<td><div class="nm">Đối chiếu hóa đơn với cơ quan thuế <span class="chip new">mới</span></div><div class="ds">So hóa đơn trong sổ với dữ liệu hóa đơn điện tử của cơ quan thuế</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="thue05 tạm nộp thuế tndn theo quý ước tính thu nhập chịu thuế, nhắc hạn nộp luật thuế tndn 67/2025/qh15">
+<td class="code">THUE05</td>
+<td><div class="nm">Tạm nộp thuế TNDN theo quý <span class="chip new">mới</span></div><div class="ds">Ước tính thu nhập chịu thuế, nhắc hạn nộp</div><div class="law">Luật Thuế TNDN 67/2025/QH15</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="thue06 quyết toán thuế tndn năm loại chi phí không được trừ; thuế suất 20%, 17% hoặc 15% theo doanh thu; chuyển lỗ luật thuế tndn 67/2025/qh15, nghị định 320/2025/nđ-cp">
+<td class="code">THUE06</td>
+<td><div class="nm">Quyết toán thuế TNDN năm <span class="chip new">mới</span></div><div class="ds">Loại chi phí không được trừ; thuế suất 20%, 17% hoặc 15% theo doanh thu; chuyển lỗ</div><div class="law">Luật Thuế TNDN 67/2025/QH15, Nghị định 320/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="2" data-new="1" data-q="thue07 khấu trừ thuế tncn từ tiền lương biểu lũy tiến 5 bậc; giảm trừ 15,5 triệu bản thân, 6,2 triệu mỗi người phụ thuộc luật thuế tncn 109/2025/qh15">
+<td class="code">THUE07</td>
+<td><div class="nm">Khấu trừ thuế TNCN từ tiền lương <span class="chip new">mới</span></div><div class="ds">Biểu lũy tiến 5 bậc; giảm trừ 15,5 triệu bản thân, 6,2 triệu mỗi người phụ thuộc</div><div class="law">Luật Thuế TNCN 109/2025/QH15</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="thue08 chứng từ khấu trừ thuế tncn điện tử cấp cho người lao động, truyền dữ liệu tới cơ quan thuế nghị định 70/2025/nđ-cp">
+<td class="code">THUE08</td>
+<td><div class="nm">Chứng từ khấu trừ thuế TNCN điện tử <span class="chip new">mới</span></div><div class="ds">Cấp cho người lao động, truyền dữ liệu tới cơ quan thuế</div><div class="law">Nghị định 70/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="thue09 quyết toán thuế tncn năm tổng hợp theo người, nhận ủy quyền quyết toán, xuất tờ khai luật thuế tncn 109/2025/qh15">
+<td class="code">THUE09</td>
+<td><div class="nm">Quyết toán thuế TNCN năm <span class="chip new">mới</span></div><div class="ds">Tổng hợp theo người, nhận ủy quyền quyết toán, xuất tờ khai</div><div class="law">Luật Thuế TNCN 109/2025/QH15</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="thue10 khấu trừ thuế thu nhập vãng lai cộng tác viên, hợp đồng dịch vụ cá nhân; cam kết thu nhập thấp luật thuế tncn 109/2025/qh15 và văn bản hướng dẫn">
+<td class="code">THUE10</td>
+<td><div class="nm">Khấu trừ thuế thu nhập vãng lai <span class="chip new">mới</span></div><div class="ds">Cộng tác viên, hợp đồng dịch vụ cá nhân; cam kết thu nhập thấp</div><div class="law">Luật Thuế TNCN 109/2025/QH15 và văn bản hướng dẫn</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="1" data-new="1" data-q="thue11 hồ sơ giao dịch liên kết mua bán giữa văn phòng và nhà máy: tờ khai thông tin giao dịch liên kết khi quyết toán quy định về giao dịch liên kết">
+<td class="code">THUE11</td>
+<td><div class="nm">Hồ sơ giao dịch liên kết <span class="chip new">mới</span></div><div class="ds">Mua bán giữa Văn phòng và Nhà máy: tờ khai thông tin giao dịch liên kết khi quyết toán</div><div class="law">Quy định về giao dịch liên kết</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="thue12 lịch nghĩa vụ thuế và tiền chậm nộp nhắc hạn nộp tờ khai, nộp tiền; tính tiền chậm nộp khi trễ luật quản lý thuế, sửa đổi bởi luật 108/2025/qh15">
+<td class="code">THUE12</td>
+<td><div class="nm">Lịch nghĩa vụ thuế và tiền chậm nộp <span class="chip new">mới</span></div><div class="ds">Nhắc hạn nộp tờ khai, nộp tiền; tính tiền chậm nộp khi trễ</div><div class="law">Luật Quản lý thuế, sửa đổi bởi Luật 108/2025/QH15</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="3" data-new="1" data-q="thue13 thuế nhà thầu nước ngoài khi mua dịch vụ, bản quyền từ nước ngoài ">
+<td class="code">THUE13</td>
+<td><div class="nm">Thuế nhà thầu nước ngoài <span class="chip new">mới</span></div><div class="ds">Khi mua dịch vụ, bản quyền từ nước ngoài</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-nsu" data-grp>
+<h3>Lao động &amp; nhân sự <span class="cnt" data-cnt>17</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="2" data-new="1" data-q="nsu01 tuyển dụng yêu cầu tuyển, hồ sơ ứng viên, phỏng vấn ">
+<td class="code">NSU01</td>
+<td><div class="nm">Tuyển dụng <span class="chip new">mới</span></div><div class="ds">Yêu cầu tuyển, hồ sơ ứng viên, phỏng vấn</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="nsu02 hồ sơ nhân viên và người phụ thuộc số định danh cá nhân dùng làm mã số thuế; đăng ký người phụ thuộc luật bảo vệ dữ liệu cá nhân 91/2025/qh15">
+<td class="code">NSU02</td>
+<td><div class="nm">Hồ sơ nhân viên và người phụ thuộc </div><div class="ds">Số định danh cá nhân dùng làm mã số thuế; đăng ký người phụ thuộc</div><div class="law">Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="nsu03 hợp đồng lao động thử việc, xác định và không xác định thời hạn, phụ lục; nhắc hết hạn bộ luật lao động 2019">
+<td class="code">NSU03</td>
+<td><div class="nm">Hợp đồng lao động </div><div class="ds">Thử việc, xác định và không xác định thời hạn, phụ lục; nhắc hết hạn</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu04 thang bảng lương và quy chế lương thưởng kiểm tra mức thấp nhất không dưới lương tối thiểu vùng bộ luật lao động 2019, nghị định 293/2025/nđ-cp">
+<td class="code">NSU04</td>
+<td><div class="nm">Thang bảng lương và quy chế lương thưởng <span class="chip new">mới</span></div><div class="ds">Kiểm tra mức thấp nhất không dưới lương tối thiểu vùng</div><div class="law">Bộ luật Lao động 2019, Nghị định 293/2025/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu05 ca làm việc lịch 3 ca nhà máy, ca hành chính văn phòng, làm đêm bộ luật lao động 2019">
+<td class="code">NSU05</td>
+<td><div class="nm">Ca làm việc <span class="chip new">mới</span></div><div class="ds">Lịch 3 ca nhà máy, ca hành chính văn phòng, làm đêm</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="nsu06 chấm công máy chấm công, điện thoại; tổng hợp công theo ca ">
+<td class="code">NSU06</td>
+<td><div class="nm">Chấm công </div><div class="ds">Máy chấm công, điện thoại; tổng hợp công theo ca</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu07 làm thêm giờ đăng ký, duyệt; chặn vượt 40 giờ/tháng và giới hạn năm 200 hoặc 300 giờ bộ luật lao động 2019, nghị định 145/2020/nđ-cp">
+<td class="code">NSU07</td>
+<td><div class="nm">Làm thêm giờ <span class="chip new">mới</span></div><div class="ds">Đăng ký, duyệt; chặn vượt 40 giờ/tháng và giới hạn năm 200 hoặc 300 giờ</div><div class="law">Bộ luật Lao động 2019, Nghị định 145/2020/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="nsu08 nghỉ phép, nghỉ lễ tết phép năm 12 ngày cộng thâm niên, nghỉ việc riêng, nghỉ không lương bộ luật lao động 2019">
+<td class="code">NSU08</td>
+<td><div class="nm">Nghỉ phép, nghỉ lễ Tết </div><div class="ds">Phép năm 12 ngày cộng thâm niên, nghỉ việc riêng, nghỉ không lương</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu09 ốm đau, thai sản hồ sơ hưởng chế độ, ngày nghỉ, tính lương những ngày nghỉ luật bảo hiểm xã hội 2024">
+<td class="code">NSU09</td>
+<td><div class="nm">Ốm đau, thai sản <span class="chip new">mới</span></div><div class="ds">Hồ sơ hưởng chế độ, ngày nghỉ, tính lương những ngày nghỉ</div><div class="law">Luật Bảo hiểm xã hội 2024</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu10 tai nạn lao động, bệnh nghề nghiệp khai báo, điều tra, chi trả luật an toàn, vệ sinh lao động 2015">
+<td class="code">NSU10</td>
+<td><div class="nm">Tai nạn lao động, bệnh nghề nghiệp <span class="chip new">mới</span></div><div class="ds">Khai báo, điều tra, chi trả</div><div class="law">Luật An toàn, vệ sinh lao động 2015</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu11 an toàn vệ sinh lao động huấn luyện, khám sức khỏe định kỳ, trang bị bảo hộ luật an toàn, vệ sinh lao động 2015">
+<td class="code">NSU11</td>
+<td><div class="nm">An toàn vệ sinh lao động <span class="chip new">mới</span></div><div class="ds">Huấn luyện, khám sức khỏe định kỳ, trang bị bảo hộ</div><div class="law">Luật An toàn, vệ sinh lao động 2015</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu12 khen thưởng, kỷ luật lao động biên bản, quyết định, lưu hồ sơ bộ luật lao động 2019">
+<td class="code">NSU12</td>
+<td><div class="nm">Khen thưởng, kỷ luật lao động <span class="chip new">mới</span></div><div class="ds">Biên bản, quyết định, lưu hồ sơ</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu13 điều chuyển, thăng chức, điều chỉnh lương quyết định, phụ lục hợp đồng, báo tăng mức đóng bảo hiểm ">
+<td class="code">NSU13</td>
+<td><div class="nm">Điều chuyển, thăng chức, điều chỉnh lương <span class="chip new">mới</span></div><div class="ds">Quyết định, phụ lục hợp đồng, báo tăng mức đóng bảo hiểm</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu14 chấm dứt hợp đồng lao động trợ cấp thôi việc, chốt thời gian đóng bảo hiểm, quyết toán lương, phép còn lại bộ luật lao động 2019">
+<td class="code">NSU14</td>
+<td><div class="nm">Chấm dứt hợp đồng lao động <span class="chip new">mới</span></div><div class="ds">Trợ cấp thôi việc, chốt thời gian đóng bảo hiểm, quyết toán lương, phép còn lại</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="nsu15 báo cáo sử dụng lao động định kỳ báo cáo 6 tháng và năm bộ luật lao động 2019, nghị định 145/2020/nđ-cp">
+<td class="code">NSU15</td>
+<td><div class="nm">Báo cáo sử dụng lao động định kỳ <span class="chip new">mới</span></div><div class="ds">Báo cáo 6 tháng và năm</div><div class="law">Bộ luật Lao động 2019, Nghị định 145/2020/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="3" data-new="1" data-q="nsu16 đánh giá hiệu suất kpi theo kỳ, làm căn cứ thưởng ">
+<td class="code">NSU16</td>
+<td><div class="nm">Đánh giá hiệu suất <span class="chip new">mới</span></div><div class="ds">KPI theo kỳ, làm căn cứ thưởng</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="3" data-new="1" data-q="nsu17 đào tạo kế hoạch, lớp học, chứng chỉ, hạn chứng chỉ ">
+<td class="code">NSU17</td>
+<td><div class="nm">Đào tạo <span class="chip new">mới</span></div><div class="ds">Kế hoạch, lớp học, chứng chỉ, hạn chứng chỉ</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-luong" data-grp>
+<h3>Tiền lương &amp; bảo hiểm <span class="cnt" data-cnt>13</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="2" data-new="1" data-q="luong01 thiết lập lương tối thiểu vùng theo địa bàn văn phòng tp.hcm và nhà máy tây ninh; cảnh báo lương thấp hơn mức vùng nghị định 293/2025/nđ-cp (từ 01/01/2026)">
+<td class="code">LUONG01</td>
+<td><div class="nm">Thiết lập lương tối thiểu vùng theo địa bàn <span class="chip new">mới</span></div><div class="ds">Văn phòng TP.HCM và Nhà máy Tây Ninh; cảnh báo lương thấp hơn mức vùng</div><div class="law">Nghị định 293/2025/NĐ-CP (từ 01/01/2026)</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="luong02 tính lương thời gian, sản phẩm, khoán theo công, theo sản lượng công đoạn bộ luật lao động 2019">
+<td class="code">LUONG02</td>
+<td><div class="nm">Tính lương thời gian, sản phẩm, khoán </div><div class="ds">Theo công, theo sản lượng công đoạn</div><div class="law">Bộ luật Lao động 2019</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong03 phụ cấp và trợ cấp ăn ca, xăng xe, điện thoại, độc hại; đánh dấu khoản chịu thuế, khoản tính đóng bảo hiểm luật thuế tncn 109/2025/qh15, luật bảo hiểm xã hội 2024">
+<td class="code">LUONG03</td>
+<td><div class="nm">Phụ cấp và trợ cấp <span class="chip new">mới</span></div><div class="ds">Ăn ca, xăng xe, điện thoại, độc hại; đánh dấu khoản chịu thuế, khoản tính đóng bảo hiểm</div><div class="law">Luật Thuế TNCN 109/2025/QH15, Luật Bảo hiểm xã hội 2024</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong04 tiền lương làm thêm và làm đêm 150% ngày thường, 200% ngày nghỉ tuần, 300% lễ tết; làm đêm thêm ít nhất 30% bộ luật lao động 2019, nghị định 145/2020/nđ-cp">
+<td class="code">LUONG04</td>
+<td><div class="nm">Tiền lương làm thêm và làm đêm <span class="chip new">mới</span></div><div class="ds">150% ngày thường, 200% ngày nghỉ tuần, 300% lễ Tết; làm đêm thêm ít nhất 30%</div><div class="law">Bộ luật Lao động 2019, Nghị định 145/2020/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong05 tính bhxh, bhyt, bhtn người lao động 10,5%, doanh nghiệp 21,5%; mức trần theo lương cơ sở đổi từ 01/7/2026 luật bảo hiểm xã hội 2024, luật việc làm 2025">
+<td class="code">LUONG05</td>
+<td><div class="nm">Tính BHXH, BHYT, BHTN <span class="chip new">mới</span></div><div class="ds">Người lao động 10,5%, doanh nghiệp 21,5%; mức trần theo lương cơ sở đổi từ 01/7/2026</div><div class="law">Luật Bảo hiểm xã hội 2024, Luật Việc làm 2025</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong06 kinh phí công đoàn 2% quỹ lương làm căn cứ đóng bhxh luật công đoàn 2024, nghị định 105/2026/nđ-cp">
+<td class="code">LUONG06</td>
+<td><div class="nm">Kinh phí công đoàn <span class="chip new">mới</span></div><div class="ds">2% quỹ lương làm căn cứ đóng BHXH</div><div class="law">Luật Công đoàn 2024, Nghị định 105/2026/NĐ-CP</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong07 khai báo tăng, giảm lao động đóng bảo hiểm lập hồ sơ điện tử khi vào làm, nghỉ việc, đổi mức lương luật bảo hiểm xã hội 2024">
+<td class="code">LUONG07</td>
+<td><div class="nm">Khai báo tăng, giảm lao động đóng bảo hiểm <span class="chip new">mới</span></div><div class="ds">Lập hồ sơ điện tử khi vào làm, nghỉ việc, đổi mức lương</div><div class="law">Luật Bảo hiểm xã hội 2024</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="luong08 thuế tncn trên bảng lương tính cùng bảng lương, nối sang khấu trừ và quyết toán luật thuế tncn 109/2025/qh15">
+<td class="code">LUONG08</td>
+<td><div class="nm">Thuế TNCN trên bảng lương </div><div class="ds">Tính cùng bảng lương, nối sang khấu trừ và quyết toán</div><div class="law">Luật Thuế TNCN 109/2025/QH15</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong09 tạm ứng lương tạm ứng giữa kỳ, trừ khi tính lương ">
+<td class="code">LUONG09</td>
+<td><div class="nm">Tạm ứng lương <span class="chip new">mới</span></div><div class="ds">Tạm ứng giữa kỳ, trừ khi tính lương</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="1" data-q="luong10 thưởng và lương tháng 13 tính thuế tncn cho khoản thưởng ">
+<td class="code">LUONG10</td>
+<td><div class="nm">Thưởng và lương tháng 13 <span class="chip new">mới</span></div><div class="ds">Tính thuế TNCN cho khoản thưởng</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="luong11 bảng lương, phiếu lương, chi lương qua ngân hàng duyệt bảng lương, gửi phiếu lương riêng từng người, tệp chi lương ">
+<td class="code">LUONG11</td>
+<td><div class="nm">Bảng lương, phiếu lương, chi lương qua ngân hàng </div><div class="ds">Duyệt bảng lương, gửi phiếu lương riêng từng người, tệp chi lương</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="luong12 hạch toán và phân bổ chi phí lương theo khoản mục: lương trực tiếp nhà máy, khối văn phòng; 622, 627, 641, 642 thông tư 99/2025/tt-btc">
+<td class="code">LUONG12</td>
+<td><div class="nm">Hạch toán và phân bổ chi phí lương </div><div class="ds">Theo khoản mục: lương trực tiếp nhà máy, khối văn phòng; 622, 627, 641, 642</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="luong13 đề nghị thanh toán và công tác phí nhân viên chi hộ, xin hoàn tiền; kiểm soát ngân sách ">
+<td class="code">LUONG13</td>
+<td><div class="nm">Đề nghị thanh toán và công tác phí </div><div class="ds">Nhân viên chi hộ, xin hoàn tiền; kiểm soát ngân sách</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr></tbody></table></div>
+</div><div class="grp" id="g-bc" data-grp>
+<h3>Báo cáo <span class="cnt" data-cnt>10</span></h3>
+<div class="tbl"><table class="list"><thead><tr><th style="width:84px">Mã</th><th>Nghiệp vụ</th><th style="width:70px">Giai đoạn</th></tr></thead><tbody><tr data-p="1" data-new="1" data-q="bc01 báo cáo tài chính báo cáo tình hình tài chính, kết quả kinh doanh, lưu chuyển tiền tệ, thuyết minh thông tư 99/2025/tt-btc">
+<td class="code">BC01</td>
+<td><div class="nm">Báo cáo tài chính <span class="chip new">mới</span></div><div class="ds">Báo cáo tình hình tài chính, kết quả kinh doanh, lưu chuyển tiền tệ, thuyết minh</div><div class="law">Thông tư 99/2025/TT-BTC</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="0" data-q="bc02 báo cáo phân tích chi phí nhiều kỳ theo cây theo mẫu misa công ty đang dùng, truy ngược chứng từ ">
+<td class="code">BC02</td>
+<td><div class="nm">Báo cáo phân tích chi phí nhiều kỳ theo cây </div><div class="ds">Theo mẫu MISA công ty đang dùng, truy ngược chứng từ</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="2" data-new="0" data-q="bc03 lãi gộp theo nhãn hàng, kênh, vùng, sản phẩm báo cáo quản trị cho ban giám đốc ">
+<td class="code">BC03</td>
+<td><div class="nm">Lãi gộp theo nhãn hàng, kênh, vùng, sản phẩm </div><div class="ds">Báo cáo quản trị cho ban giám đốc</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="2" data-new="0" data-q="bc04 nhập xuất tồn và hàng cận hạn theo kho, lô, hạn dùng ">
+<td class="code">BC04</td>
+<td><div class="nm">Nhập xuất tồn và hàng cận hạn </div><div class="ds">Theo kho, lô, hạn dùng</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="1" data-new="0" data-q="bc05 công nợ và tuổi nợ phải thu, phải trả theo đối tác, theo hạn ">
+<td class="code">BC05</td>
+<td><div class="nm">Công nợ và tuổi nợ </div><div class="ds">Phải thu, phải trả theo đối tác, theo hạn</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="1" data-new="1" data-q="bc07 bảng kê và tổng hợp thuế hóa đơn đầu vào, đầu ra; đối chiếu với tờ khai ">
+<td class="code">BC07</td>
+<td><div class="nm">Bảng kê và tổng hợp thuế <span class="chip new">mới</span></div><div class="ds">Hóa đơn đầu vào, đầu ra; đối chiếu với tờ khai</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr><tr data-p="2" data-new="1" data-q="bc08 lao động, lương, bảo hiểm quỹ lương, số đóng bảo hiểm, thuế tncn theo tháng ">
+<td class="code">BC08</td>
+<td><div class="nm">Lao động, lương, bảo hiểm <span class="chip new">mới</span></div><div class="ds">Quỹ lương, số đóng bảo hiểm, thuế TNCN theo tháng</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="3" data-new="0" data-q="bc09 báo cáo hợp nhất 2 pháp nhân sau loại trừ giao dịch nội bộ ">
+<td class="code">BC09</td>
+<td><div class="nm">Báo cáo hợp nhất 2 pháp nhân </div><div class="ds">Sau loại trừ giao dịch nội bộ</div></td>
+<td class="ph"><span class="chip p3">GĐ3</span></td></tr><tr data-p="2" data-new="1" data-q="bc10 bảng điều hành ban giám đốc doanh thu, chi phí, tiền, tồn kho, công nợ trên một màn hình ">
+<td class="code">BC10</td>
+<td><div class="nm">Bảng điều hành ban giám đốc <span class="chip new">mới</span></div><div class="ds">Doanh thu, chi phí, tiền, tồn kho, công nợ trên một màn hình</div></td>
+<td class="ph"><span class="chip p2">GĐ2</span></td></tr><tr data-p="1" data-new="0" data-q="bc11 truy ngược từ báo cáo tới chứng từ bấm số trên báo cáo ra chứng từ gốc ">
+<td class="code">BC11</td>
+<td><div class="nm">Truy ngược từ báo cáo tới chứng từ </div><div class="ds">Bấm số trên báo cáo ra chứng từ gốc</div></td>
+<td class="ph"><span class="chip p1">GĐ1</span></td></tr></tbody></table></div>
+</div>
+</section>
+
+<section id="luu-y">
+<h2><span class="no">05</span>Lưu ý</h2>
+<ul class="gaps">
+  <li><b>Tham số pháp lý phải có ngày hiệu lực, không viết cứng vào code</b><span>Lương cơ sở đổi ngay giữa năm 2026 (01/7), nên bảng lương tháng 6 và tháng 7 dùng mức trần bảo hiểm khác nhau. App lưu mỗi tham số kèm ngày bắt đầu áp dụng; luật đổi thì kế toán nhập dòng mới, không phải sửa code.</span></li>
+  <li><b>Tài liệu này không thay tư vấn pháp lý</b><span>Kế toán trưởng, nhân sự và QA cần xác nhận từng tham số trước khi chạy thật, đặc biệt các điểm dưới đây.</span></li>
+  <li><b>Vùng lương tối thiểu của Nhà máy</b><span>Kết quả tra cứu cho thấy xã Mỹ Hạnh thuộc vùng I sau sắp xếp địa giới; nhân sự đối chiếu lại phụ lục Nghị định 293/2025/NĐ-CP.</span></li>
+  <li><b>Giới hạn làm thêm 300 giờ/năm</b><span>Chỉ áp dụng cho một số ngành và phải thông báo cơ quan lao động; cần xác nhận ngành chế biến thực phẩm của công ty thuộc diện này.</span></li>
+  <li><b>Văn bản hướng dẫn chưa đọc toàn văn</b><span>Thông tư 30/2025/TT-BTC (khấu hao), văn bản hướng dẫn Luật Thuế TNCN 109/2025 và Luật Quản lý thuế 108/2025, quy định an toàn thực phẩm mới. Mẫu tờ khai có thể đổi sau 01/7/2026.</span></li>
+  <li><b>Lệ phí môn bài đã bãi bỏ từ 01/01/2026</b><span>Không đưa nghiệp vụ kê khai, nộp lệ phí môn bài vào app.</span></li>
+</ul>
+</section>
+
+<section id="nguon">
+<h2>Nguồn tham khảo</h2>
+<ul class="src">
+<li><a href="https://thuvienphapluat.vn/phap-luat/toan-van-thong-tu-992025ttbtc-che-do-ke-toan-doanh-nghiep-thay-the-thong-tu-200-tu-01012026-ra-sao-239165.html">Thông tư 99/2025/TT-BTC chế độ kế toán doanh nghiệp</a></li>
+<li><a href="https://luatvietnam.vn/tin-van-ban-moi/chinh-thuc-giam-thue-gtgt-xuong-8-tu-ngay-01-7-2025-den-het-31-12-2026-186-102680-article.html">Giảm thuế GTGT còn 8% tới hết 31/12/2026</a></li>
+<li><a href="https://ihoadon.vn/hddt/thanh-toan-khong-dung-tien-mat-tu-01-7-2025-tai-nghi-dinh-181-2025-nd-cp.html">Thanh toán không dùng tiền mặt từ 5 triệu, Nghị định 181/2025</a></li>
+<li><a href="https://thuvienphapluat.vn/van-ban/Doanh-nghiep/Luat-Thue-thu-nhap-doanh-nghiep-2025-so-67-2025-QH15-580594.aspx">Luật Thuế TNDN 67/2025/QH15</a></li>
+<li><a href="https://luatvietnam.vn/thue-phi-le-phi/diem-moi-nghi-dinh-320-2025-nd-cp-ve-thue-tndn-565-105990-article.html">Điểm mới Nghị định 320/2025/NĐ-CP</a></li>
+<li><a href="https://luatvietnam.vn/tin-van-ban-moi/chinh-thuc-bai-bo-le-phi-mon-bai-tu-01-01-2026-186-102164-article.html">Bãi bỏ lệ phí môn bài từ 01/01/2026</a></li>
+<li><a href="https://www.ey.com/vi_vn/technical/tax/tax-and-law-updates/luat-thue-thu-nhap-ca-nhan-109-2025-qh15">Luật Thuế TNCN 109/2025/QH15 (EY)</a></li>
+<li><a href="https://luatvietan.vn/lo-trinh-ap-dung-luat-thue-tncn-nam-2026-cap-nhat-luat-so-109-2025-qh15-moi-nhat.html">Lộ trình áp dụng Luật Thuế TNCN 2026</a></li>
+<li><a href="https://vietnamnet.vn/5-thay-doi-lon-cua-luat-thue-thu-nhap-ca-nhan-2025-tu-1-7-2481753.html">5 thay đổi lớn của Luật Thuế TNCN</a></li>
+<li><a href="https://thanhnien.vn/luong-toi-thieu-vung-tang-tu-112026-ai-duoc-tang-tang-bao-nhieu-185260101182419626.htm">Lương tối thiểu vùng từ 01/01/2026</a></li>
+<li><a href="https://thuvienphapluat.vn/phap-luat/muc-luong-toi-thieu-vung-tinh-tay-ninh-tu-112026-theo-nghi-dinh-2932025ndcp-chi-tiet-ra-sao-241020.html">Lương tối thiểu vùng tỉnh Tây Ninh 2026</a></li>
+<li><a href="https://thuvienphapluat.vn/phap-luat-doanh-nghiep/bai-viet/bang-luong-co-so-2026-va-muc-luong-co-so-moi-tu-01-7-2026-18709.html">Lương cơ sở mới từ 01/7/2026</a></li>
+<li><a href="https://luatvietnam.vn/bao-hiem/ty-le-dong-bhxh-cua-doanh-nghiep-va-nguoi-lao-dong-563-100379-article.html">Tỷ lệ đóng BHXH năm 2026</a></li>
+<li><a href="https://luatvietnam.vn/lao-dong-tien-luong/muc-dong-doan-phi-kinh-phi-cong-doan-562-23118-article.html">Kinh phí công đoàn 2026</a></li>
+<li><a href="https://www.talentnetgroup.com/vn/vi/phan-tich-chuyen-sau/tinh-luong-lam-them-gio">Tiền lương làm thêm giờ 2026</a></li>
+<li><a href="https://xaydungchinhsach.chinhphu.vn/nghi-dinh-70-2025-nd-cp-sua-doi-bo-sung-quy-dinh-ve-hoa-don-chung-tu-11925032321512617.htm">Nghị định 70/2025/NĐ-CP về hóa đơn, chứng từ</a></li>
+<li><a href="https://xaydungchinhsach.chinhphu.vn/toan-van-luat-quan-ly-thue-co-hieu-luc-tu-1-7-2026-119260626174633402.htm">Luật Quản lý thuế có hiệu lực từ 01/7/2026</a></li>
+<li><a href="https://congbao.chinhphu.vn/van-ban/luat-so-91-2025-qh15-45578.htm">Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15</a></li>
+<li><a href="https://vanban.chinhphu.vn/?pageid=27160&docid=213853&classid=1&typegroupid=6">Thông tư 30/2025/TT-BTC sửa Thông tư 45/2013</a></li>
+</ul>
+</section>
+<footer>Mở rộng từ “Bản thiết kế ERP LiFeOOD” và “Phương án công nghệ ERP LiFeOOD”. Số liệu pháp lý tra cứu ngày 14/09/2026.</footer>
+</main></div>
+<script>
+(function(){
+  const q = document.getElementById('q'), onlynew = document.getElementById('onlynew'), shown = document.getElementById('shown');
+  let ph = '0';
+  function apply(){
+    const s = q.value.trim().toLowerCase(); let total = 0;
+    document.querySelectorAll('[data-grp]').forEach(g => {
+      let c = 0;
+      g.querySelectorAll('tbody tr').forEach(tr => {
+        const ok = (ph === '0' || tr.dataset.p === ph) && (!onlynew.checked || tr.dataset.new === '1') && (!s || tr.dataset.q.includes(s));
+        tr.hidden = !ok; if (ok) c++;
+      });
+      g.querySelector('[data-cnt]').textContent = c;
+      g.hidden = c === 0; total += c;
+    });
+    shown.textContent = total + ' nghiệp vụ';
+  }
+  q.addEventListener('input', apply); onlynew.addEventListener('change', apply);
+  document.querySelectorAll('[data-ph]').forEach(b => b.addEventListener('click', () => {
+    ph = b.dataset.ph; document.querySelectorAll('[data-ph]').forEach(x => x.classList.toggle('on', x === b)); apply();
+  }));
+  window.addEventListener('beforeprint', () => { q.value=''; onlynew.checked=false; ph='0'; apply(); });
+})();
+</script>

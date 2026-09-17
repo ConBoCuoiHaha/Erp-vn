@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="p_gio_tuan" model="lfood.legal.param"><field name="code">GIO_LAM_VIEC_TUAN</field><field name="name">Giờ làm việc bình thường tối đa một tuần</field><field name="group">labor</field><field name="value_type">number</field></record>
+    <record id="pv_gio_tuan" model="lfood.legal.param.value"><field name="param_id" ref="p_gio_tuan"/><field name="value">48</field><field name="date_from">2021-01-01</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 105 khoản 1</field><field name="state">approved</field></record>
+    <record id="p_nghi_ca" model="lfood.legal.param"><field name="code">NGHI_CHUYEN_CA_GIO</field><field name="name">Giờ nghỉ tối thiểu trước khi chuyển sang ca khác</field><field name="group">labor</field><field name="value_type">number</field></record>
+    <record id="pv_nghi_ca" model="lfood.legal.param.value"><field name="param_id" ref="p_nghi_ca"/><field name="value">12</field><field name="date_from">2021-01-01</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 109 khoản 2</field><field name="state">approved</field></record>
+</odoo>

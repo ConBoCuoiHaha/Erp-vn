@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_budget_spread" model="ir.actions.act_window">
+        <field name="name">Chia số theo khoản mục cha</field>
+        <field name="res_model">lfood.budget.spread</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_budget_list" model="ir.ui.view">
+        <field name="name">lfood.budget.list</field>
+        <field name="model">lfood.budget</field>
+        <field name="arch" type="xml">
+            <list string="Ngân sách">
+                <field name="name"/>
+                <field name="year"/>
+                <field name="version"/>
+                <field name="amount_total" sum="Tổng kế hoạch"/>
+                <field name="state"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_budget_form" model="ir.ui.view">
+        <field name="name">lfood.budget.form</field>
+        <field name="model">lfood.budget</field>
+        <field name="arch" type="xml">
+            <form string="Ngân sách">
+                <header>
+                    <button name="action_load_items" type="object" string="Nạp khoản mục"
+                            invisible="state != 'draft'"
+                            help="Tạo đủ dòng cho mọi khoản mục chi tiết và 12 tháng"/>
+                    <button name="%(action_budget_spread)d" type="action" string="Chia số theo khoản mục cha"
+                            class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Duyệt"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"/>
+                    <button name="action_lock" type="object" string="Khóa"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'approved'"/>
+                    <button name="action_new_version" type="object" string="Lập phiên bản mới"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" placeholder="Ví dụ Ngân sách 2027"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="version"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="amount_total"/>
+                            <field name="approved_by"/>
+                            <field name="approved_on"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Dòng ngân sách">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" default_order="cost_item_id, month">
+                                    <field name="cost_item_id" options="{'no_create': True}"/>
+                                    <field name="month"/>
+                                    <field name="amount" sum="Tổng"/>
+                                    <field name="locked"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Ghi chú">
+                            <field name="note" placeholder="Căn cứ lập, giả định, người trình"/>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">
+                        Số kế hoạch chỉ nhập ở khoản mục chi tiết. Số của khoản mục cha là tổng các khoản con,
+                        tự cộng lên khi sửa dòng. Muốn nhập ở cấp cha thì bấm Chia số theo khoản mục cha:
+                        hệ thống chia xuống các dòng chi tiết theo tỷ trọng hiện có và giữ nguyên dòng đang khóa.
+                        Ngân sách đã duyệt không sửa được, muốn đổi thì lập phiên bản mới.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_budget_search" model="ir.ui.view">
+        <field name="name">lfood.budget.search</field>
+        <field name="model">lfood.budget</field>
+        <field name="arch" type="xml">
+            <search string="Ngân sách">
+                <field name="name"/>
+                <field name="year"/>
+                <filter name="f_draft" string="Nháp" domain="[('state', '=', 'draft')]"/>
+                <filter name="f_approved" string="Đã duyệt" domain="[('state', 'in', ('approved', 'locked'))]"/>
+                <group>
+                    <filter name="g_year" string="Năm" context="{'group_by': 'year'}"/>
+                    <filter name="g_state" string="Trạng thái" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_budget" model="ir.actions.act_window">
+        <field name="name">Ngân sách</field>
+        <field name="res_model">lfood.budget</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_budget_spread_form" model="ir.ui.view">
+        <field name="name">lfood.budget.spread.form</field>
+        <field name="model">lfood.budget.spread</field>
+        <field name="arch" type="xml">
+            <form string="Chia số kế hoạch">
+                <group>
+                    <field name="budget_id" readonly="1"/>
+                    <field name="cost_item_id" options="{'no_create': True}"/>
+                    <field name="month"/>
+                    <field name="current_amount"/>
+                    <field name="amount"/>
+                </group>
+                <div class="text-muted">
+                    Số nhập ở đây được chia xuống các khoản mục chi tiết thuộc nhánh theo tỷ trọng hiện có.
+                    Dòng đang khóa giữ nguyên; phần lẻ dồn vào dòng có số lẻ lớn nhất nên tổng luôn khớp tới đồng.
+                </div>
+                <footer>
+                    <button name="action_apply" type="object" string="Chia số" class="btn-primary"/>
+                    <button special="cancel" string="Hủy"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_budget_report_list" model="ir.ui.view">
+        <field name="name">lfood.budget.report.list</field>
+        <field name="model">lfood.budget.report</field>
+        <field name="arch" type="xml">
+            <list string="Ngân sách và thực tế" create="false">
+                <field name="year"/>
+                <field name="month"/>
+                <field name="lvl1_id" optional="show"/>
+                <field name="lvl2_id" optional="hide"/>
+                <field name="cost_item_id"/>
+                <field name="plan_amount" sum="Kế hoạch"/>
+                <field name="actual_amount" sum="Thực tế"/>
+                <field name="diff_amount" sum="Chênh lệch"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_budget_report_search" model="ir.ui.view">
+        <field name="name">lfood.budget.report.search</field>
+        <field name="model">lfood.budget.report</field>
+        <field name="arch" type="xml">
+            <search string="Ngân sách và thực tế">
+                <field name="cost_item_id"/>
+                <field name="year"/>
+                <filter name="f_over" string="Vượt ngân sách" domain="[('diff_amount', '>', 0)]"/>
+                <group>
+                    <filter name="g_lvl1" string="Khoản mục cấp 1" context="{'group_by': 'lvl1_id'}"/>
+                    <filter name="g_lvl2" string="Khoản mục cấp 2" context="{'group_by': 'lvl2_id'}"/>
+                    <filter name="g_month" string="Tháng" context="{'group_by': 'month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_budget_report" model="ir.actions.act_window">
+        <field name="name">Ngân sách và thực tế</field>
+        <field name="res_model">lfood.budget.report</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_g_lvl1': 1}</field>
+    </record>
+
+    <menuitem id="menu_budget" name="Ngân sách" parent="lfood_base.menu_documents"
+              action="action_budget" sequence="60"/>
+    <menuitem id="menu_budget_report" name="Ngân sách và thực tế" parent="lfood_base.menu_reports"
+              action="action_budget_report" sequence="60"/>
+</odoo>

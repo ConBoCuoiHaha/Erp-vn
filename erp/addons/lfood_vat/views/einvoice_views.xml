@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_einvoice_check_list" model="ir.ui.view">
+        <field name="name">lfood.einvoice.check.list</field>
+        <field name="model">lfood.einvoice.check</field>
+        <field name="arch" type="xml">
+            <list string="Đối chiếu hóa đơn với cơ quan thuế">
+                <field name="kind"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="summary"/>
+                <field name="checked_on"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_einvoice_check_form" model="ir.ui.view">
+        <field name="name">lfood.einvoice.check.form</field>
+        <field name="model">lfood.einvoice.check</field>
+        <field name="arch" type="xml">
+            <form string="Đối chiếu hóa đơn với cơ quan thuế">
+                <header>
+                    <button name="action_check" type="object" string="Đối chiếu" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="kind"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="import_file" filename="import_name"/>
+                            <field name="import_name" invisible="1"/>
+                            <field name="summary"/>
+                            <field name="checked_on"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Tải bảng kê hóa đơn trên cổng hoadondientu.gdt.gov.vn (Tra cứu hóa đơn, Xuất Excel) cho đúng khoảng
+                        ngày, chọn tệp rồi bấm Đối chiếu. Hóa đơn trong sổ lấy theo nguồn của bảng kê tờ khai 01/GTGT; so khớp theo mã số thuế
+                        đối tác và số hóa đơn.</div>
+                    <field name="line_ids" readonly="1">
+                        <list decoration-danger="result in ('book_only', 'cancelled')" decoration-warning="result in ('diff', 'portal_only')"
+                              decoration-muted="result == 'match'">
+                            <field name="result"/>
+                            <field name="partner_vat"/>
+                            <field name="partner_id"/>
+                            <field name="ref"/>
+                            <field name="date"/>
+                            <field name="portal_base"/>
+                            <field name="book_base"/>
+                            <field name="portal_tax"/>
+                            <field name="book_tax"/>
+                            <field name="portal_status"/>
+                            <button name="action_open_source" type="object" string="Mở chứng từ" invisible="not source_id"/>
+                            <field name="source_id" column_invisible="1"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_einvoice_check" model="ir.actions.act_window">
+        <field name="name">Đối chiếu hóa đơn với cơ quan thuế</field>
+        <field name="res_model">lfood.einvoice.check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_einvoice_check" name="Đối chiếu hóa đơn với cơ quan thuế" parent="menu_tax_root" action="action_einvoice_check" sequence="15"/>
+</odoo>

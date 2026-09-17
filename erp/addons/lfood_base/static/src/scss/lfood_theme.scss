@@ -1,0 +1,35 @@
+// ERP LiFeOOD - giao diện cơ bản trắng xám, gọn như MISA
+.o_web_client {
+    font-family: "Segoe UI", system-ui, -apple-system, Arial, sans-serif;
+}
+.o_main_navbar {
+    --NavBar-entry-backgroundColor: #FFFFFF;
+    --NavBar-entry-backgroundColor--hover: #F1F1F3;
+    --NavBar-entry-backgroundColor--focus: #F1F1F3;
+    --NavBar-entry-backgroundColor--active: #E4E4E7;
+    --NavBar-entry-color--active: #18181B;
+    background: #FFFFFF !important;
+    border-bottom: 1px solid #E4E4E7 !important;
+    .o_menu_brand, .o_nav_entry, .dropdown-toggle, .o_menu_sections .dropdown-toggle {
+        color: #18181B !important;
+    }
+    .o_menu_sections .o_nav_entry, .o_menu_sections .dropdown-toggle {
+        background: #FFFFFF !important;
+        &:hover, &:focus { background: #F1F1F3 !important; }
+    }
+    .o_menu_sections .dropdown.show .dropdown-toggle,
+    .o_menu_sections .dropdown-toggle.show { background: #E4E4E7 !important; }
+}
+.o_action_manager { background: #F7F7F8; }
+.o_list_renderer .o_list_table {
+    thead th { background: #F1F1F3; font-weight: 600; }
+}
+.o_form_view .o_form_sheet_bg { background: #F7F7F8; }
+.o_form_view .o_form_sheet { border: 1px solid #E4E4E7; box-shadow: none; }
+.btn-primary { background-color: #18181B; border-color: #18181B; }
+.btn-primary:hover, .btn-primary:focus { background-color: #3F3F46; border-color: #3F3F46; }
+.o_lfood_big_total { font-size: 1.6rem; font-weight: 700; font-variant-numeric: tabular-nums; }
+.o_lfood_note { color: #71717A; }
+.o_lfood_changes table { width: 100%; border-collapse: collapse; }
+.o_lfood_changes th, .o_lfood_changes td { border-bottom: 1px solid #E4E4E7; padding: 4px 8px; text-align: left; }
+.o_lfood_changes th { background: #F1F1F3; }

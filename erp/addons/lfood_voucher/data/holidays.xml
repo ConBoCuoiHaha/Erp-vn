@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Chỉ nạp các ngày đã đối chiếu; ngày nghỉ bù, Giỗ Tổ, Quốc khánh của từng năm kế toán nhập theo thông báo hằng năm. -->
+<odoo noupdate="1">
+    <record id="hol_2026_0101" model="lfood.holiday"><field name="date">2026-01-01</field><field name="name">Tết Dương lịch</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2026_tet_1" model="lfood.holiday"><field name="date">2026-02-16</field><field name="name">Tết Âm lịch Bính Ngọ</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112; lịch nghỉ 14-22/02/2026</field></record>
+    <record id="hol_2026_tet_2" model="lfood.holiday"><field name="date">2026-02-17</field><field name="name">Tết Âm lịch Bính Ngọ</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2026_tet_3" model="lfood.holiday"><field name="date">2026-02-18</field><field name="name">Tết Âm lịch Bính Ngọ</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2026_tet_4" model="lfood.holiday"><field name="date">2026-02-19</field><field name="name">Tết Âm lịch Bính Ngọ</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2026_tet_5" model="lfood.holiday"><field name="date">2026-02-20</field><field name="name">Tết Âm lịch Bính Ngọ</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2026_0430" model="lfood.holiday"><field name="date">2026-04-30</field><field name="name">Ngày Chiến thắng</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2026_0501" model="lfood.holiday"><field name="date">2026-05-01</field><field name="name">Ngày Quốc tế Lao động</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+    <record id="hol_2027_0101" model="lfood.holiday"><field name="date">2027-01-01</field><field name="name">Tết Dương lịch</field><field name="legal_ref">Bộ luật Lao động 2019, Điều 112</field></record>
+</odoo>

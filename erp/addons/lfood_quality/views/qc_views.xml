@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_form_qc" model="ir.ui.view">
+        <field name="name">lfood.product.form.qc</field>
+        <field name="model">lfood.product</field>
+        <field name="inherit_id" ref="lfood_stock.view_product_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='shelf_life_days']" position="after">
+                <field name="qc_required"/>
+                <field name="qc_template_id" invisible="not qc_required" options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_qc_template_form" model="ir.ui.view">
+        <field name="name">lfood.qc.template.form</field>
+        <field name="model">lfood.qc.template</field>
+        <field name="arch" type="xml">
+            <form string="Bộ chỉ tiêu kiểm tra">
+                <sheet>
+                    <group><field name="name"/><field name="active"/></group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="sequence" widget="handle"/>
+                            <field name="name"/>
+                            <field name="requirement"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_qc_template_list" model="ir.ui.view">
+        <field name="name">lfood.qc.template.list</field>
+        <field name="model">lfood.qc.template</field>
+        <field name="arch" type="xml">
+            <list string="Bộ chỉ tiêu kiểm tra"><field name="name"/></list>
+        </field>
+    </record>
+    <record id="action_qc_template" model="ir.actions.act_window">
+        <field name="name">Bộ chỉ tiêu kiểm tra</field>
+        <field name="res_model">lfood.qc.template</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_qc_check_list" model="ir.ui.view">
+        <field name="name">lfood.qc.check.list</field>
+        <field name="model">lfood.qc.check</field>
+        <field name="arch" type="xml">
+            <list string="Phiếu kiểm tra chất lượng" decoration-danger="state == 'failed'" decoration-success="state == 'passed'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="stage"/>
+                <field name="product_id"/>
+                <field name="lot_id"/>
+                <field name="partner_id"/>
+                <field name="quantity"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_qc_check_form" model="ir.ui.view">
+        <field name="name">lfood.qc.check.form</field>
+        <field name="model">lfood.qc.check</field>
+        <field name="arch" type="xml">
+            <form string="Phiếu kiểm tra chất lượng">
+                <header>
+                    <button name="action_pass" type="object" string="Kết luận Đạt, giải phóng lô" class="btn-primary"
+                            invisible="state != 'pending'" groups="lfood_base.group_chief_accountant,lfood_base.group_director"/>
+                    <button name="action_fail" type="object" string="Kết luận Không đạt" invisible="state != 'pending'"
+                            groups="lfood_base.group_chief_accountant,lfood_base.group_director"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="stage" readonly="state != 'pending'"/>
+                            <field name="lot_id" readonly="1"/>
+                            <field name="product_id"/>
+                            <field name="quantity" readonly="1"/>
+                            <field name="picking_id"/>
+                            <field name="partner_id"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'pending'"/>
+                            <field name="inspector" readonly="state != 'pending'"/>
+                            <field name="decided_by" invisible="not decided_by"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'pending'">
+                        <list editable="bottom" decoration-danger="result and not passed">
+                            <field name="name"/>
+                            <field name="requirement"/>
+                            <field name="result"/>
+                            <field name="passed"/>
+                        </list>
+                    </field>
+                    <field name="conclusion" placeholder="Kết luận, nguyên nhân nếu không đạt" readonly="state != 'pending'"/>
+                    <field name="action_ids" invisible="not action_ids" readonly="1">
+                        <list><field name="name"/><field name="deadline"/><field name="state"/></list>
+                    </field>
+                    <div class="text-muted">Lô đang chờ kiểm tra hoặc không đạt bị cách ly, không xuất bán, xuất dùng được.
+                        Quy trình nội bộ theo hệ thống quản lý an toàn thực phẩm của công ty.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_qc_check" model="ir.actions.act_window">
+        <field name="name">Phiếu kiểm tra chất lượng</field>
+        <field name="res_model">lfood.qc.check</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_qc_action_list" model="ir.ui.view">
+        <field name="name">lfood.qc.action.list</field>
+        <field name="model">lfood.qc.action</field>
+        <field name="arch" type="xml">
+            <list string="Hành động khắc phục" decoration-danger="state == 'open' and deadline &lt; current_date">
+                <field name="name"/>
+                <field name="responsible"/>
+                <field name="deadline"/>
+                <field name="done_on"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_qc_action_form" model="ir.ui.view">
+        <field name="name">lfood.qc.action.form</field>
+        <field name="model">lfood.qc.action</field>
+        <field name="arch" type="xml">
+            <form string="Hành động khắc phục">
+                <header>
+                    <button name="action_done" type="object" string="Đã xong" class="btn-primary" invisible="state != 'open'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="check_id"/>
+                            <field name="responsible"/>
+                        </group>
+                        <group>
+                            <field name="deadline"/>
+                            <field name="done_on"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <field name="cause" placeholder="Nguyên nhân"/>
+                    <field name="measure" placeholder="Biện pháp khắc phục, phòng ngừa (trả nhà cung cấp, hủy, sửa quy trình...)"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_qc_action" model="ir.actions.act_window">
+        <field name="name">Hành động khắc phục</field>
+        <field name="res_model">lfood.qc.action</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_qc_check" name="Phiếu kiểm tra chất lượng" parent="menu_quality_root" action="action_qc_check" sequence="5"/>
+    <menuitem id="menu_qc_action" name="Hành động khắc phục" parent="menu_quality_root" action="action_qc_action" sequence="8"/>
+    <menuitem id="menu_qc_template" name="Bộ chỉ tiêu kiểm tra" parent="menu_quality_root" action="action_qc_template" sequence="30"/>
+</odoo>

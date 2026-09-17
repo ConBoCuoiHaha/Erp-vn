@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_vat_return_list" model="ir.ui.view">
+        <field name="name">lfood.vat.return.list</field>
+        <field name="model">lfood.vat.return</field>
+        <field name="arch" type="xml">
+            <list string="Tờ khai thuế GTGT">
+                <field name="name"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="due_date"/>
+                <field name="tax_payable" sum="Tổng"/>
+                <field name="carry_out"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'confirmed'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_vat_return_form" model="ir.ui.view">
+        <field name="name">lfood.vat.return.form</field>
+        <field name="model">lfood.vat.return</field>
+        <field name="arch" type="xml">
+            <form string="Tờ khai thuế GTGT">
+                <header>
+                    <button name="action_fetch" type="object" string="Lấy dữ liệu" class="btn-primary"
+                            invisible="state != 'draft'" groups="lfood_base.group_accountant"/>
+                    <button name="action_confirm" type="object" string="Xác nhận tờ khai" invisible="state != 'draft' or not line_ids"
+                            groups="lfood_base.group_chief_accountant"
+                            confirm="Xác nhận tờ khai: khóa số liệu, ghi bút toán bù trừ Nợ 33311 / Có 1331, 1332. Tiếp tục?"/>
+                    <button name="action_reset" type="object" string="Hủy xác nhận" invisible="state != 'confirmed'"
+                            groups="lfood_base.group_chief_accountant" confirm="Hủy xác nhận và đảo bút toán bù trừ?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="period_type" readonly="state != 'draft' or line_ids"/>
+                            <field name="year" readonly="state != 'draft' or line_ids"/>
+                            <field name="month" invisible="period_type != 'month'" readonly="state != 'draft' or line_ids"/>
+                            <field name="quarter" invisible="period_type != 'quarter'" readonly="state != 'draft' or line_ids"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft' or line_ids"/>
+                        </group>
+                        <group>
+                            <field name="due_date"/>
+                            <field name="carry_in"/>
+                            <field name="tax_payable" class="o_lfood_big_total"/>
+                            <field name="carry_out"/>
+                            <field name="confirmed_by" invisible="not confirmed_by"/>
+                            <field name="confirmed_on" invisible="not confirmed_on"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Tờ khai 01/GTGT" name="form">
+                            <field name="form_html" nolabel="1"/>
+                            <div class="text-muted">
+                                Số liệu để nhập vào phần mềm khai thuế của cơ quan thuế. Tờ khai theo Thông tư 89/2026/TT-BTC, áp dụng từ kỳ tháng 7/2026;
+                                kỳ trước 7/2026 dùng mẫu Thông tư 80/2021. Hàng hóa giảm thuế còn 8% khai ở dòng 10% theo số thuế đã giảm và kèm phụ lục giảm thuế.
+                            </div>
+                        </page>
+                        <page string="Bảng kê mua vào" name="in">
+                            <field name="purchase_line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" create="false" decoration-danger="not deductible and tax">
+                                    <field name="date"/>
+                                    <field name="ref"/>
+                                    <field name="partner_id" readonly="1"/>
+                                    <field name="partner_vat"/>
+                                    <field name="name"/>
+                                    <field name="base" sum="Tổng" readonly="1"/>
+                                    <field name="rate_name" readonly="1"/>
+                                    <field name="tax" sum="Tổng" readonly="1"/>
+                                    <field name="deductible" groups="lfood_base.group_chief_accountant"/>
+                                    <field name="imported" optional="hide"/>
+                                    <field name="reason"/>
+                                    <field name="kind" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Tự kiểm tra: chứng từ chưa có hóa đơn thì không được khấu trừ; hóa đơn từ ngưỡng thanh toán không dùng tiền mặt
+                                (tham số NGUONG_TT_KHONG_TIEN_MAT) mà trả tiền mặt thì không được khấu trừ. Kế toán trưởng được sửa cột Được khấu trừ, ghi rõ lý do.
+                                Thuế không được khấu trừ lập phiếu kế toán ghi vào chi phí.
+                            </div>
+                        </page>
+                        <page string="Bảng kê bán ra" name="out">
+                            <field name="sale_line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" create="false">
+                                    <field name="date"/>
+                                    <field name="ref"/>
+                                    <field name="partner_id" readonly="1"/>
+                                    <field name="partner_vat"/>
+                                    <field name="name"/>
+                                    <field name="base" sum="Tổng" readonly="1"/>
+                                    <field name="rate_name" readonly="1"/>
+                                    <field name="tax" sum="Tổng" readonly="1"/>
+                                    <field name="group"/>
+                                    <field name="reduced"/>
+                                    <field name="reason"/>
+                                    <field name="kind" column_invisible="1"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Hiện lấy từ sổ kế toán: bút toán ghi Có 511, 711 kèm thuế Có 33311. Doanh thu không có thuế mặc định là Không chịu thuế;
+                                hàng xuất khẩu thuế suất 0% thì sửa cột Nhóm.
+                            </div>
+                        </page>
+                        <page string="Phụ lục giảm thuế" name="reduction">
+                            <field name="reduction_html" nolabel="1"/>
+                        </page>
+                        <page string="Điều chỉnh" name="adjust">
+                            <group>
+                                <group>
+                                    <field name="adj_37" readonly="state != 'draft'"/>
+                                    <field name="adj_38" readonly="state != 'draft'"/>
+                                    <field name="adj_39a" readonly="state != 'draft'"/>
+                                </group>
+                                <group>
+                                    <field name="adj_40b" readonly="state != 'draft'"/>
+                                    <field name="adj_42" readonly="state != 'draft'"/>
+                                </group>
+                            </group>
+                            <div class="text-muted">
+                                [37], [38]: mua trả chậm từ 5 triệu chưa có chứng từ không dùng tiền mặt khi đến hạn, phát hiện sai sót thuế đầu vào kỳ trước,
+                                nhận hóa đơn điều chỉnh, thay thế. Điều chỉnh không tự ghi sổ: lập phiếu kế toán tương ứng.
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_vat_return" model="ir.actions.act_window">
+        <field name="name">Tờ khai thuế GTGT</field>
+        <field name="res_model">lfood.vat.return</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html"><p>Bấm Mới, chọn kỳ, bấm Lấy dữ liệu. Kế toán trưởng kiểm tra bảng kê rồi Xác nhận tờ khai.</p></field>
+    </record>
+
+    <record id="view_company_lfood_form_vat" model="ir.ui.view">
+        <field name="name">res.company.lfood.form.vat</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="lfood_base.view_company_lfood_form"/>
+        <field name="arch" type="xml">
+            <field name="lfood_edit_after_post_days" position="after">
+                <field name="lfood_vat_period"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="menu_tax_root" name="Thuế" parent="lfood_base.menu_root" sequence="35"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+    <menuitem id="menu_vat_return" name="Tờ khai thuế GTGT" parent="menu_tax_root" action="action_vat_return" sequence="10"/>
+</odoo>

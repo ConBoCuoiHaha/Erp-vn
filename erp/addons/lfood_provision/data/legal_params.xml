@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bậc trích lập dự phòng nợ phải thu khó đòi theo Điều 6 Thông tư 48/2019/TT-BTC.
+     Doanh nghiệp kinh doanh dịch vụ viễn thông và bán lẻ có mốc riêng: sửa số tháng ở đây, không sửa code. -->
+<odoo noupdate="1">
+    <record id="p_bracket_1" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_THANG_1</field><field name="name">Dự phòng phải thu: số tháng quá hạn bậc 1</field><field name="group">accounting</field><field name="value_type">number</field></record>
+    <record id="pv_bracket_1" model="lfood.legal.param.value"><field name="param_id" ref="p_bracket_1"/><field name="value">6</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6: quá hạn từ 6 tháng đến dưới 1 năm</field><field name="state">approved</field></record>
+    <record id="p_rate_1" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_TY_LE_1</field><field name="name">Dự phòng phải thu: tỷ lệ bậc 1</field><field name="group">accounting</field><field name="value_type">percent</field></record>
+    <record id="pv_rate_1" model="lfood.legal.param.value"><field name="param_id" ref="p_rate_1"/><field name="value">30</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6</field><field name="state">approved</field></record>
+
+    <record id="p_bracket_2" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_THANG_2</field><field name="name">Dự phòng phải thu: số tháng quá hạn bậc 2</field><field name="group">accounting</field><field name="value_type">number</field></record>
+    <record id="pv_bracket_2" model="lfood.legal.param.value"><field name="param_id" ref="p_bracket_2"/><field name="value">12</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6: từ 1 năm đến dưới 2 năm</field><field name="state">approved</field></record>
+    <record id="p_rate_2" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_TY_LE_2</field><field name="name">Dự phòng phải thu: tỷ lệ bậc 2</field><field name="group">accounting</field><field name="value_type">percent</field></record>
+    <record id="pv_rate_2" model="lfood.legal.param.value"><field name="param_id" ref="p_rate_2"/><field name="value">50</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6</field><field name="state">approved</field></record>
+
+    <record id="p_bracket_3" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_THANG_3</field><field name="name">Dự phòng phải thu: số tháng quá hạn bậc 3</field><field name="group">accounting</field><field name="value_type">number</field></record>
+    <record id="pv_bracket_3" model="lfood.legal.param.value"><field name="param_id" ref="p_bracket_3"/><field name="value">24</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6: từ 2 năm đến dưới 3 năm</field><field name="state">approved</field></record>
+    <record id="p_rate_3" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_TY_LE_3</field><field name="name">Dự phòng phải thu: tỷ lệ bậc 3</field><field name="group">accounting</field><field name="value_type">percent</field></record>
+    <record id="pv_rate_3" model="lfood.legal.param.value"><field name="param_id" ref="p_rate_3"/><field name="value">70</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6</field><field name="state">approved</field></record>
+
+    <record id="p_bracket_4" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_THANG_4</field><field name="name">Dự phòng phải thu: số tháng quá hạn bậc 4</field><field name="group">accounting</field><field name="value_type">number</field></record>
+    <record id="pv_bracket_4" model="lfood.legal.param.value"><field name="param_id" ref="p_bracket_4"/><field name="value">36</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6: từ 3 năm trở lên</field><field name="state">approved</field></record>
+    <record id="p_rate_4" model="lfood.legal.param"><field name="code">DU_PHONG_PTKD_TY_LE_4</field><field name="name">Dự phòng phải thu: tỷ lệ bậc 4</field><field name="group">accounting</field><field name="value_type">percent</field></record>
+    <record id="pv_rate_4" model="lfood.legal.param.value"><field name="param_id" ref="p_rate_4"/><field name="value">100</field><field name="date_from">2019-10-10</field><field name="legal_ref">Thông tư 48/2019/TT-BTC, Điều 6</field><field name="state">approved</field></record>
+</odoo>

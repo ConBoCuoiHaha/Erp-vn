@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_provision_list" model="ir.ui.view">
+        <field name="name">lfood.provision.list</field>
+        <field name="model">lfood.provision</field>
+        <field name="arch" type="xml">
+            <list string="Trích lập dự phòng">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="kind"/>
+                <field name="required_amount" sum="Phải trích"/>
+                <field name="existing_amount"/>
+                <field name="adjust_amount" sum="Chênh lệch"
+                       decoration-danger="adjust_amount &gt; 0" decoration-success="adjust_amount &lt; 0"/>
+                <field name="state"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_provision_form" model="ir.ui.view">
+        <field name="name">lfood.provision.form</field>
+        <field name="model">lfood.provision</field>
+        <field name="arch" type="xml">
+            <form string="Trích lập dự phòng">
+                <header>
+                    <button name="action_load" type="object" string="Lấy số liệu" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Ghi sổ"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy chứng từ"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="kind" readonly="state != 'draft'"/>
+                            <field name="date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="required_amount"/>
+                            <field name="existing_amount"/>
+                            <field name="adjust_amount"/>
+                        </group>
+                    </group>
+                    <field name="memo" placeholder="Diễn giải"/>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="kind" column_invisible="1"/>
+                            <field name="partner_id" optional="show" column_invisible="context.get('default_kind') == 'inventory'"/>
+                            <field name="due_date" optional="show"/>
+                            <field name="months_overdue" optional="show"/>
+                            <field name="rate" optional="show"/>
+                            <field name="product_id" optional="show"/>
+                            <field name="quantity" optional="show"/>
+                            <field name="unit_cost" optional="show"/>
+                            <field name="net_realisable" optional="show"/>
+                            <field name="base_amount" sum="Giá trị gốc"/>
+                            <field name="provision" sum="Số dự phòng"/>
+                            <field name="note"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Theo Thông tư 48/2019/TT-BTC, trích lập khi lập báo cáo tài chính năm.
+                        Nợ phải thu quá hạn trích 30% nếu quá 6 tháng đến dưới 1 năm, 50% nếu 1 đến dưới 2 năm,
+                        70% nếu 2 đến dưới 3 năm, 100% nếu từ 3 năm trở lên; tỷ lệ và mốc tháng nằm trong Tham số pháp lý.
+                        Hàng tồn kho chỉ trích khi giá gốc cao hơn giá trị thuần có thể thực hiện được, kế toán nhập
+                        giá trị thuần vào cột tương ứng. App chỉ ghi phần chênh lệch so với số dự phòng đang có:
+                        phải thu khó đòi Nợ 6426 / Có 2293, hàng tồn kho Nợ 632 / Có 2294, hoàn nhập thì ghi ngược lại.
+                        Hồ sơ chứng minh khoản nợ (hợp đồng, đối chiếu công nợ, văn bản đòi nợ) do kế toán lưu kèm.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_provision_search" model="ir.ui.view">
+        <field name="name">lfood.provision.search</field>
+        <field name="model">lfood.provision</field>
+        <field name="arch" type="xml">
+            <search string="Trích lập dự phòng">
+                <field name="name"/>
+                <filter name="f_recv" string="Nợ phải thu khó đòi" domain="[('kind', '=', 'receivable')]"/>
+                <filter name="f_inv" string="Giảm giá hàng tồn kho" domain="[('kind', '=', 'inventory')]"/>
+                <group>
+                    <filter name="g_kind" string="Loại dự phòng" context="{'group_by': 'kind'}"/>
+                    <filter name="g_state" string="Trạng thái" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_provision" model="ir.actions.act_window">
+        <field name="name">Trích lập dự phòng</field>
+        <field name="res_model">lfood.provision</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_provision" name="Trích lập dự phòng" parent="lfood_base.menu_documents"
+              action="action_provision" sequence="76"/>
+</odoo>

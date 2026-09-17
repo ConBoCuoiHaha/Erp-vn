@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_recall_company" model="ir.rule">
+        <field name="name">Thu hồi sản phẩm theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_recall"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_qc_check_company" model="ir.rule">
+        <field name="name">Phiếu kiểm tra chất lượng theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_qc_check"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_qc_action_company" model="ir.rule">
+        <field name="name">Hành động khắc phục theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_qc_action"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

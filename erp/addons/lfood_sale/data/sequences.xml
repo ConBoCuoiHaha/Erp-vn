@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_sale_invoice" model="ir.sequence"><field name="name">Chứng từ bán hàng</field><field name="code">lfood.sale.invoice</field><field name="prefix">BH%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_move_sale" model="ir.sequence"><field name="name">Nhật ký bán hàng</field><field name="code">lfood.move.sale</field><field name="prefix">BHS%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+</odoo>

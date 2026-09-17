@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cột ngoại tệ trên phiếu kế toán và sổ nhật ký chung -->
+    <record id="view_move_form_fx" model="ir.ui.view">
+        <field name="name">lfood.move.form.fx</field>
+        <field name="model">lfood.move</field>
+        <field name="inherit_id" ref="lfood_ledger.view_move_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/list/field[@name='credit']" position="after">
+                <field name="currency_id" optional="show" options="{'no_create': True}"/>
+                <field name="amount_currency" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_move_line_list_fx" model="ir.ui.view">
+        <field name="name">lfood.move.line.list.fx</field>
+        <field name="model">lfood.move.line</field>
+        <field name="inherit_id" ref="lfood_ledger.view_move_line_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='credit']" position="after">
+                <field name="currency_id" optional="hide"/>
+                <field name="amount_currency" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_fx_list" model="ir.ui.view">
+        <field name="name">lfood.fx.revaluation.list</field>
+        <field name="model">lfood.fx.revaluation</field>
+        <field name="arch" type="xml">
+            <list string="Đánh giá lại ngoại tệ">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="bank"/>
+                <field name="gain"/>
+                <field name="loss"/>
+                <field name="net"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_fx_form" model="ir.ui.view">
+        <field name="name">lfood.fx.revaluation.form</field>
+        <field name="model">lfood.fx.revaluation</field>
+        <field name="arch" type="xml">
+            <form string="Đánh giá lại ngoại tệ cuối kỳ">
+                <header>
+                    <button name="action_load" type="object" string="Lấy số dư ngoại tệ" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Ghi sổ"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="bank" placeholder="Ví dụ Vietcombank chi nhánh Tây Ninh"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="gain"/>
+                            <field name="loss"/>
+                            <field name="net"/>
+                        </group>
+                    </group>
+                    <separator string="Tỷ giá cuối kỳ"/>
+                    <field name="rate_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="currency_id" options="{'no_create': True}"/>
+                            <field name="buy_rate"/>
+                            <field name="sell_rate"/>
+                            <field name="rate"/>
+                        </list>
+                    </field>
+                    <separator string="Số dư đánh giá lại"/>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list create="false" decoration-success="diff &gt; 0" decoration-danger="diff &lt; 0">
+                            <field name="account_id"/>
+                            <field name="partner_id"/>
+                            <field name="currency_id"/>
+                            <field name="amount_currency"/>
+                            <field name="book_value"/>
+                            <field name="rate"/>
+                            <field name="revalued"/>
+                            <field name="diff" sum="Chênh lệch"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Theo Thông tư 99/2025/TT-BTC: cuối kỳ đánh giá lại số dư các khoản mục tiền tệ có gốc ngoại tệ
+                        (tiền, phải thu, phải trả, vay) theo tỷ giá mua bán chuyển khoản trung bình của ngân hàng thương mại
+                        nơi doanh nghiệp thường xuyên giao dịch; chênh lệch ghi vào doanh thu hoạt động tài chính (515) hoặc
+                        chi phí tài chính (635) theo số thuần giữa tổng lãi và tổng lỗ. Dòng nào không phải khoản mục tiền tệ
+                        (ví dụ trả trước cho người bán bằng ngoại tệ) thì kế toán xóa trước khi ghi sổ.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_fx" model="ir.actions.act_window">
+        <field name="name">Đánh giá lại ngoại tệ</field>
+        <field name="res_model">lfood.fx.revaluation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_fx" name="Đánh giá lại ngoại tệ" parent="lfood_ledger.menu_ledger_root" action="action_fx" sequence="55"/>
+</odoo>

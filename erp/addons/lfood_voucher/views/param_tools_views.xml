@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_param_tools_form" model="ir.ui.view">
+        <field name="name">lfood.param.tools.form</field>
+        <field name="model">lfood.param.tools</field>
+        <field name="arch" type="xml">
+            <form string="Lịch sử và gói tham số">
+                <group>
+                    <group><field name="date"/></group>
+                    <group>
+                        <field name="export_file" filename="export_name" invisible="not export_file"/>
+                        <field name="export_name" invisible="1"/>
+                        <field name="import_file" filename="import_name" groups="lfood_base.group_chief_accountant"/>
+                        <field name="import_name" invisible="1"/>
+                        <field name="result" invisible="not result"/>
+                    </group>
+                </group>
+                <field name="history_html"/>
+                <footer>
+                    <button name="action_export" type="object" string="Xuất gói tham số" class="btn-primary"/>
+                    <button name="action_import" type="object" string="Nhập gói tham số" invisible="not import_file"
+                            groups="lfood_base.group_chief_accountant"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_param_tools" model="ir.actions.act_window">
+        <field name="name">Lịch sử và gói tham số</field>
+        <field name="res_model">lfood.param.tools</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_param_tools" name="Lịch sử và gói tham số" parent="lfood_base.menu_config" action="action_param_tools" sequence="21"/>
+</odoo>

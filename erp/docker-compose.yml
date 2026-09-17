@@ -1,0 +1,57 @@
+# ERP LiFeOOD - chạy trên laptop (Odoo 19 Community + PostgreSQL 16 + sao lưu tự động)
+# Bật:   docker compose up -d        Tắt: docker compose down
+# Mở:    http://localhost:8069
+# Cấu hình sao lưu: tệp .env
+services:
+  db:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-lfood_dev_only}
+      POSTGRES_DB: postgres
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    # không mở cổng 5432 ra ngoài: máy đã có PostgreSQL 17 dùng cổng này
+
+  odoo:
+    image: odoo:19.0
+    restart: unless-stopped
+    depends_on: [db]
+    ports:
+      - "8069:8069"
+    environment:
+      HOST: db
+      USER: odoo
+      PASSWORD: ${DB_PASSWORD:-lfood_dev_only}
+      TZ: Asia/Ho_Chi_Minh
+    volumes:
+      - odoo-data:/var/lib/odoo
+      - ./addons:/mnt/extra-addons
+      - ./config:/etc/odoo
+      - ${BACKUP_DIR:-./backups}:/mnt/backups
+    command: ["odoo", "--dev=xml"]
+
+  backup:
+    image: postgres:16
+    restart: unless-stopped
+    depends_on: [db]
+    environment:
+      PGPASSWORD: ${DB_PASSWORD:-lfood_dev_only}
+      PGDATABASE: lfood
+      TZ: Asia/Ho_Chi_Minh
+      BACKUP_TIMES: ${BACKUP_TIMES:-12:00,17:30}
+      KEEP_DAILY: ${KEEP_DAILY:-14}
+      KEEP_WEEKLY: ${KEEP_WEEKLY:-8}
+      KEEP_MONTHLY: ${KEEP_MONTHLY:-12}
+      BACKUP_PASSPHRASE: ${BACKUP_PASSPHRASE:-}
+    volumes:
+      - ${BACKUP_DIR:-./backups}:/backups
+      - odoo-data:/odoo-data:ro
+      - ./backup:/scripts:ro
+      - ${OFFSITE_DIR:-./.offsite-disabled}:/offsite
+    entrypoint: ["sh", "/scripts/run-backup.sh"]
+
+volumes:
+  db-data:
+  odoo-data:

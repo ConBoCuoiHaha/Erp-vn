@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Điều khoản bán hàng trên thẻ đối tượng -->
+    <record id="view_partner_form_sale_terms" model="ir.ui.view">
+        <field name="name">res.partner.lfood.form.sale.terms</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="lfood_admin.view_partner_lfood_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='comment']/.." position="before">
+                <group string="Điều khoản bán hàng">
+                    <group>
+                        <field name="lfood_channel_id"/>
+                        <field name="lfood_pricelist_id"/>
+                    </group>
+                    <group>
+                        <field name="lfood_credit_limit"/>
+                        <field name="lfood_payment_days"/>
+                        <field name="lfood_min_shelf_days"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_sale_invoice_form_order" model="ir.ui.view">
+        <field name="name">lfood.sale.invoice.form.order</field>
+        <field name="model">lfood.sale.invoice</field>
+        <field name="inherit_id" ref="lfood_sale.view_sale_invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='memo']" position="before">
+                <field name="sale_order_id" invisible="not sale_order_id"/>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Kênh -->
+    <record id="view_channel_list" model="ir.ui.view">
+        <field name="name">lfood.sale.channel.list</field>
+        <field name="model">lfood.sale.channel</field>
+        <field name="arch" type="xml">
+            <list string="Kênh phân phối" editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="cost_item_id"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_channel" model="ir.actions.act_window">
+        <field name="name">Kênh phân phối</field>
+        <field name="res_model">lfood.sale.channel</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'active_test': False}</field>
+    </record>
+
+    <!-- Bảng giá -->
+    <record id="view_pricelist_list" model="ir.ui.view">
+        <field name="name">lfood.pricelist.list</field>
+        <field name="model">lfood.pricelist</field>
+        <field name="arch" type="xml">
+            <list string="Bảng giá">
+                <field name="name"/>
+                <field name="channel_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_pricelist_form" model="ir.ui.view">
+        <field name="name">lfood.pricelist.form</field>
+        <field name="model">lfood.pricelist</field>
+        <field name="arch" type="xml">
+            <form string="Bảng giá">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="channel_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="min_qty"/>
+                            <field name="price"/>
+                            <field name="discount"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Đơn giá chưa có thuế GTGT. Cùng mặt hàng có nhiều dòng thì app lấy dòng có "Từ số lượng"
+                        lớn nhất không vượt số lượng đặt.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_pricelist" model="ir.actions.act_window">
+        <field name="name">Bảng giá</field>
+        <field name="res_model">lfood.pricelist</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- Đơn bán -->
+    <record id="view_sale_order_list" model="ir.ui.view">
+        <field name="name">lfood.sale.order.list</field>
+        <field name="model">lfood.sale.order</field>
+        <field name="arch" type="xml">
+            <list string="Đơn bán hàng" decoration-warning="state == 'waiting'" decoration-muted="state == 'cancel'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="partner_id"/>
+                <field name="channel_id"/>
+                <field name="user_id" optional="show"/>
+                <field name="amount_total" sum="Tổng"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_sale_order_search" model="ir.ui.view">
+        <field name="name">lfood.sale.order.search</field>
+        <field name="model">lfood.sale.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="channel_id"/>
+                <filter name="quotes" string="Báo giá" domain="[('state', '=', 'draft')]"/>
+                <filter name="waiting" string="Chờ duyệt tín dụng" domain="[('state', '=', 'waiting')]"/>
+                <filter name="to_invoice" string="Còn phải lập hóa đơn" domain="[('state', '=', 'confirmed')]"/>
+                <group>
+                    <filter name="by_partner" string="Khách hàng" context="{'group_by': 'partner_id'}"/>
+                    <filter name="by_channel" string="Kênh" context="{'group_by': 'channel_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_sale_order_form" model="ir.ui.view">
+        <field name="name">lfood.sale.order.form</field>
+        <field name="model">lfood.sale.order</field>
+        <field name="arch" type="xml">
+            <form string="Đơn bán hàng">
+                <header>
+                    <button name="action_apply_prices" type="object" string="Áp bảng giá" invisible="state != 'draft'"/>
+                    <button name="action_confirm" type="object" string="Xác nhận đơn" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_approve_credit" type="object" string="Duyệt vượt hạn mức" class="btn-primary"
+                            groups="lfood_base.group_chief_accountant,lfood_base.group_director"
+                            invisible="state != 'waiting'"/>
+                    <button name="action_create_invoice" type="object" string="Lập hóa đơn" class="btn-primary"
+                            invisible="state != 'confirmed'"/>
+                    <button name="action_cancel" type="object" string="Hủy đơn"
+                            invisible="state in ('done', 'cancel')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,confirmed,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_invoices" type="object" class="oe_stat_button" icon="fa-file-text-o"
+                                invisible="not invoice_count">
+                            <field name="invoice_count" widget="statinfo" string="Hóa đơn"/>
+                        </button>
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="partner_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="channel_id" readonly="state != 'draft'"/>
+                            <field name="pricelist_id" readonly="state != 'draft'"/>
+                            <field name="warehouse_id" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="date_delivery"/>
+                            <field name="user_id" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="memo" placeholder="Diễn giải"/>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="discount"/>
+                            <field name="net_price" optional="hide"/>
+                            <field name="amount" sum="Tiền hàng"/>
+                            <field name="vat_rate_id" options="{'no_create': True}"/>
+                            <field name="tax" sum="Thuế"/>
+                            <field name="qty_invoiced" column_invisible="parent.state == 'draft'"/>
+                            <field name="qty_to_invoice" column_invisible="parent.state == 'draft'"/>
+                        </list>
+                    </field>
+                    <group>
+                        <group>
+                            <field name="credit_note" invisible="not credit_note"/>
+                            <field name="approved_by" invisible="not approved_by"/>
+                        </group>
+                        <group>
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_sale_order" model="ir.actions.act_window">
+        <field name="name">Báo giá, đơn bán hàng</field>
+        <field name="res_model">lfood.sale.order</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_sale_order" name="Báo giá, đơn bán" parent="lfood_sale.menu_sale_root" action="action_sale_order" sequence="5"/>
+    <menuitem id="menu_pricelist" name="Bảng giá" parent="lfood_sale.menu_sale_root" action="action_pricelist" sequence="30"/>
+    <menuitem id="menu_channel" name="Kênh phân phối" parent="lfood_sale.menu_sale_root" action="action_channel" sequence="40"/>
+</odoo>

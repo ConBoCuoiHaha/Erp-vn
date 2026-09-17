@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_promotion" model="ir.sequence"><field name="name">Chương trình khuyến mại</field><field name="code">lfood.promotion</field><field name="prefix">KM%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+</odoo>

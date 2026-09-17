@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quote_list" model="ir.ui.view">
+        <field name="name">lfood.purchase.quote.list</field>
+        <field name="model">lfood.purchase.quote</field>
+        <field name="arch" type="xml">
+            <list string="So sánh báo giá" default_order="amount_total">
+                <field name="request_id" optional="show"/>
+                <field name="partner_id"/>
+                <field name="date"/>
+                <field name="valid_until" optional="show"/>
+                <field name="lead_days" optional="show"/>
+                <field name="amount"/>
+                <field name="amount_tax" optional="hide"/>
+                <field name="amount_total" sum="Tổng"/>
+                <field name="chosen"/>
+                <button name="action_choose" type="object" string="Chọn báo giá" class="btn-link"
+                        invisible="chosen"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_quote_form" model="ir.ui.view">
+        <field name="name">lfood.purchase.quote.form</field>
+        <field name="model">lfood.purchase.quote</field>
+        <field name="arch" type="xml">
+            <form string="Báo giá nhà cung cấp">
+                <header>
+                    <button name="action_choose" type="object" string="Chọn báo giá này và lập đơn mua"
+                            class="btn-primary" invisible="chosen"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="request_id" options="{'no_create': True}"/>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="date"/>
+                            <field name="valid_until"/>
+                        </group>
+                        <group>
+                            <field name="lead_days"/>
+                            <field name="amount"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                            <field name="chosen"/>
+                            <field name="order_id"/>
+                        </group>
+                    </group>
+                    <field name="note" placeholder="Điều kiện giao hàng, thanh toán"/>
+                    <field name="line_ids" readonly="chosen">
+                        <list editable="bottom">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="name"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="amount" sum="Tiền hàng"/>
+                            <field name="vat_rate_id" optional="show"/>
+                            <field name="tax" sum="Thuế" optional="show"/>
+                            <field name="cost_item_id" optional="hide" options="{'no_create': True}"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_quote" model="ir.actions.act_window">
+        <field name="name">Báo giá nhà cung cấp</field>
+        <field name="res_model">lfood.purchase.quote</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_group_request': 1}</field>
+    </record>
+
+    <record id="view_quote_search" model="ir.ui.view">
+        <field name="name">lfood.purchase.quote.search</field>
+        <field name="model">lfood.purchase.quote</field>
+        <field name="arch" type="xml">
+            <search string="Báo giá">
+                <field name="partner_id"/>
+                <field name="request_id"/>
+                <filter name="f_open" string="Chưa chọn" domain="[('chosen', '=', False)]"/>
+                <group>
+                    <filter name="group_request" string="Yêu cầu mua" context="{'group_by': 'request_id'}"/>
+                    <filter name="g_partner" string="Nhà cung cấp" context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="view_adjust_list" model="ir.ui.view">
+        <field name="name">lfood.purchase.adjust.list</field>
+        <field name="model">lfood.purchase.adjust</field>
+        <field name="arch" type="xml">
+            <list string="Điều chỉnh giá nhập">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="kind"/>
+                <field name="picking_id"/>
+                <field name="partner_id"/>
+                <field name="amount" sum="Số tiền"/>
+                <field name="tax" optional="show"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_adjust_form" model="ir.ui.view">
+        <field name="name">lfood.purchase.adjust.form</field>
+        <field name="model">lfood.purchase.adjust</field>
+        <field name="arch" type="xml">
+            <form string="Điều chỉnh giá nhập">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy chứng từ"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'posted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="kind"/>
+                            <field name="picking_id" options="{'no_create': True}"/>
+                            <field name="partner_id" options="{'no_create': True}"/>
+                            <field name="date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="method"/>
+                            <field name="amount"/>
+                            <field name="vat_rate_id"/>
+                            <field name="tax"/>
+                            <field name="cost_item_id" options="{'no_create': True}"/>
+                            <field name="invoice_number"/>
+                        </group>
+                    </group>
+                    <field name="memo" placeholder="Diễn giải, ví dụ cước vận chuyển chuyến ngày 03/11"/>
+                    <separator string="Phân bổ vào từng mặt hàng"/>
+                    <field name="line_ids" nolabel="1">
+                        <list>
+                            <field name="product_id"/>
+                            <field name="lot_id" optional="show"/>
+                            <field name="quantity"/>
+                            <field name="base"/>
+                            <field name="amount" sum="Tổng phân bổ"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Chi phí mua hàng cộng vào giá gốc hàng tồn kho, giảm giá và chiết khấu thương mại hàng mua
+                        trừ khỏi giá gốc (Chuẩn mực kế toán số 02, nguyên tắc kế toán hàng tồn kho của Thông tư 99/2025/TT-BTC).
+                        Chứng từ này không làm thay đổi số lượng tồn, chỉ ghi thêm một lớp giá trị lên thẻ kho
+                        nên giá bình quân đổi theo đúng phần điều chỉnh.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_adjust" model="ir.actions.act_window">
+        <field name="name">Chi phí mua hàng, giảm giá hàng mua</field>
+        <field name="res_model">lfood.purchase.adjust</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_company_form_quote" model="ir.ui.view">
+        <field name="name">res.company.form.quote</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="lfood_purchase.view_company_form_purchase"/>
+        <field name="arch" type="xml">
+            <field name="lfood_purchase_tolerance" position="after">
+                <field name="lfood_quote_threshold"/>
+                <field name="lfood_min_quotes"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="menu_quote" name="Báo giá nhà cung cấp" parent="menu_purchase_root" action="action_quote" sequence="15"/>
+    <menuitem id="menu_adjust" name="Chi phí mua hàng, giảm giá" parent="menu_purchase_root" action="action_adjust" sequence="30"/>
+</odoo>

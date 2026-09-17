@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_form_related" model="ir.ui.view">
+        <field name="name">res.partner.lfood.form.related</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="lfood_admin.view_partner_lfood_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='comment']/.." position="before">
+                <group string="Quan hệ liên kết (Nghị định 255/2026/NĐ-CP)">
+                    <field name="lfood_related"/>
+                    <field name="lfood_related_basis" invisible="not lfood_related" required="lfood_related"/>
+                    <field name="lfood_related_domestic" invisible="not lfood_related"/>
+                    <field name="lfood_related_rate" invisible="not lfood_related or not lfood_related_domestic"/>
+                    <field name="lfood_related_incentive" invisible="not lfood_related or not lfood_related_domestic"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_payment_form_interest" model="ir.ui.view">
+        <field name="name">lfood.payment.form.interest</field>
+        <field name="model">lfood.payment</field>
+        <field name="inherit_id" ref="lfood_ledger.view_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='purpose']" position="after">
+                <field name="lfood_interest_income" invisible="kind != 'in'" readonly="state != 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_finalization_form_related" model="ir.ui.view">
+        <field name="name">lfood.cit.finalization.form.related</field>
+        <field name="model">lfood.cit.finalization</field>
+        <field name="inherit_id" ref="lfood_cit.view_finalization_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='note']/.." position="before">
+                <page string="Giao dịch liên kết" name="related">
+                    <field name="related_html" readonly="1"/>
+                    <group string="Miễn kê khai, miễn lập hồ sơ xác định giá">
+                        <group>
+                            <field name="tp_status"/>
+                            <field name="tp_sector" readonly="state != 'draft'"/>
+                            <field name="tp_apa" readonly="state != 'draft'"/>
+                            <field name="tp_own_incentive" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="tp_revenue"/>
+                            <field name="tp_net_revenue"/>
+                            <field name="tp_margin_profit"/>
+                            <field name="tp_related_total"/>
+                        </group>
+                    </group>
+                    <field name="tp_reason" nolabel="1"/>
+                    <group string="Khống chế chi phí lãi vay (khoản 3 Điều 16)" invisible="not has_related and not ic_carry_used">
+                        <group>
+                            <field name="has_related" invisible="1"/>
+                            <field name="ic_op_profit" readonly="state != 'draft'"/>
+                            <field name="ic_interest" readonly="state != 'draft'"/>
+                            <field name="ic_interest_income" readonly="state != 'draft'"/>
+                            <field name="ic_depreciation" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="ic_cap"/>
+                            <field name="ic_excess"/>
+                            <field name="ic_carry_used"/>
+
+                        </group>
+                    </group>
+                    <button name="action_recompute_interest_cap" type="object" string="Tính lại khống chế lãi vay và miễn hồ sơ"
+                            invisible="state != 'draft'"/>
+                    <div class="text-muted">
+                        Chi phí lãi vay thuần (sau khi trừ lãi tiền gửi, lãi cho vay) được trừ không vượt quá 30% của lợi nhuận thuần từ
+                        hoạt động kinh doanh cộng chi phí lãi vay thuần cộng chi phí khấu hao; phần vượt được chuyển sang kỳ sau khi kỳ đó
+                        còn dưới mức, liên tục không quá 5 năm. App lấy chi phí lãi vay từ phân hệ Vay và khấu hao từ TK 6234, 6274, 6414,
+                        6424; lãi tiền gửi, lãi cho vay lấy từ phiếu thu có đánh dấu "Là lãi tiền gửi, lãi cho vay" (chênh lệch tỷ giá
+                        ghi 515 không bị tính). Miễn kê khai và lập hồ sơ khi chỉ giao dịch với bên liên kết nộp thuế TNDN tại Việt
+                        Nam cùng thuế suất, không bên nào được ưu đãi; vẫn kê khai nhưng miễn lập hồ sơ khi doanh thu dưới 50 tỷ và
+                        giao dịch liên kết dưới 30 tỷ, hoặc có APA, hoặc doanh thu dưới 500 tỷ và tỷ suất lợi nhuận thuần trước lãi
+                        vay và thuế đạt 5% (phân phối), 10% (sản xuất), 15% (gia công).
+                    </div>
+                </page>
+                <page string="Hồ sơ xác định giá" name="tp_doc">
+                    <field name="tp_doc_html" readonly="1"/>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

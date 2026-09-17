@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_tally_list" model="ir.ui.view">
+        <field name="name">lfood.purchase.tally.list</field>
+        <field name="model">lfood.purchase.tally</field>
+        <field name="arch" type="xml">
+            <list string="Bảng kê thu mua không có hóa đơn">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="place" optional="show"/>
+                <field name="buyer_name" optional="show"/>
+                <field name="amount" sum="Tổng giá thanh toán"/>
+                <field name="amount_nondeductible" sum="Không được trừ"
+                       decoration-danger="amount_nondeductible &gt; 0"/>
+                <field name="state"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_tally_form" model="ir.ui.view">
+        <field name="name">lfood.purchase.tally.form</field>
+        <field name="model">lfood.purchase.tally</field>
+        <field name="arch" type="xml">
+            <form string="Bảng kê thu mua không có hóa đơn">
+                <header>
+                    <button name="action_confirm" type="object" string="Ký duyệt" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy bảng kê"
+                            groups="lfood_base.group_chief_accountant" invisible="state != 'confirmed'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="place" placeholder="Xã, huyện, tỉnh nơi tổ chức thu mua"/>
+                            <field name="buyer_name"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="picking_id" options="{'no_create': True}"/>
+                            <field name="amount"/>
+                            <field name="amount_nondeductible" decoration-danger="amount_nondeductible &gt; 0"/>
+                            <field name="confirmed_by"/>
+                        </group>
+                    </group>
+                    <field name="memo" placeholder="Diễn giải"/>
+                    <notebook>
+                        <page string="Chi tiết thu mua">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="date"/>
+                                    <field name="case"/>
+                                    <field name="seller_name"/>
+                                    <field name="seller_id_number"/>
+                                    <field name="seller_address"/>
+                                    <field name="product_id" optional="hide" options="{'no_create': True}"/>
+                                    <field name="name"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="amount" sum="Tổng"/>
+                                    <field name="payment_method"/>
+                                    <field name="deductible" readonly="1" decoration-danger="not deductible"/>
+                                    <field name="note" optional="show"/>
+                                </list>
+                            </field>
+                            <div class="text-muted">
+                                Chỉ lập bảng kê cho các trường hợp được phép ở cột Trường hợp. Tổng giá trị mua
+                                trong ngày của cùng một người bán từ mức trong Tham số pháp lý
+                                (BANG_KE_NGUONG_TIEN_MAT, hiện là 5.000.000đ) trở lên mà trả tiền mặt thì khoản chi
+                                không được tính vào chi phí được trừ; app tự đánh dấu cột Được tính chi phí được trừ.
+                            </div>
+                        </page>
+                        <page string="Mẫu in 02/TNDN">
+                            <field name="form_html" readonly="1" nolabel="1"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_tally_search" model="ir.ui.view">
+        <field name="name">lfood.purchase.tally.search</field>
+        <field name="model">lfood.purchase.tally</field>
+        <field name="arch" type="xml">
+            <search string="Bảng kê thu mua">
+                <field name="name"/>
+                <field name="place"/>
+                <filter name="f_nondeduct" string="Có khoản không được trừ" domain="[('amount_nondeductible', '>', 0)]"/>
+                <filter name="f_date" string="Ngày lập" date="date"/>
+                <group>
+                    <filter name="g_state" string="Trạng thái" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_tally" model="ir.actions.act_window">
+        <field name="name">Bảng kê thu mua không có hóa đơn</field>
+        <field name="res_model">lfood.purchase.tally</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_tally" name="Bảng kê thu mua không có hóa đơn" parent="menu_purchase_root"
+              action="action_tally" sequence="40"/>
+</odoo>

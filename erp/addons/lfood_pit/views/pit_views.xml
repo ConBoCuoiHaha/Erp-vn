@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_salary_advance_list" model="ir.ui.view">
+        <field name="name">lfood.salary.advance.list</field>
+        <field name="model">lfood.salary.advance</field>
+        <field name="arch" type="xml">
+            <list string="Tạm ứng lương" editable="top">
+                <field name="employee_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                <field name="date" readonly="state != 'draft'"/>
+                <field name="amount" sum="Tổng" readonly="state != 'draft'"/>
+                <field name="method" readonly="state != 'draft'"/>
+                <field name="note"/>
+                <field name="state"/>
+                <field name="slip_line_id"/>
+                <button name="action_post" type="object" string="Chi" invisible="state != 'draft'"/>
+                <button name="action_cancel" type="object" string="Hủy" invisible="state == 'cancel'"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_salary_advance" model="ir.actions.act_window">
+        <field name="name">Tạm ứng lương</field>
+        <field name="res_model">lfood.salary.advance</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_pit_freelance_list" model="ir.ui.view">
+        <field name="name">lfood.pit.freelance.list</field>
+        <field name="model">lfood.pit.freelance</field>
+        <field name="arch" type="xml">
+            <list string="Thu nhập vãng lai">
+                <field name="date"/><field name="partner_id"/><field name="tax_code"/><field name="name"/>
+                <field name="gross" sum="Tổng"/><field name="tax" sum="Tổng"/><field name="net" sum="Tổng"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_pit_freelance_form" model="ir.ui.view">
+        <field name="name">lfood.pit.freelance.form</field>
+        <field name="model">lfood.pit.freelance</field>
+        <field name="arch" type="xml">
+            <form string="Chi trả thu nhập vãng lai">
+                <header>
+                    <button name="action_post" type="object" string="Chi trả" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state == 'cancel'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="tax_code" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="gross" readonly="state != 'draft'"/>
+                            <field name="expense_account" readonly="state != 'draft'"/>
+                            <field name="cost_item_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="method" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="resident" readonly="state != 'draft'"/>
+                            <field name="requested" readonly="state != 'draft'"/>
+                            <field name="commitment" readonly="state != 'draft'"/>
+                            <field name="commitment_file" filename="commitment_name" invisible="not commitment"/>
+                            <field name="commitment_name" invisible="1"/>
+                            <field name="rate"/>
+                            <field name="tax"/>
+                            <field name="net"/>
+                            <field name="tax_note"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Cá nhân cư trú không ký hợp đồng lao động hoặc hợp đồng dưới 03 tháng: khấu trừ 10% khi chi
+                        từ 05 triệu đồng/lần (Nghị định 253/2026/NĐ-CP Điều 50, từ 01/7/2026); cá nhân không cư trú 20% (Điều 64).</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_pit_freelance" model="ir.actions.act_window">
+        <field name="name">Thu nhập vãng lai</field>
+        <field name="res_model">lfood.pit.freelance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_pit_settlement_list" model="ir.ui.view">
+        <field name="name">lfood.pit.settlement.list</field>
+        <field name="model">lfood.pit.settlement</field>
+        <field name="arch" type="xml">
+            <list string="Quyết toán thuế TNCN">
+                <field name="year"/><field name="due_date"/><field name="total_withheld"/>
+                <field name="total_payable"/><field name="total_refund"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_pit_settlement_form" model="ir.ui.view">
+        <field name="name">lfood.pit.settlement.form</field>
+        <field name="model">lfood.pit.settlement</field>
+        <field name="arch" type="xml">
+            <form string="Quyết toán thuế TNCN">
+                <header>
+                    <button name="action_compute" type="object" string="Tính số liệu" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Chốt" invisible="state != 'draft'" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_reset" type="object" string="Mở lại" invisible="state != 'done'" groups="lfood_base.group_chief_accountant"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="year" readonly="state != 'draft'"/>
+                            <field name="due_date"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="total_withheld"/>
+                            <field name="total_payable"/>
+                            <field name="total_refund"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Tiền lương, tiền công">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" create="false" decoration-muted="not authorized">
+                                    <field name="employee_id" readonly="1"/>
+                                    <field name="tax_code"/>
+                                    <field name="months" readonly="1"/>
+                                    <field name="taxable" readonly="1" sum="Tổng"/>
+                                    <field name="insurance" readonly="1"/>
+                                    <field name="family_deduction" readonly="1"/>
+                                    <field name="assessable" readonly="1"/>
+                                    <field name="tax" readonly="1" sum="Tổng"/>
+                                    <field name="withheld" readonly="1" sum="Tổng"/>
+                                    <field name="difference" readonly="1"/>
+                                    <field name="eligible"/>
+                                    <field name="ineligible_reason"/>
+                                    <field name="other_income"/>
+                                    <field name="self_settle_reason"/>
+                                    <field name="authorized"/>
+                                    <field name="authorization_file" filename="authorization_name"/>
+                                    <field name="authorization_name" column_invisible="1"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Thu nhập vãng lai">
+                            <field name="freelance_html"/>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">Nghị định 253/2026/NĐ-CP Điều 51. Nhập thu nhập nơi khác, lý do phải tự quyết toán, tick ủy quyền
+                        và đính kèm giấy ủy quyền rồi bấm Tính số liệu lại. Tờ khai 05/QTT-TNCN và chứng từ khấu trừ lập trên phần mềm
+                        của cơ quan thuế theo số liệu từng người ở đây.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_pit_settlement" model="ir.actions.act_window">
+        <field name="name">Quyết toán thuế TNCN</field>
+        <field name="res_model">lfood.pit.settlement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_salary_advance" name="Tạm ứng lương" parent="lfood_payroll.menu_payroll_root" action="action_salary_advance" sequence="15"/>
+    <menuitem id="menu_pit_freelance" name="Thu nhập vãng lai" parent="lfood_payroll.menu_payroll_root" action="action_pit_freelance" sequence="35"/>
+    <menuitem id="menu_pit_settlement" name="Quyết toán thuế TNCN" parent="lfood_payroll.menu_payroll_root" action="action_pit_settlement" sequence="40"/>
+</odoo>

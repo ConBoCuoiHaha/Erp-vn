@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_security_settings_form" model="ir.ui.view">
+        <field name="name">lfood.security.settings.form</field>
+        <field name="model">lfood.security.settings</field>
+        <field name="arch" type="xml">
+            <form string="Đăng nhập an toàn">
+                <group>
+                    <group>
+                        <field name="cooldown_after"/>
+                        <field name="cooldown_minutes"/>
+                    </group>
+                    <group>
+                        <field name="inactivity_minutes"/>
+                        <field name="password_minlength"/>
+                    </group>
+                </group>
+                <separator string="Người dùng chưa bật mã xác thực 2 lớp"/>
+                <field name="no_totp_html" readonly="1"/>
+                <div class="text-muted">Mỗi người bật mã 2 lớp tại Hồ sơ của tôi, Bảo mật tài khoản, bằng ứng dụng xác thực
+                    trên điện thoại. Nên bắt buộc với Kế toán trưởng, Giám đốc và quản trị hệ thống.</div>
+                <footer>
+                    <button name="action_apply" type="object" string="Lưu" class="btn-primary"/>
+                    <button special="cancel" string="Đóng"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_security_settings" model="ir.actions.act_window">
+        <field name="name">Đăng nhập an toàn</field>
+        <field name="res_model">lfood.security.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_security_settings" name="Đăng nhập an toàn" parent="lfood_base.menu_config"
+              action="action_security_settings" sequence="95" groups="lfood_base.group_sysadmin"/>
+</odoo>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tham số của bảng kê thu mua không có hóa đơn. Luật đổi thì Kế toán trưởng thêm mức mới có ngày hiệu lực. -->
+<odoo noupdate="1">
+    <record id="p_tally_cash_limit" model="lfood.legal.param">
+        <field name="code">BANG_KE_NGUONG_TIEN_MAT</field>
+        <field name="name">Ngưỡng phải thanh toán không dùng tiền mặt khi thu mua không có hóa đơn</field>
+        <field name="group">cit</field>
+        <field name="value_type">amount</field>
+        <field name="description">Tổng giá trị mua trong ngày của cùng một hộ, cá nhân từ mức này trở lên mà trả tiền mặt thì khoản chi không được tính vào chi phí được trừ khi tính thuế TNDN. Dùng ở Bảng kê thu mua mẫu 02/TNDN.</field>
+    </record>
+    <record id="pv_tally_cash_limit" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_tally_cash_limit"/>
+        <field name="value">5000000</field>
+        <field name="date_from">2026-03-16</field>
+        <field name="legal_ref">Thông tư 20/2026/TT-BTC hướng dẫn Luật Thuế TNDN 67/2025/QH15 và Nghị định 320/2025/NĐ-CP; kế toán trưởng xác nhận lại ngày hiệu lực của Thông tư</field>
+        <field name="state">approved</field>
+    </record>
+</odoo>

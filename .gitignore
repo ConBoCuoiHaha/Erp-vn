@@ -1,0 +1,61 @@
+# --- Bí mật, cấu hình máy chủ (dùng tệp *.example làm mẫu) ---
+.env
+.env.*
+!.env.example
+erp/config/odoo.conf
+*.pem
+*.key
+*.p12
+*.pfx
+*password*.txt
+.demo-password.txt
+secrets/
+
+# --- Dữ liệu, sao lưu, cơ sở dữ liệu ---
+backups/
+erp/backups/
+erp/.offsite-disabled/
+*.dump
+*.sql
+*.sql.gz
+*.backup
+*.tar.gz
+*.zip
+filestore/
+pgdata/
+db-data/
+odoo-data/
+*.log
+
+# --- Dữ liệu công ty, tài liệu tham khảo bên ngoài ---
+erp-lfood-data.json
+*.pdf
+*.jpg
+*.jpeg
+*.png
+*.xlsx
+*.xls
+*.docx
+*.csv
+
+# --- Bản thử nghiệm cũ ---
+app-v1/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# --- Công cụ, hệ điều hành ---
+.claude/
+.vscode/
+.idea/
+*.swp
+*.tmp
+~$*
+.DS_Store
+Thumbs.db
+desktop.ini

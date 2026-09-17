@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Nhà máy có sản xuất: thành phẩm ghi TK 155. Văn phòng chỉ thương mại: hàng mua về ghi TK 156. -->
+    <function model="res.company" name="write">
+        <value eval="[ref('lfood_base.company_factory')]"/>
+        <value eval="{'lfood_manufacturer': True}"/>
+    </function>
+</odoo>

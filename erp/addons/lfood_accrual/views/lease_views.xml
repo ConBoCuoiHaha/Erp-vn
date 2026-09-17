@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_lease_company" model="ir.rule">
+        <field name="name">Hợp đồng thuê theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_lease"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_lease_list" model="ir.ui.view">
+        <field name="name">lfood.lease.list</field>
+        <field name="model">lfood.lease</field>
+        <field name="arch" type="xml">
+            <list string="Hợp đồng thuê tài sản">
+                <field name="name"/><field name="kind"/><field name="partner_id"/><field name="contract_ref"/>
+                <field name="date_from"/><field name="date_to"/><field name="monthly_rent"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_lease_form" model="ir.ui.view">
+        <field name="name">lfood.lease.form</field>
+        <field name="model">lfood.lease</field>
+        <field name="arch" type="xml">
+            <form string="Hợp đồng thuê tài sản">
+                <header>
+                    <button name="action_start" type="object" string="Bắt đầu thuê" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_close" type="object" string="Kết thúc, nhận lại ký quỹ" invisible="state != 'running'"
+                            confirm="Kết thúc hợp đồng thuê và ghi nhận lại tiền ký quỹ?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="kind" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="contract_ref" readonly="state != 'draft'"/>
+                            <field name="document" filename="document_name"/>
+                            <field name="document_name" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="monthly_rent" readonly="state != 'draft'"/>
+                            <field name="cycle" readonly="state != 'draft'"/>
+                            <field name="expense_account" readonly="state != 'draft'"/>
+                            <field name="cost_item_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="deposit" readonly="state != 'draft'"/>
+                            <field name="deposit_method" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="period_ids">
+                        <list>
+                            <field name="date"/><field name="months"/><field name="amount" sum="Tổng"/>
+                            <field name="prepaid_id"/><field name="done"/>
+                            <button name="action_record" type="object" string="Ghi nhận kỳ" invisible="done"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">Kỳ nhiều tháng: tạo chi phí trả trước Nợ 242 / Có 3311 và phân bổ theo tháng. Kỳ một tháng: ghi hóa đơn
+                        tiền thuê bằng chứng từ mua dịch vụ. Ký quỹ Nợ 244 / Có 111, 112.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_lease" model="ir.actions.act_window">
+        <field name="name">Hợp đồng thuê tài sản</field>
+        <field name="res_model">lfood.lease</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_lease" name="Hợp đồng thuê tài sản" parent="lfood_base.menu_documents" action="action_lease" sequence="45"/>
+</odoo>

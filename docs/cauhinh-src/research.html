@@ -1,0 +1,47 @@
+<section id="nghien-cuu">
+<h2><span class="no">05</span>Mức độ nghiên cứu hiện tại</h2>
+<p class="intro">Trả lời thẳng: phần nghiên cứu hiện đủ để thiết kế khung app và danh mục cấu hình, <b>chưa đủ để khẳng định app đúng quy trình kế toán, vận hành của LiFeOOD</b>. Bảng dưới tách rõ đã làm gì và còn thiếu gì.</p>
+
+<div class="two">
+  <div class="box">
+    <h4>Đã làm</h4>
+    <ul>
+      <li>Tra cứu các thay đổi pháp luật có hiệu lực 2025–2026: chế độ kế toán TT99, luật thuế GTGT, TNDN, TNCN mới, hóa đơn chứng từ, lương tối thiểu vùng, lương cơ sở, BHXH, BHTN, kinh phí công đoàn, làm thêm giờ, khấu hao, bảo vệ dữ liệu cá nhân, bãi bỏ lệ phí môn bài.</li>
+      <li>Đối chiếu nhiều nguồn cho các con số đưa vào tài liệu; điểm chưa chắc đã đánh dấu “cần xác nhận”.</li>
+      <li>Dựa trên kiến thức nền về quy trình kế toán Việt Nam (định khoản, khóa sổ, kê khai, lương và bảo hiểm) và cách các ERP như Odoo, MISA tổ chức nghiệp vụ.</li>
+      <li>Đọc tài liệu công ty đã gửi: sơ đồ luồng ERP, bài giảng kế toán ERP, ảnh chứng từ MDV00433 và báo cáo chi phí trên MISA, file Excel tài sản cố định.</li>
+    </ul>
+  </div>
+  <div class="box warnb">
+    <h4>Chưa làm, còn thiếu</h4>
+    <ul>
+      <li><b>Chưa đọc toàn văn</b> Thông tư 99 (danh mục tài khoản chi tiết, mẫu chứng từ, sổ, báo cáo tài chính), văn bản hướng dẫn Luật Thuế TNCN 2025 và Luật Quản lý thuế 2025, Thông tư 30/2025 về khấu hao. Phần lớn số liệu lấy từ bài tóm tắt của các trang pháp luật, MISA, EY.</li>
+      <li><b>Chưa có quy trình thật của công ty:</b> quy chế tài chính, quy chế lương thưởng, thang bảng lương, luồng duyệt, cách định khoản đang dùng trên MISA, kỳ kê khai thuế, ưu đãi thuế nếu có, cơ cấu ca nhà máy.</li>
+      <li><b>Chưa trao đổi với người làm thực tế:</b> kế toán trưởng, nhân sự, thủ kho, QA.</li>
+      <li><b>Không thay tư vấn thuế, kế toán hành nghề.</b> Chưa có đại lý thuế hay kiểm toán rà soát.</li>
+    </ul>
+  </div>
+</div>
+
+<h3 class="h3s">Để nghiên cứu kỹ trước khi viết code</h3>
+<ol class="steps">
+  <li><b>Lấy toàn văn văn bản từ nguồn chính thức</b><span>Công báo, cổng văn bản Chính phủ, Bộ Tài chính; lập bảng đối chiếu từng tham số với điều khoản cụ thể.</span></li>
+  <li><b>Khảo sát người làm thực tế</b><span>Bảng câu hỏi cho kế toán trưởng, nhân sự, thủ kho, QA: đang làm thế nào, chứng từ nào, ai duyệt, chỗ nào tốn thời gian.</span></li>
+  <li><b>Xuất dữ liệu cấu hình từ MISA</b><span>Hệ thống tài khoản đang dùng, danh mục khoản mục đủ 33 dòng, mẫu định khoản, danh mục thành phần lương, báo cáo mẫu; dựng lại cho đúng cách công ty đang hạch toán.</span></li>
+  <li><b>Chạy song song với MISA 1–2 tháng</b><span>Cùng dữ liệu, so từng con số bảng lương, tờ khai, báo cáo; lệch ở đâu sửa cấu hình ở đó.</span></li>
+  <li><b>Nhờ đại lý thuế hoặc kiểm toán rà bảng tham số</b><span>Trước khi dùng thật cho lương và kê khai thuế.</span></li>
+</ol>
+
+<h3 class="h3s">Tài liệu cần công ty cung cấp</h3>
+<div class="tbl"><table>
+<thead><tr><th>Tài liệu</th><th>Người cung cấp</th><th>Dùng để cấu hình</th></tr></thead>
+<tbody>
+<tr><td>Quy chế tài chính, quy chế chi tiêu nội bộ</td><td>Kế toán trưởng</td><td>Hạn mức duyệt, phụ cấp công tác, tạm ứng, định mức chi</td></tr>
+<tr><td>Quy chế lương thưởng, thang bảng lương, mẫu hợp đồng lao động</td><td>Nhân sự</td><td>Thành phần lương, phụ cấp, thưởng, loại hợp đồng</td></tr>
+<tr><td>Bảng lương 1–2 tháng gần nhất (đã che tên, số CCCD)</td><td>Nhân sự</td><td>Kiểm tra công thức cho ra đúng số</td></tr>
+<tr><td>Danh mục tài khoản, khoản mục chi phí, định khoản đang dùng trên MISA</td><td>Kế toán</td><td>Hệ thống tài khoản, định khoản tự động, cây khoản mục</td></tr>
+<tr><td>Tờ khai thuế GTGT, TNCN kỳ gần nhất; nhà cung cấp hóa đơn điện tử</td><td>Kế toán thuế</td><td>Kỳ kê khai, mẫu tờ khai, kết nối hóa đơn</td></tr>
+<tr><td>Lịch ca nhà máy, quy định chấm công, làm thêm giờ</td><td>Nhân sự, quản đốc</td><td>Ca làm việc, quy tắc chấm công, giới hạn làm thêm</td></tr>
+<tr><td>Kế hoạch HACCP, danh mục kiểm nghiệm, hồ sơ công bố sản phẩm</td><td>QA</td><td>Điểm kiểm tra, giới hạn CCP, nhắc hạn hồ sơ</td></tr>
+</tbody></table></div>
+</section>

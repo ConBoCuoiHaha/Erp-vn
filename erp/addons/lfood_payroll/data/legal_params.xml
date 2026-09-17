@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tham số tính lương, bảo hiểm, thuế TNCN. Mỗi mức ghi văn bản căn cứ; đổi luật thì Kế toán trưởng thêm mức mới có ngày hiệu lực. -->
+<odoo noupdate="1">
+    <record id="p_bhxh_nld" model="lfood.legal.param"><field name="code">BHXH_NLD</field><field name="name">BHXH người lao động đóng (quỹ hưu trí, tử tuất)</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhxh_nld" model="lfood.legal.param.value"><field name="param_id" ref="p_bhxh_nld"/><field name="value">8</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15, Điều 33</field><field name="state">approved</field></record>
+
+    <record id="p_bhyt_nld" model="lfood.legal.param"><field name="code">BHYT_NLD</field><field name="name">BHYT người lao động đóng</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhyt_nld" model="lfood.legal.param.value"><field name="param_id" ref="p_bhyt_nld"/><field name="value">1.5</field><field name="date_from">2025-07-01</field><field name="legal_ref">Nghị định 188/2025/NĐ-CP, Điều 6: 4,5%, người lao động đóng một phần ba</field><field name="state">approved</field></record>
+
+    <record id="p_bhtn_nld" model="lfood.legal.param"><field name="code">BHTN_NLD</field><field name="name">BHTN người lao động đóng</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhtn_nld" model="lfood.legal.param.value"><field name="param_id" ref="p_bhtn_nld"/><field name="value">1</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Việc làm 74/2025/QH15, Điều 33 (tối đa 1%)</field><field name="state">approved</field></record>
+
+    <record id="p_bhxh_dn_od" model="lfood.legal.param"><field name="code">BHXH_DN_OM_DAU_THAI_SAN</field><field name="name">BHXH doanh nghiệp đóng quỹ ốm đau, thai sản</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhxh_dn_od" model="lfood.legal.param.value"><field name="param_id" ref="p_bhxh_dn_od"/><field name="value">3</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15, Điều 34</field><field name="state">approved</field></record>
+
+    <record id="p_bhxh_dn_ht" model="lfood.legal.param"><field name="code">BHXH_DN_HUU_TRI_TU_TUAT</field><field name="name">BHXH doanh nghiệp đóng quỹ hưu trí, tử tuất</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhxh_dn_ht" model="lfood.legal.param.value"><field name="param_id" ref="p_bhxh_dn_ht"/><field name="value">14</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15, Điều 34</field><field name="state">approved</field></record>
+
+    <record id="p_bhxh_dn_tnld" model="lfood.legal.param"><field name="code">BHXH_DN_TNLD_BNN</field><field name="name">Quỹ tai nạn lao động, bệnh nghề nghiệp</field><field name="group">insurance</field><field name="value_type">percent</field>
+        <field name="description">0,5% mức bình thường; 0,3% nếu doanh nghiệp đủ điều kiện và được chấp thuận theo Điều 5 Nghị định 58/2020/NĐ-CP sửa đổi</field></record>
+    <record id="pv_bhxh_dn_tnld" model="lfood.legal.param.value"><field name="param_id" ref="p_bhxh_dn_tnld"/><field name="value">0.5</field><field name="date_from">2025-07-01</field><field name="legal_ref">Nghị định 158/2025/NĐ-CP, Điều 43 (sửa Nghị định 58/2020/NĐ-CP)</field><field name="state">approved</field></record>
+
+    <record id="p_bhyt_dn" model="lfood.legal.param"><field name="code">BHYT_DN</field><field name="name">BHYT doanh nghiệp đóng</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhyt_dn" model="lfood.legal.param.value"><field name="param_id" ref="p_bhyt_dn"/><field name="value">3</field><field name="date_from">2025-07-01</field><field name="legal_ref">Nghị định 188/2025/NĐ-CP, Điều 6: 4,5%, người sử dụng lao động đóng hai phần ba</field><field name="state">approved</field></record>
+
+    <record id="p_bhtn_dn" model="lfood.legal.param"><field name="code">BHTN_DN</field><field name="name">BHTN doanh nghiệp đóng</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_bhtn_dn" model="lfood.legal.param.value"><field name="param_id" ref="p_bhtn_dn"/><field name="value">1</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Việc làm 74/2025/QH15, Điều 33 (tối đa 1%)</field><field name="state">approved</field></record>
+
+    <record id="p_tran_bhxh" model="lfood.legal.param"><field name="code">HE_SO_TRAN_BHXH</field><field name="name">Hệ số trần tiền lương đóng BHXH, BHYT (lần mức tham chiếu)</field><field name="group">insurance</field><field name="value_type">number</field></record>
+    <record id="pv_tran_bhxh" model="lfood.legal.param.value"><field name="param_id" ref="p_tran_bhxh"/><field name="value">20</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15; mức tham chiếu áp dụng bằng lương cơ sở</field><field name="state">approved</field></record>
+
+    <record id="p_tran_bhtn" model="lfood.legal.param"><field name="code">HE_SO_TRAN_BHTN</field><field name="name">Hệ số trần tiền lương đóng BHTN (lần lương tối thiểu vùng)</field><field name="group">insurance</field><field name="value_type">number</field></record>
+    <record id="pv_tran_bhtn" model="lfood.legal.param.value"><field name="param_id" ref="p_tran_bhtn"/><field name="value">20</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Việc làm 74/2025/QH15, Điều 34</field><field name="state">approved</field></record>
+
+    <record id="p_min_wage_2" model="lfood.legal.param"><field name="code">LUONG_TOI_THIEU_VUNG_II</field><field name="name">Lương tối thiểu vùng II</field><field name="group">salary</field></record>
+    <record id="pv_min_wage_2" model="lfood.legal.param.value"><field name="param_id" ref="p_min_wage_2"/><field name="value">4730000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Nghị định 293/2025/NĐ-CP</field><field name="state">approved</field></record>
+    <record id="p_min_wage_3" model="lfood.legal.param"><field name="code">LUONG_TOI_THIEU_VUNG_III</field><field name="name">Lương tối thiểu vùng III</field><field name="group">salary</field></record>
+    <record id="pv_min_wage_3" model="lfood.legal.param.value"><field name="param_id" ref="p_min_wage_3"/><field name="value">4140000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Nghị định 293/2025/NĐ-CP</field><field name="state">approved</field></record>
+    <record id="p_min_wage_4" model="lfood.legal.param"><field name="code">LUONG_TOI_THIEU_VUNG_IV</field><field name="name">Lương tối thiểu vùng IV</field><field name="group">salary</field></record>
+    <record id="pv_min_wage_4" model="lfood.legal.param.value"><field name="param_id" ref="p_min_wage_4"/><field name="value">3700000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Nghị định 293/2025/NĐ-CP</field><field name="state">approved</field></record>
+
+    <record id="p_pit_b1" model="lfood.legal.param"><field name="code">TNCN_BAC_1_DEN</field><field name="name">Thuế TNCN bậc 1: thu nhập tính thuế tháng đến</field><field name="group">pit</field></record>
+    <record id="pv_pit_b1" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_b1"/><field name="value">10000000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_b2" model="lfood.legal.param"><field name="code">TNCN_BAC_2_DEN</field><field name="name">Thuế TNCN bậc 2: thu nhập tính thuế tháng đến</field><field name="group">pit</field></record>
+    <record id="pv_pit_b2" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_b2"/><field name="value">30000000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_b3" model="lfood.legal.param"><field name="code">TNCN_BAC_3_DEN</field><field name="name">Thuế TNCN bậc 3: thu nhập tính thuế tháng đến</field><field name="group">pit</field></record>
+    <record id="pv_pit_b3" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_b3"/><field name="value">60000000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_b4" model="lfood.legal.param"><field name="code">TNCN_BAC_4_DEN</field><field name="name">Thuế TNCN bậc 4: thu nhập tính thuế tháng đến</field><field name="group">pit</field></record>
+    <record id="pv_pit_b4" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_b4"/><field name="value">100000000</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_r1" model="lfood.legal.param"><field name="code">TNCN_THUE_SUAT_1</field><field name="name">Thuế suất TNCN bậc 1</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_pit_r1" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_r1"/><field name="value">5</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_r2" model="lfood.legal.param"><field name="code">TNCN_THUE_SUAT_2</field><field name="name">Thuế suất TNCN bậc 2</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_pit_r2" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_r2"/><field name="value">10</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_r3" model="lfood.legal.param"><field name="code">TNCN_THUE_SUAT_3</field><field name="name">Thuế suất TNCN bậc 3</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_pit_r3" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_r3"/><field name="value">20</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_r4" model="lfood.legal.param"><field name="code">TNCN_THUE_SUAT_4</field><field name="name">Thuế suất TNCN bậc 4</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_pit_r4" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_r4"/><field name="value">30</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+    <record id="p_pit_r5" model="lfood.legal.param"><field name="code">TNCN_THUE_SUAT_5</field><field name="name">Thuế suất TNCN bậc 5</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_pit_r5" model="lfood.legal.param.value"><field name="param_id" ref="p_pit_r5"/><field name="value">35</field><field name="date_from">2026-01-01</field><field name="legal_ref">Luật Thuế TNCN 109/2025/QH15, Điều 9</field><field name="state">approved</field></record>
+
+    <record id="comp_basic" model="lfood.payroll.component"><field name="sequence">1</field><field name="code">LUONG_CHINH</field><field name="name">Lương chính</field><field name="prorate" eval="True"/></record>
+    <record id="comp_resp" model="lfood.payroll.component"><field name="sequence">2</field><field name="code">PC_TRACH_NHIEM</field><field name="name">Phụ cấp trách nhiệm</field><field name="prorate" eval="True"/></record>
+    <record id="comp_meal" model="lfood.payroll.component"><field name="sequence">3</field><field name="code">AN_CA</field><field name="name">Tiền ăn giữa ca</field></record>
+    <record id="comp_ot" model="lfood.payroll.component"><field name="sequence">4</field><field name="code">LAM_THEM</field><field name="name">Tiền lương làm thêm giờ</field></record>
+    <record id="comp_bonus" model="lfood.payroll.component"><field name="sequence">5</field><field name="code">THUONG</field><field name="name">Thưởng</field></record>
+    <record id="comp_advance" model="lfood.payroll.component"><field name="sequence">20</field><field name="code">TRU_TAM_UNG</field><field name="name">Trừ tạm ứng</field><field name="kind">deduction</field><field name="taxable" eval="False"/><field name="deduction_account">141</field></record>
+</odoo>

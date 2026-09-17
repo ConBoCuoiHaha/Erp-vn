@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_voucher" name="Chứng từ mua dịch vụ" parent="lfood_base.menu_documents"
+              action="action_voucher" sequence="10"/>
+    <menuitem id="menu_voucher_bulk" name="Điều chỉnh hàng loạt" parent="lfood_base.menu_documents"
+              action="action_voucher_bulk" sequence="15" groups="lfood_base.group_chief_accountant"/>
+    <menuitem id="menu_bulk_batch" name="Lô điều chỉnh hàng loạt" parent="lfood_base.menu_documents"
+              action="action_bulk_batch" sequence="20"/>
+    <menuitem id="menu_cost_analysis" name="Phân tích chi phí nhiều kỳ" parent="lfood_base.menu_reports"
+              action="action_cost_analysis" sequence="10"/>
+    <menuitem id="menu_cost_item" name="Khoản mục chi phí" parent="lfood_base.menu_config"
+              action="action_cost_item" sequence="10"/>
+    <menuitem id="menu_legal_param" name="Tham số pháp lý" parent="lfood_base.menu_config"
+              action="action_legal_param" sequence="20"/>
+    <menuitem id="menu_vat_rate" name="Thuế suất GTGT" parent="lfood_base.menu_config"
+              action="action_vat_rate" sequence="30"/>
+</odoo>

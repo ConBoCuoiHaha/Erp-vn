@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_benefit_list" model="ir.ui.view">
+        <field name="name">lfood.hr.benefit.list</field>
+        <field name="model">lfood.hr.benefit</field>
+        <field name="arch" type="xml">
+            <list string="Ốm đau, thai sản">
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="kind"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="days"/>
+                <field name="total" sum="Tổng"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_benefit_form" model="ir.ui.view">
+        <field name="name">lfood.hr.benefit.form</field>
+        <field name="model">lfood.hr.benefit</field>
+        <field name="arch" type="xml">
+            <form string="Hồ sơ ốm đau, thai sản">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state != 'posted'"
+                            groups="lfood_base.group_chief_accountant"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="employee_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="kind" readonly="state != 'draft'"/>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="half_days" readonly="state != 'draft'" invisible="kind not in ('sick', 'child_sick')"/>
+                            <field name="years_paid" readonly="state != 'draft'" invisible="kind != 'sick'"/>
+                            <field name="hard_job" readonly="state != 'draft'" invisible="kind != 'sick'"/>
+                            <field name="child_birth" readonly="state != 'draft'" invisible="kind != 'child_sick'"/>
+                            <field name="gestation_weeks" readonly="state != 'draft'" invisible="kind != 'miscarriage'"/>
+                            <field name="children" readonly="state != 'draft'" invisible="kind not in ('birth', 'male_birth')"/>
+                            <field name="surgery" readonly="state != 'draft'" invisible="kind != 'male_birth'"/>
+                            <field name="preterm" readonly="state != 'draft'" invisible="kind != 'male_birth'"/>
+                        </group>
+                        <group>
+                            <field name="salary_base" readonly="state != 'draft'"/>
+                            <field name="days"/>
+                            <field name="limit_days" invisible="not limit_days"/>
+                            <field name="used_days" invisible="not used_days"/>
+                            <field name="amount"/>
+                            <field name="lump_sum" invisible="not lump_sum"/>
+                            <field name="total"/>
+                            <field name="certificate" filename="certificate_name" readonly="state != 'draft'"/>
+                            <field name="certificate_name" invisible="1"/>
+                            <field name="bhxh_ref"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Luật Bảo hiểm xã hội 41/2024/QH15: ốm đau tối đa 30/40/60 ngày làm việc trong năm (nghề
+                        nặng nhọc 40/50/70), hưởng 75% lương đóng BHXH tháng gần nhất chia 24 ngày; chăm con ốm 20 ngày (con dưới 3
+                        tuổi), 15 ngày (3 đến dưới 7 tuổi); dưỡng sức tối đa 10 ngày, 30% mức tham chiếu; khám thai 5 lần, mỗi lần
+                        2 ngày; sảy thai 10/20/40/50 ngày; nam nghỉ khi vợ sinh 5/7/10/14 ngày; nữ sinh con 6 tháng (thêm 1 tháng
+                        mỗi con từ con thứ hai), 100% bình quân lương đóng 6 tháng và trợ cấp 2 lần mức tham chiếu mỗi con.
+                        Ghi sổ Nợ 3383 / Có 334.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_benefit" model="ir.actions.act_window">
+        <field name="name">Ốm đau, thai sản</field>
+        <field name="res_model">lfood.hr.benefit</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_benefit" name="Ốm đau, thai sản" parent="lfood_hr.menu_hr_root" action="action_benefit" sequence="32"/>
+</odoo>

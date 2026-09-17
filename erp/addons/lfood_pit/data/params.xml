@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="comp_salary_advance" model="lfood.payroll.component"><field name="sequence">19</field><field name="code">TRU_TAM_UNG_LUONG</field><field name="name">Trừ tạm ứng lương</field><field name="kind">deduction</field><field name="taxable" eval="False"/><field name="deduction_account">334</field></record>
+    <record id="comp_13th" model="lfood.payroll.component"><field name="sequence">6</field><field name="code">LUONG_THANG_13</field><field name="name">Lương tháng 13</field></record>
+
+    <record id="p_vl_nguong" model="lfood.legal.param"><field name="code">TNCN_NGUONG_KHAU_TRU_VANG_LAI</field><field name="name">Ngưỡng mỗi lần chi trả phải khấu trừ thuế TNCN (không ký hợp đồng lao động hoặc dưới 03 tháng)</field><field name="group">pit</field></record>
+    <record id="pv_vl_nguong_old" model="lfood.legal.param.value"><field name="param_id" ref="p_vl_nguong"/><field name="value">2000000</field><field name="date_from">2015-01-01</field><field name="date_to">2026-06-30</field><field name="legal_ref">Thông tư 111/2013/TT-BTC, Điều 25 khoản 1 điểm i</field><field name="state">approved</field></record>
+    <record id="pv_vl_nguong" model="lfood.legal.param.value"><field name="param_id" ref="p_vl_nguong"/><field name="value">5000000</field><field name="date_from">2026-07-01</field><field name="legal_ref">Nghị định 253/2026/NĐ-CP, Điều 50 khoản 2</field><field name="state">approved</field></record>
+
+    <record id="p_vl_ty_le" model="lfood.legal.param"><field name="code">TNCN_TY_LE_VANG_LAI</field><field name="name">Tỷ lệ khấu trừ thuế TNCN thu nhập vãng lai của cá nhân cư trú</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_vl_ty_le" model="lfood.legal.param.value"><field name="param_id" ref="p_vl_ty_le"/><field name="value">10</field><field name="date_from">2015-01-01</field><field name="legal_ref">Nghị định 253/2026/NĐ-CP, Điều 50 khoản 2 (trước đó Thông tư 111/2013/TT-BTC, Điều 25)</field><field name="state">approved</field></record>
+
+    <record id="p_kct" model="lfood.legal.param"><field name="code">TNCN_THUE_SUAT_KHONG_CU_TRU</field><field name="name">Thuế suất TNCN tiền lương, tiền công của cá nhân không cư trú</field><field name="group">pit</field><field name="value_type">percent</field></record>
+    <record id="pv_kct" model="lfood.legal.param.value"><field name="param_id" ref="p_kct"/><field name="value">20</field><field name="date_from">2015-01-01</field><field name="legal_ref">Nghị định 253/2026/NĐ-CP, Điều 64 khoản 1 (trước đó Luật Thuế TNCN 2007, Điều 26)</field><field name="state">approved</field></record>
+
+    <record id="p_qt_bq" model="lfood.legal.param"><field name="code">TNCN_QT_THU_NHAP_KHAC_BQ_THANG</field><field name="name">Thu nhập nơi khác bình quân tháng tối đa (đã khấu trừ 10%) vẫn được ủy quyền quyết toán</field><field name="group">pit</field></record>
+    <record id="pv_qt_bq" model="lfood.legal.param.value"><field name="param_id" ref="p_qt_bq"/><field name="value">15000000</field><field name="date_from">2026-07-01</field><field name="legal_ref">Nghị định 253/2026/NĐ-CP, Điều 51 khoản 1 điểm b, khoản 2 điểm b</field><field name="state">approved</field></record>
+</odoo>

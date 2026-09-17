@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_asset_root" name="Tài sản cố định" parent="lfood_base.menu_root" sequence="20"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+    <menuitem id="menu_asset" name="Danh sách tài sản" parent="menu_asset_root" action="action_asset" sequence="10"/>
+    <menuitem id="menu_depreciation" name="Chứng từ khấu hao" parent="menu_asset_root" action="action_depreciation" sequence="20"/>
+    <menuitem id="menu_schedule" name="Bảng tính khấu hao" parent="menu_asset_root" action="action_schedule" sequence="30"/>
+    <menuitem id="menu_category" name="Loại tài sản" parent="lfood_base.menu_config" action="action_category" sequence="40"/>
+</odoo>

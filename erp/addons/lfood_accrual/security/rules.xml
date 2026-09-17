@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_prepaid_company" model="ir.rule">
+        <field name="name">Chi phí trả trước theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_prepaid"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_accrued_company" model="ir.rule">
+        <field name="name">Chi phí trích trước theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_accrued"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_prepaid_line_company" model="ir.rule">
+        <field name="name">Kỳ phân bổ theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_prepaid_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_accrued_line_company" model="ir.rule">
+        <field name="name">Kỳ trích trước theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_accrued_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

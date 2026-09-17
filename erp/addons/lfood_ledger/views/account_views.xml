@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_account_list" model="ir.ui.view">
+        <field name="name">lfood.account.list</field>
+        <field name="model">lfood.account</field>
+        <field name="arch" type="xml">
+            <list string="Hệ thống tài khoản" decoration-bf="level == 1" decoration-muted="not allow_posting">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="level" optional="show"/>
+                <field name="nature"/>
+                <field name="allow_posting"/>
+                <field name="track_partner" optional="show"/>
+                <field name="bs_term" optional="show"/>
+                <field name="is_official" optional="show"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_account_form" model="ir.ui.view">
+        <field name="name">lfood.account.form</field>
+        <field name="model">lfood.account</field>
+        <field name="arch" type="xml">
+            <form string="Tài khoản">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="parent_id"/>
+                            <field name="nature"/>
+                        </group>
+                        <group>
+                            <field name="allow_posting"/>
+                            <field name="track_partner"/>
+                            <field name="bs_term"/>
+                            <field name="is_official"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        Tài khoản cấp 1, cấp 2 theo Phụ lục II Thông tư 99/2025/TT-BTC. Công ty được mở thêm tài khoản chi tiết
+                        (ví dụ 3311, 1121 theo từng ngân hàng). Tài khoản đã có số phát sinh không mở thêm tài khoản con được.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_account_search" model="ir.ui.view">
+        <field name="name">lfood.account.search</field>
+        <field name="model">lfood.account</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code" string="Số hiệu, tên" filter_domain="['|', ('code', '=like', self + '%'), ('name', 'ilike', self)]"/>
+                <filter name="f_posting" string="Được hạch toán" domain="[('allow_posting', '=', True)]"/>
+                <filter name="f_level1" string="Cấp 1" domain="[('level', '=', 1)]"/>
+                <filter name="f_company" string="Tài khoản chi tiết công ty" domain="[('is_official', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_account" model="ir.actions.act_window">
+        <field name="name">Hệ thống tài khoản</field>
+        <field name="res_model">lfood.account</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

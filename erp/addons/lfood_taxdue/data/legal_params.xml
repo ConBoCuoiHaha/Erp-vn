@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="p_late_rate" model="lfood.legal.param"><field name="code">TIEN_CHAM_NOP_TY_LE_NGAY</field><field name="name">Tiền chậm nộp thuế: tỷ lệ mỗi ngày</field><field name="group">other</field><field name="value_type">percent</field></record>
+    <record id="pv_late_rate_2020" model="lfood.legal.param.value"><field name="param_id" ref="p_late_rate"/><field name="value">0.03</field><field name="date_from">2020-07-01</field><field name="date_to">2026-06-30</field><field name="legal_ref">Luật Quản lý thuế 38/2019/QH14, Điều 59</field><field name="state">approved</field></record>
+    <record id="pv_late_rate_2026" model="lfood.legal.param.value"><field name="param_id" ref="p_late_rate"/><field name="value">0.03</field><field name="date_from">2026-07-01</field><field name="legal_ref">Luật Quản lý thuế 108/2025/QH15, Điều 16; Nghị định 252/2026/NĐ-CP, Điều 26</field><field name="state">approved</field></record>
+</odoo>

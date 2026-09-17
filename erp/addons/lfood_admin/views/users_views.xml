@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_users_lfood_list" model="ir.ui.view">
+        <field name="name">res.users.lfood.list</field>
+        <field name="model">res.users</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Người dùng">
+                <field name="name" string="Họ tên"/>
+                <field name="login" string="Tên đăng nhập"/>
+                <field name="lfood_role"/>
+                <field name="company_id" string="Công ty mặc định"/>
+                <field name="company_ids" string="Được truy cập" widget="many2many_tags" optional="show"/>
+                <field name="login_date" string="Đăng nhập gần nhất"/>
+                <field name="lfood_audit_count" optional="show"/>
+                <field name="active" string="Hoạt động" widget="boolean_toggle" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_users_lfood_form" model="ir.ui.view">
+        <field name="name">res.users.lfood.form</field>
+        <field name="model">res.users</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <form string="Người dùng">
+                <header>
+                    <button name="action_lfood_change_password" type="object" string="Đặt lại mật khẩu"
+                            class="btn-primary" invisible="not id"/>
+                    <button name="action_archive" type="object" string="Ngừng hoạt động"
+                            invisible="not id or not active"
+                            confirm="Người này sẽ không đăng nhập được nữa. Dữ liệu và nhật ký vẫn giữ nguyên. Tiếp tục?"/>
+                    <button name="action_unarchive" type="object" string="Cho hoạt động lại" invisible="active"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_lfood_view_audit" type="object" class="oe_stat_button" icon="fa-list">
+                            <field name="lfood_audit_count" widget="statinfo" string="Thao tác đã ghi"/>
+                        </button>
+                    </div>
+                    <div class="alert alert-secondary" role="alert" invisible="active">
+                        Tài khoản đang ngừng hoạt động.
+                    </div>
+                    <group>
+                        <group string="Tài khoản">
+                            <field name="active" invisible="1"/>
+                            <field name="name" string="Họ tên" required="1"/>
+                            <field name="login" string="Tên đăng nhập / email" required="1"/>
+                            <field name="email" string="Email liên hệ"/>
+                            <field name="lang" string="Ngôn ngữ"/>
+                            <field name="tz" string="Múi giờ"/>
+                        </group>
+                        <group string="Phân quyền">
+                            <field name="lfood_role" required="1"/>
+                            <field name="company_ids" string="Được truy cập công ty" widget="many2many_checkboxes"/>
+                            <field name="company_id" string="Công ty mặc định"
+                                   domain="[('id', 'in', company_ids)]" required="1"/>
+                            <field name="login_date" string="Đăng nhập gần nhất" readonly="1"/>
+                            <field name="create_date" string="Ngày tạo" readonly="1"/>
+                            <field name="create_uid" string="Người tạo" readonly="1"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">
+                        Mật khẩu: sau khi tạo tài khoản, bấm Đặt lại mật khẩu và giao cho người dùng; người dùng tự đổi lại
+                        ở mục Hồ sơ của tôi. Tài khoản đã có thao tác không xóa được, chỉ Ngừng hoạt động, để giữ dấu vết.
+                        Phân quyền chi tiết theo nhóm của Odoo: menu Thiết lập &gt; Người dùng.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_users_lfood_search" model="ir.ui.view">
+        <field name="name">res.users.lfood.search</field>
+        <field name="model">res.users</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search string="Người dùng">
+                <field name="name" string="Họ tên"/>
+                <field name="login" string="Tên đăng nhập"/>
+                <filter name="active_users" string="Đang hoạt động" domain="[('active', '=', True)]"/>
+                <filter name="inactive_users" string="Ngừng hoạt động" domain="[('active', '=', False)]"/>
+                <separator/>
+                <filter name="internal" string="Người dùng nội bộ" domain="[('share', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_users_lfood" model="ir.actions.act_window">
+        <field name="name">Người dùng và vai trò</field>
+        <field name="res_model">res.users</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_users_lfood_search"/>
+        <field name="domain">[('share', '=', False)]</field>
+        <field name="context">{'search_default_active_users': 1, 'active_test': False}</field>
+    </record>
+    <record id="action_users_lfood_list" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_users_lfood_list"/>
+        <field name="act_window_id" ref="action_users_lfood"/>
+    </record>
+    <record id="action_users_lfood_form" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_users_lfood_form"/>
+        <field name="act_window_id" ref="action_users_lfood"/>
+    </record>
+
+    <menuitem id="menu_users_lfood" name="Người dùng và vai trò" parent="menu_admin"
+              action="action_users_lfood" sequence="10"/>
+    <menuitem id="menu_company_admin" name="Pháp nhân" parent="menu_admin"
+              action="lfood_base.action_company_lfood" sequence="30"/>
+    <menuitem id="menu_audit_admin" name="Nhật ký hệ thống" parent="menu_admin"
+              action="lfood_audit.action_audit_log" sequence="60"/>
+    <menuitem id="menu_odoo_settings" name="Thiết lập nâng cao (Odoo)" parent="menu_admin"
+              action="base.action_res_groups" sequence="90"/>
+</odoo>

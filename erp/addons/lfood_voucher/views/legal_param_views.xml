@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_legal_param_list" model="ir.ui.view">
+        <field name="name">lfood.legal.param.list</field>
+        <field name="model">lfood.legal.param</field>
+        <field name="arch" type="xml">
+            <list string="Tham số pháp lý">
+                <field name="group"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="value_type"/>
+                <field name="current_value"/>
+                <field name="current_ref"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_legal_param_form" model="ir.ui.view">
+        <field name="name">lfood.legal.param.form</field>
+        <field name="model">lfood.legal.param</field>
+        <field name="arch" type="xml">
+            <form string="Tham số pháp lý">
+                <sheet>
+                    <div class="oe_title"><h2><field name="name"/></h2></div>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="group"/>
+                            <field name="kind"/>
+                            <field name="value_type"/>
+                        </group>
+                        <group>
+                            <field name="current_value"/>
+                            <field name="current_ref"/>
+                            <field name="description"/>
+                        </group>
+                    </group>
+                    <div class="o_lfood_note">
+                        Luật thay đổi thì thêm một dòng mới với ngày áp dụng mới rồi bấm Duyệt. Không sửa dòng đã duyệt;
+                        dòng cũ tự có ngày kết thúc. Kỳ đã khóa sổ không bị tính lại.
+                    </div>
+                    <field name="value_ids">
+                        <list editable="bottom" decoration-muted="state == 'approved' and date_to and date_to &lt; current_date">
+                            <field name="value"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="legal_ref"/>
+                            <field name="note"/>
+                            <field name="state" readonly="1"/>
+                            <field name="approved_by"/>
+                            <field name="approved_on"/>
+                            <button name="action_approve" type="object" string="Duyệt" invisible="state != 'draft'"
+                                    groups="lfood_base.group_chief_accountant"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_legal_param_search" model="ir.ui.view">
+        <field name="name">lfood.legal.param.search</field>
+        <field name="model">lfood.legal.param</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="code"/>
+                <field name="name"/>
+                <group>
+                    <filter name="g_group" string="Nhóm" context="{'group_by': 'group'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_legal_param" model="ir.actions.act_window">
+        <field name="name">Tham số pháp lý</field>
+        <field name="res_model">lfood.legal.param</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_g_group': 1}</field>
+    </record>
+
+    <record id="view_vat_rate_list" model="ir.ui.view">
+        <field name="name">lfood.vat.rate.list</field>
+        <field name="model">lfood.vat.rate</field>
+        <field name="arch" type="xml">
+            <list string="Thuế suất GTGT" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="rate"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="legal_ref"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_vat_rate" model="ir.actions.act_window">
+        <field name="name">Thuế suất GTGT</field>
+        <field name="res_model">lfood.vat.rate</field>
+        <field name="view_mode">list</field>
+    </record>
+</odoo>

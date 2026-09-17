@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_audit_log_list" model="ir.ui.view">
+        <field name="name">lfood.audit.log.list</field>
+        <field name="model">lfood.audit.log</field>
+        <field name="arch" type="xml">
+            <list string="Nhật ký hệ thống" create="false" edit="false" delete="false">
+                <field name="event_time"/>
+                <field name="user_id"/>
+                <field name="action"/>
+                <field name="model_name"/>
+                <field name="res_name"/>
+                <field name="summary"/>
+                <field name="company_id" optional="hide"/>
+                <field name="ip" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_audit_log_form" model="ir.ui.view">
+        <field name="name">lfood.audit.log.form</field>
+        <field name="model">lfood.audit.log</field>
+        <field name="arch" type="xml">
+            <form string="Dòng nhật ký" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_title"><h2><field name="summary" readonly="1"/></h2></div>
+                    <group>
+                        <group string="Ai, khi nào">
+                            <field name="event_time"/>
+                            <field name="user_id"/>
+                            <field name="login"/>
+                            <field name="company_id"/>
+                        </group>
+                        <group string="Làm gì">
+                            <field name="action"/>
+                            <field name="model_name"/>
+                            <field name="res_name"/>
+                            <field name="res_id"/>
+                        </group>
+                        <group string="Từ đâu">
+                            <field name="ip"/>
+                            <field name="user_agent"/>
+                            <field name="session_ref"/>
+                        </group>
+                        <group string="Chống sửa">
+                            <field name="prev_hash"/>
+                            <field name="hash"/>
+                        </group>
+                    </group>
+                    <field name="changes_html" readonly="1" nolabel="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_audit_log_search" model="ir.ui.view">
+        <field name="name">lfood.audit.log.search</field>
+        <field name="model">lfood.audit.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="user_id"/>
+                <field name="res_name"/>
+                <field name="summary"/>
+                <field name="model_name"/>
+                <field name="ip"/>
+                <filter name="f_data" string="Tạo, sửa, xóa dữ liệu" domain="[('action', 'in', ['create', 'write', 'unlink', 'bulk', 'state'])]"/>
+                <filter name="f_export" string="Xuất dữ liệu, in báo cáo" domain="[('action', 'in', ['export', 'print'])]"/>
+                <filter name="f_login" string="Đăng nhập, đăng xuất" domain="[('action', 'in', ['login', 'login_failed', 'logout'])]"/>
+                <filter name="f_perm" string="Phân quyền, cấu hình" domain="[('action', 'in', ['permission', 'config'])]"/>
+                <filter name="f_failed" string="Đăng nhập thất bại" domain="[('action', '=', 'login_failed')]"/>
+                <separator/>
+                <filter name="f_today" string="Hôm nay" domain="[('event_time', '&gt;=', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="g_user" string="Người thực hiện" context="{'group_by': 'user_id'}"/>
+                    <filter name="g_action" string="Hành động" context="{'group_by': 'action'}"/>
+                    <filter name="g_model" string="Đối tượng" context="{'group_by': 'model_name'}"/>
+                    <filter name="g_day" string="Ngày" context="{'group_by': 'event_time:day'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_audit_log" model="ir.actions.act_window">
+        <field name="name">Nhật ký hệ thống</field>
+        <field name="res_model">lfood.audit.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p>Mọi thao tác trên app được ghi tại đây: ai, lúc nào, từ máy nào, sửa trường nào, giá trị cũ và mới. Không ai sửa hoặc xóa được.</p>
+        </field>
+    </record>
+
+    <record id="action_audit_verify" model="ir.actions.server">
+        <field name="name">Kiểm tra toàn vẹn nhật ký</field>
+        <field name="model_id" ref="model_lfood_audit_log"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_verify_chain()</field>
+        <field name="group_ids" eval="[(4, ref('lfood_base.group_chief_accountant')), (4, ref('lfood_base.group_director')), (4, ref('lfood_base.group_sysadmin'))]"/>
+    </record>
+
+    <menuitem id="menu_audit_log" name="Nhật ký hệ thống" parent="lfood_base.menu_control"
+              action="action_audit_log" sequence="10"/>
+    <menuitem id="menu_audit_verify" name="Kiểm tra toàn vẹn nhật ký" parent="lfood_base.menu_control"
+              action="action_audit_verify" sequence="20"/>
+</odoo>

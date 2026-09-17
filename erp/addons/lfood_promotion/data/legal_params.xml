@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hạn mức khuyến mại theo Nghị định 81/2018/NĐ-CP, sửa đổi bởi Nghị định 128/2024/NĐ-CP (hiệu lực 01/12/2024)
+     và Nghị định 239/2026/NĐ-CP (hiệu lực 26/6/2026). -->
+<odoo noupdate="1">
+    <record id="p_km_limit" model="lfood.legal.param"><field name="code">KM_HAN_MUC_GIA_TRI</field><field name="name">Khuyến mại: giá trị tặng, mức giảm tối đa so với giá bán ngay trước khuyến mại</field><field name="group">other</field><field name="value_type">percent</field></record>
+    <record id="pv_km_limit" model="lfood.legal.param.value"><field name="param_id" ref="p_km_limit"/><field name="value">50</field><field name="date_from">2024-12-01</field><field name="legal_ref">Nghị định 81/2018/NĐ-CP Điều 6 khoản 1, Điều 7 khoản 1, sửa đổi bởi Nghị định 128/2024/NĐ-CP</field><field name="state">approved</field></record>
+    <record id="p_km_notice" model="lfood.legal.param"><field name="code">KM_NGAY_THONG_BAO</field><field name="name">Khuyến mại: số ngày làm việc tối thiểu nộp thông báo trước khi thực hiện</field><field name="group">other</field><field name="value_type">number</field></record>
+    <record id="pv_km_notice" model="lfood.legal.param.value"><field name="param_id" ref="p_km_notice"/><field name="value">3</field><field name="date_from">2024-12-01</field><field name="legal_ref">Nghị định 81/2018/NĐ-CP Điều 17, sửa đổi bởi Nghị định 128/2024/NĐ-CP và Nghị định 239/2026/NĐ-CP</field><field name="state">approved</field></record>
+</odoo>

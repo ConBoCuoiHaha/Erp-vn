@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_cit_provisional" model="ir.sequence"><field name="name">Tạm nộp thuế TNDN quý</field><field name="code">lfood.cit.provisional</field><field name="prefix">TNQ%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+    <record id="seq_cit_finalization" model="ir.sequence"><field name="name">Quyết toán thuế TNDN</field><field name="code">lfood.cit.finalization</field><field name="prefix">QTN%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+</odoo>

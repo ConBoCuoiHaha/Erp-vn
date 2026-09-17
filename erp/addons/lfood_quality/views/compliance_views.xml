@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_declaration_list" model="ir.ui.view">
+        <field name="name">lfood.product.declaration.list</field>
+        <field name="model">lfood.product.declaration</field>
+        <field name="arch" type="xml">
+            <list string="Hồ sơ công bố sản phẩm" decoration-muted="state == 'expired'">
+                <field name="product_id"/>
+                <field name="kind"/>
+                <field name="name"/>
+                <field name="date_submitted"/>
+                <field name="date_published"/>
+                <field name="valid_until"/>
+                <field name="deadline"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_declaration_form" model="ir.ui.view">
+        <field name="name">lfood.product.declaration.form</field>
+        <field name="model">lfood.product.declaration</field>
+        <field name="arch" type="xml">
+            <form string="Hồ sơ công bố sản phẩm">
+                <header>
+                    <button name="action_submit" type="object" string="Đã nộp" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_publish" type="object" string="Đã được đăng tải" class="btn-primary"
+                            invisible="state != 'submitted'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="kind"/>
+                            <field name="name"/>
+                            <field name="authority"/>
+                            <field name="date_submitted"/>
+                            <field name="date_published"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="lab_test_id" options="{'no_create': True}"/>
+                            <field name="certificate_until" invisible="kind != 'conformity'"/>
+                            <field name="valid_until"/>
+                            <field name="deadline" invisible="not deadline"/>
+                            <field name="dossier" filename="dossier_name"/>
+                            <field name="dossier_name" invisible="1"/>
+                            <field name="label" filename="label_name"/>
+                            <field name="label_name" invisible="1"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Nghị quyết 66.13/2026/NQ-CP: công bố tiêu chuẩn áp dụng hoặc đăng ký bản công bố, kèm phiếu
+                        kiểm nghiệm trong 12 tháng của phòng thử nghiệm ISO/IEC 17025; chỉ sản xuất, kinh doanh sau khi hồ sơ được
+                        đăng tải; sản phẩm tự công bố cũ công bố lại trước 27/01/2027, nhóm đăng ký cũ trước 27/01/2028.
+                        Nghị định 46/2026/NĐ-CP: công bố hợp quy có thời hạn theo chứng nhận, không quá 3 năm.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_declaration" model="ir.actions.act_window">
+        <field name="name">Hồ sơ công bố sản phẩm</field>
+        <field name="res_model">lfood.product.declaration</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_lab_test_list" model="ir.ui.view">
+        <field name="name">lfood.lab.test.list</field>
+        <field name="model">lfood.lab.test</field>
+        <field name="arch" type="xml">
+            <list string="Phiếu kết quả kiểm nghiệm" editable="bottom" decoration-danger="not passed">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="product_id" options="{'no_create': True}"/>
+                <field name="lot_id" options="{'no_create': True}"/>
+                <field name="lab"/>
+                <field name="lab_iso17025"/>
+                <field name="passed"/>
+                <field name="sample_kept_until"/>
+                <field name="file" filename="file_name"/>
+                <field name="file_name" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_lab_test" model="ir.actions.act_window">
+        <field name="name">Kiểm nghiệm định kỳ, lưu mẫu</field>
+        <field name="res_model">lfood.lab.test</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="view_worker_check_list" model="ir.ui.view">
+        <field name="name">lfood.worker.check.list</field>
+        <field name="model">lfood.worker.check</field>
+        <field name="arch" type="xml">
+            <list string="Khám sức khỏe, tập huấn" editable="bottom" decoration-danger="not fit">
+                <field name="employee_id" options="{'no_create': True}"/>
+                <field name="kind"/>
+                <field name="date"/>
+                <field name="valid_months"/>
+                <field name="valid_until"/>
+                <field name="result"/>
+                <field name="fit"/>
+                <field name="provider"/>
+                <field name="file" filename="file_name"/>
+                <field name="file_name" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_worker_check" model="ir.actions.act_window">
+        <field name="name">Khám sức khỏe, tập huấn</field>
+        <field name="res_model">lfood.worker.check</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="view_product_form_decl" model="ir.ui.view">
+        <field name="name">lfood.product.form.decl</field>
+        <field name="model">lfood.product</field>
+        <field name="inherit_id" ref="lfood_stock.view_product_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qc_required']" position="before">
+                <field name="declaration_required"/>
+                <field name="lab_test_months"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_employee_form_food" model="ir.ui.view">
+        <field name="name">lfood.employee.form.food</field>
+        <field name="model">lfood.employee</field>
+        <field name="inherit_id" ref="lfood_payroll.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department']" position="after">
+                <field name="food_handler"/>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_declaration" name="Hồ sơ công bố sản phẩm" parent="menu_quality_root" action="action_declaration" sequence="40"/>
+    <menuitem id="menu_lab_test" name="Kiểm nghiệm định kỳ, lưu mẫu" parent="menu_quality_root" action="action_lab_test" sequence="45"/>
+    <menuitem id="menu_worker_check" name="Khám sức khỏe, tập huấn" parent="menu_quality_root" action="action_worker_check" sequence="50"/>
+</odoo>

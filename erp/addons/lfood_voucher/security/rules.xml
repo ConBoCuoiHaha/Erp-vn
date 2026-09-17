@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mỗi người chỉ thấy dữ liệu của các công ty mình được phép -->
+    <record id="rule_voucher_company" model="ir.rule">
+        <field name="name">Chứng từ theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_service_voucher"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_version_company" model="ir.rule">
+        <field name="name">Phiên bản theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_service_voucher_version"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_line_company" model="ir.rule">
+        <field name="name">Dòng chứng từ theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_service_voucher_line"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_analysis_company" model="ir.rule">
+        <field name="name">Báo cáo chi phí theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_cost_analysis"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_cost_item_company" model="ir.rule">
+        <field name="name">Khoản mục chung hoặc theo công ty</field>
+        <field name="model_id" ref="model_lfood_cost_item"/>
+        <field name="domain_force">['|', ('company_id', '=', False), ('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>
+

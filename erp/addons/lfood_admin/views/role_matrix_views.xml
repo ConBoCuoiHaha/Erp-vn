@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_role_matrix_form" model="ir.ui.view">
+        <field name="name">lfood.role.matrix.form</field>
+        <field name="model">lfood.role.matrix</field>
+        <field name="arch" type="xml">
+            <form string="Ma trận phân quyền" create="false" edit="false" delete="false">
+                <sheet>
+                    <h2>Ai được làm gì</h2>
+                    <p class="text-muted">
+                        Mỗi người có một vai trò. Vai trò cao hơn có mọi quyền của vai trò thấp hơn trong cùng nhánh.
+                        Mọi thao tác của mọi vai trò, kể cả Quản trị, đều được ghi vào nhật ký hệ thống và không ai sửa được.
+                    </p>
+                    <field name="html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_role_matrix" model="ir.actions.act_window">
+        <field name="name">Ma trận phân quyền</field>
+        <field name="res_model">lfood.role.matrix</field>
+        <field name="view_mode">form</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_role_matrix" name="Ma trận phân quyền" parent="menu_admin"
+              action="action_role_matrix" sequence="20"/>
+    <menuitem id="menu_role_matrix_config" name="Ma trận phân quyền" parent="lfood_base.menu_config"
+              action="action_role_matrix" sequence="80"/>
+</odoo>

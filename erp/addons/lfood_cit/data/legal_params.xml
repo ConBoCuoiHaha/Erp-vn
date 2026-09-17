@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Tham số thuế TNDN. Luật đổi thì Kế toán trưởng thêm mức mới có ngày hiệu lực, không sửa đè mức cũ. -->
+<odoo noupdate="1">
+    <record id="p_cit_rate_std" model="lfood.legal.param"><field name="code">TNDN_THUE_SUAT_PHO_THONG</field><field name="name">Thuế suất thuế TNDN phổ thông</field><field name="group">cit</field><field name="value_type">percent</field></record>
+    <record id="pv_cit_rate_std" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_rate_std"/><field name="value">20</field><field name="date_from">2025-10-01</field><field name="legal_ref">Luật Thuế thu nhập doanh nghiệp 67/2025/QH15</field><field name="state">approved</field></record>
+
+    <record id="p_cit_rate_17" model="lfood.legal.param"><field name="code">TNDN_THUE_SUAT_17</field><field name="name">Thuế suất TNDN khi doanh thu trên 3 tỷ đến 50 tỷ</field><field name="group">cit</field><field name="value_type">percent</field></record>
+    <record id="pv_cit_rate_17" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_rate_17"/><field name="value">17</field><field name="date_from">2025-10-01</field><field name="legal_ref">Luật Thuế thu nhập doanh nghiệp 67/2025/QH15</field><field name="state">approved</field></record>
+
+    <record id="p_cit_rate_15" model="lfood.legal.param"><field name="code">TNDN_THUE_SUAT_15</field><field name="name">Thuế suất TNDN khi doanh thu không quá 3 tỷ</field><field name="group">cit</field><field name="value_type">percent</field></record>
+    <record id="pv_cit_rate_15" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_rate_15"/><field name="value">15</field><field name="date_from">2025-10-01</field><field name="legal_ref">Luật Thuế thu nhập doanh nghiệp 67/2025/QH15</field><field name="state">approved</field></record>
+
+    <record id="p_cit_limit_15" model="lfood.legal.param"><field name="code">TNDN_DOANH_THU_MUC_15</field><field name="name">Mức doanh thu năm được áp thuế suất 15%</field><field name="group">cit</field><field name="value_type">amount</field>
+        <field name="description">Doanh thu làm căn cứ xác định mức 15% và 17% là tổng doanh thu của kỳ tính thuế TNDN liền kề trước đó.</field></record>
+    <record id="pv_cit_limit_15" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_limit_15"/><field name="value">3000000000</field><field name="date_from">2025-10-01</field><field name="legal_ref">Luật Thuế thu nhập doanh nghiệp 67/2025/QH15</field><field name="state">approved</field></record>
+
+    <record id="p_cit_limit_17" model="lfood.legal.param"><field name="code">TNDN_DOANH_THU_MUC_17</field><field name="name">Mức doanh thu năm được áp thuế suất 17%</field><field name="group">cit</field><field name="value_type">amount</field></record>
+    <record id="pv_cit_limit_17" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_limit_17"/><field name="value">50000000000</field><field name="date_from">2025-10-01</field><field name="legal_ref">Luật Thuế thu nhập doanh nghiệp 67/2025/QH15</field><field name="state">approved</field></record>
+
+    <record id="p_cit_ratio" model="lfood.legal.param"><field name="code">TNDN_TY_LE_TAM_NOP</field><field name="name">Tỷ lệ tối thiểu của tổng tạm nộp 4 quý so với số quyết toán</field><field name="group">cit</field><field name="value_type">percent</field>
+        <field name="description">Nộp thiếu thì tính tiền chậm nộp trên phần thiếu kể từ ngày tiếp sau ngày cuối cùng của thời hạn tạm nộp thuế quý IV.</field></record>
+    <record id="pv_cit_ratio" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_ratio"/><field name="value">80</field><field name="date_from">2025-10-01</field><field name="legal_ref">Quy định tạm nộp thuế TNDN của pháp luật quản lý thuế hiện hành; kế toán trưởng rà lại khi có nghị định, thông tư mới</field><field name="state">approved</field></record>
+
+    <record id="p_cit_loss_years" model="lfood.legal.param"><field name="code">TNDN_SO_NAM_CHUYEN_LO</field><field name="name">Số năm được chuyển lỗ</field><field name="group">cit</field><field name="value_type">number</field></record>
+    <record id="pv_cit_loss_years" model="lfood.legal.param.value"><field name="param_id" ref="p_cit_loss_years"/><field name="value">5</field><field name="date_from">2025-10-01</field><field name="legal_ref">Luật Thuế thu nhập doanh nghiệp 67/2025/QH15: chuyển lỗ liên tục không quá 05 năm kể từ năm tiếp theo năm phát sinh lỗ</field><field name="state">approved</field></record>
+</odoo>

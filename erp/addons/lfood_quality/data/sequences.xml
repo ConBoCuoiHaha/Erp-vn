@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_recall" model="ir.sequence"><field name="name">Thu hồi sản phẩm</field><field name="code">lfood.recall</field><field name="prefix">THSP%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+    <record id="seq_qc_check" model="ir.sequence"><field name="name">Phiếu kiểm tra chất lượng</field><field name="code">lfood.qc.check</field><field name="prefix">KTCL%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+</odoo>

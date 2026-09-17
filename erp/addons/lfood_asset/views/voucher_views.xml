@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_voucher_form_asset" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.form.asset</field>
+        <field name="model">lfood.service.voucher</field>
+        <field name="inherit_id" ref="lfood_voucher.view_voucher_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_create_asset" type="object" string="Ghi tăng TSCĐ"
+                        invisible="state not in ('posted', 'editing')" groups="lfood_base.group_accountant"/>
+            </xpath>
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_assets" type="object" class="oe_stat_button" icon="fa-cubes"
+                        invisible="not asset_count">
+                    <field name="asset_count" widget="statinfo" string="Tài sản"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_cost_analysis_list_asset" model="ir.ui.view">
+        <field name="name">lfood.cost.analysis.list.asset</field>
+        <field name="model">lfood.cost.analysis</field>
+        <field name="inherit_id" ref="lfood_voucher.view_cost_analysis_list"/>
+        <field name="arch" type="xml">
+            <field name="voucher_id" position="before">
+                <field name="source"/>
+            </field>
+            <field name="voucher_id" position="after">
+                <field name="depreciation_id" optional="show"/>
+            </field>
+        </field>
+    </record>
+</odoo>

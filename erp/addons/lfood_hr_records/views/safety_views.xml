@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_accident_company" model="ir.rule">
+        <field name="name">Tai nạn lao động theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_accident"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_accident_report_company" model="ir.rule">
+        <field name="name">Báo cáo tai nạn theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_accident_report"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_safety_training_company" model="ir.rule">
+        <field name="name">Huấn luyện an toàn theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_safety_training"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_accident_list" model="ir.ui.view">
+        <field name="name">lfood.hr.accident.list</field>
+        <field name="model">lfood.hr.accident</field>
+        <field name="arch" type="xml">
+            <list string="Tai nạn lao động" decoration-danger="severity == 'fatal'">
+                <field name="date"/><field name="employee_id"/><field name="place"/><field name="severity"/>
+                <field name="days_off"/><field name="compensation"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_accident_form" model="ir.ui.view">
+        <field name="name">lfood.hr.accident.form</field>
+        <field name="model">lfood.hr.accident</field>
+        <field name="arch" type="xml">
+            <form string="Tai nạn lao động">
+                <header>
+                    <button name="action_close" type="object" string="Đã giải quyết xong" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="employee_id" options="{'no_create': True}"/>
+                            <field name="date"/>
+                            <field name="place"/>
+                            <field name="severity"/>
+                            <field name="occupational_disease"/>
+                            <field name="reported_on"/>
+                            <field name="investigation_file" filename="investigation_name"/>
+                            <field name="investigation_name" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="monthly_salary"/>
+                            <field name="days_off"/>
+                            <field name="medical_cost"/>
+                            <field name="impairment"/>
+                            <field name="worker_fault"/>
+                            <field name="salary_during_treatment"/>
+                            <field name="compensation_months"/>
+                            <field name="compensation"/>
+                        </group>
+                    </group>
+                    <field name="description" placeholder="Diễn biến, nguyên nhân"/>
+                    <div class="text-muted">Luật An toàn, vệ sinh lao động 2015: khai báo ngay tai nạn nặng, chết người (Điều 34); trả chi phí y tế,
+                        đủ lương trong thời gian điều trị, bồi thường hoặc trợ cấp theo tỷ lệ suy giảm (Điều 38). Chi trả bằng phiếu chi.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_accident" model="ir.actions.act_window">
+        <field name="name">Tai nạn lao động</field>
+        <field name="res_model">lfood.hr.accident</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_accident_report_list" model="ir.ui.view">
+        <field name="name">lfood.hr.accident.report.list</field>
+        <field name="model">lfood.hr.accident.report</field>
+        <field name="arch" type="xml">
+            <list string="Báo cáo tai nạn lao động">
+                <field name="year"/><field name="period"/><field name="due_date"/><field name="submitted_on"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_accident_report_form" model="ir.ui.view">
+        <field name="name">lfood.hr.accident.report.form</field>
+        <field name="model">lfood.hr.accident.report</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo tai nạn lao động">
+                <header>
+                    <button name="action_compute" type="object" string="Lấy số liệu" class="btn-primary"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="year"/><field name="period"/><field name="company_id" groups="base.group_multi_company"/></group>
+                        <group><field name="due_date"/><field name="submitted_on"/></group>
+                    </group>
+                    <field name="content_html"/>
+                    <div class="text-muted">Nghị định 39/2016/NĐ-CP, Điều 24: báo cáo 6 tháng trước ngày 05/7, báo cáo năm trước ngày 10/01 năm sau.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_accident_report" model="ir.actions.act_window">
+        <field name="name">Báo cáo tai nạn lao động</field>
+        <field name="res_model">lfood.hr.accident.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_safety_training_list" model="ir.ui.view">
+        <field name="name">lfood.hr.safety.training.list</field>
+        <field name="model">lfood.hr.safety.training</field>
+        <field name="arch" type="xml">
+            <list string="Huấn luyện an toàn, vệ sinh lao động" editable="bottom">
+                <field name="employee_id" options="{'no_create': True}"/><field name="group"/><field name="course"/>
+                <field name="provider"/><field name="date"/><field name="valid_until"/>
+                <field name="certificate" filename="certificate_name"/><field name="certificate_name" column_invisible="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_safety_training" model="ir.actions.act_window">
+        <field name="name">Huấn luyện an toàn</field>
+        <field name="res_model">lfood.hr.safety.training</field>
+        <field name="view_mode">list</field>
+    </record>
+    <menuitem id="menu_safety_root" name="An toàn lao động" parent="lfood_hr.menu_hr_root" sequence="60"/>
+    <menuitem id="menu_accident" name="Tai nạn lao động" parent="menu_safety_root" action="action_accident" sequence="10"/>
+    <menuitem id="menu_accident_report" name="Báo cáo tai nạn lao động" parent="menu_safety_root" action="action_accident_report" sequence="20"/>
+    <menuitem id="menu_safety_training" name="Huấn luyện an toàn" parent="menu_safety_root" action="action_safety_training" sequence="30"/>
+</odoo>

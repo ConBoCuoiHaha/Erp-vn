@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_prepaid" model="ir.sequence"><field name="name">Chi phí trả trước</field><field name="code">lfood.prepaid</field><field name="prefix">TT%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_accrued" model="ir.sequence"><field name="name">Chi phí trích trước</field><field name="code">lfood.accrued</field><field name="prefix">TR%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+</odoo>

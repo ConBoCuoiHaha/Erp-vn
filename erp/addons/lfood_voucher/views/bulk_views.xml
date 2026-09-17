@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_voucher_bulk_form" model="ir.ui.view">
+        <field name="name">lfood.voucher.bulk.form</field>
+        <field name="model">lfood.voucher.bulk</field>
+        <field name="arch" type="xml">
+            <form string="Điều chỉnh hàng loạt">
+                <field name="state" invisible="1"/>
+                <div class="o_lfood_note" invisible="state != 'edit'">
+                    Chọn thao tác, xem trước bảng thay đổi rồi mới áp dụng. Chứng từ đã cất được lưu thành phiên bản mới, báo cáo không đổi.
+                    Chứng từ Chờ duyệt, Đang sửa, Đã hủy được bỏ qua. Cả lô hoàn tác được.
+                </div>
+                <group invisible="state != 'edit'" string="Bước 1 · Chọn chứng từ">
+                    <group>
+                        <field name="pick_date_from"/>
+                        <field name="pick_date_to"/>
+                        <field name="pick_state"/>
+                    </group>
+                    <group>
+                        <field name="pick_partner_id" options="{'no_create': True}"/>
+                        <field name="pick_cost_item_id" options="{'no_create': True}"/>
+                        <button name="action_pick_vouchers" type="object" string="Lấy chứng từ theo điều kiện" class="btn-secondary" colspan="2"/>
+                    </group>
+                    <group colspan="2">
+                        <field name="voucher_count"/>
+                        <field name="voucher_ids" widget="many2many_tags" options="{'no_create': True}"
+                               placeholder="Hoặc gõ số chứng từ để chọn từng cái"/>
+                    </group>
+                </group>
+                <group invisible="state != 'edit'" string="Bước 2 · Chọn thay đổi">
+                    <group string="Dòng áp dụng">
+                        <field name="scope"/>
+                        <field name="scope_cost_item_id" invisible="scope != 'cost_item'" required="scope == 'cost_item'"/>
+                        <field name="scope_text" invisible="scope not in ('service_code', 'acc_expense')"/>
+                    </group>
+                    <group string="Thay đổi">
+                        <field name="operation"/>
+                        <field name="percent" invisible="operation != 'scale_percent'"/>
+                        <field name="new_total" invisible="operation != 'distribute_total'"/>
+                        <field name="new_price" invisible="operation != 'set_price'"/>
+                        <field name="new_cost_item_id" invisible="operation != 'set_cost_item'"/>
+                        <field name="new_text" invisible="operation not in ('set_acc_expense', 'set_acc_payable')"/>
+                        <field name="new_vat_rate_id" invisible="operation != 'set_vat_rate'"/>
+                        <field name="new_date" invisible="operation != 'set_accounting_date'"/>
+                        <field name="find_text" invisible="operation != 'replace_memo'"/>
+                        <field name="replace_text" invisible="operation != 'replace_memo'"/>
+                    </group>
+                    <group string="Lý do">
+                        <field name="reason" nolabel="1" colspan="2" placeholder="Bắt buộc. Ghi vào nhật ký kèm tên người điều chỉnh."/>
+                    </group>
+                </group>
+                <div invisible="state != 'preview'">
+                    <group>
+                        <group>
+                            <field name="operation" readonly="1"/>
+                            <field name="reason" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="total_before"/>
+                            <field name="total_after"/>
+                        </group>
+                    </group>
+                    <field name="preview_ids" readonly="1">
+                        <list>
+                            <field name="voucher_id"/>
+                            <field name="line_label"/>
+                            <field name="field_label"/>
+                            <field name="old_value"/>
+                            <field name="new_value"/>
+                            <field name="diff" sum="Tổng chênh lệch"/>
+                        </list>
+                    </field>
+                    <group invisible="not skipped_note">
+                        <field name="skipped_note"/>
+                    </group>
+                </div>
+                <footer>
+                    <button name="action_preview" type="object" string="Xem trước" class="btn-primary" invisible="state != 'edit'"/>
+                    <button name="action_apply" type="object" string="Áp dụng" class="btn-primary" invisible="state != 'preview'"
+                            confirm="Áp dụng thay đổi cho các chứng từ trong bảng xem trước?"/>
+                    <button name="action_back" type="object" string="Quay lại sửa" invisible="state != 'preview'"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_voucher_bulk" model="ir.actions.act_window">
+        <field name="name">Điều chỉnh hàng loạt</field>
+        <field name="res_model">lfood.voucher.bulk</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_lfood_service_voucher"/>
+        <field name="binding_view_types">list</field>
+        <field name="group_ids" eval="[(4, ref('lfood_base.group_chief_accountant'))]"/>
+    </record>
+
+    <!-- lô điều chỉnh -->
+    <record id="view_bulk_batch_list" model="ir.ui.view">
+        <field name="name">lfood.voucher.bulk.batch.list</field>
+        <field name="model">lfood.voucher.bulk.batch</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false" decoration-muted="state == 'undone'">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="user_id"/>
+                <field name="operation"/>
+                <field name="voucher_count"/>
+                <field name="line_count"/>
+                <field name="amount_before"/>
+                <field name="amount_after"/>
+                <field name="reason"/>
+                <field name="state" widget="badge"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_bulk_batch_form" model="ir.ui.view">
+        <field name="name">lfood.voucher.bulk.batch.form</field>
+        <field name="model">lfood.voucher.bulk.batch</field>
+        <field name="arch" type="xml">
+            <form create="false" edit="false" delete="false">
+                <header>
+                    <button name="action_undo" type="object" string="Hoàn tác cả lô" invisible="state != 'done'"
+                            groups="lfood_base.group_chief_accountant"
+                            confirm="Tạo phiên bản khôi phục cho mọi chứng từ trong lô?"/>
+                    <button name="action_view_vouchers" type="object" string="Xem chứng từ"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h2><field name="name"/></h2></div>
+                    <group>
+                        <group>
+                            <field name="user_id"/>
+                            <field name="date"/>
+                            <field name="operation"/>
+                            <field name="reason"/>
+                        </group>
+                        <group>
+                            <field name="voucher_count"/>
+                            <field name="line_count"/>
+                            <field name="amount_before"/>
+                            <field name="amount_after"/>
+                        </group>
+                    </group>
+                    <field name="version_ids">
+                        <list>
+                            <field name="voucher_id"/>
+                            <field name="number"/>
+                            <field name="amount_total"/>
+                            <field name="saved_on"/>
+                            <field name="is_current"/>
+                        </list>
+                    </field>
+                    <group invisible="not skipped"><field name="skipped"/></group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_bulk_batch" model="ir.actions.act_window">
+        <field name="name">Lô điều chỉnh hàng loạt</field>
+        <field name="res_model">lfood.voucher.bulk.batch</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_loan_company" model="ir.rule">
+        <field name="name">Hợp đồng vay theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_loan"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_loan_accrual_company" model="ir.rule">
+        <field name="name">Trích lãi vay theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_loan_accrual"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

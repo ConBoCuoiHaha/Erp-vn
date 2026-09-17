@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_consent_company" model="ir.rule">
+        <field name="name">Căn cứ xử lý dữ liệu theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_privacy_consent"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_request_company" model="ir.rule">
+        <field name="name">Yêu cầu dữ liệu cá nhân theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_privacy_request"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_breach_company" model="ir.rule">
+        <field name="name">Sự cố dữ liệu theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_privacy_breach"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

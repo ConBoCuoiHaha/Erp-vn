@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="base.main_company" model="res.company">
+        <field name="name">LFOOD - Văn phòng</field>
+        <field name="lfood_code">VP</field>
+        <field name="vat">1102160036</field>
+        <field name="street">51 Đường D10, Phường Tây Thạnh, TP. Hồ Chí Minh</field>
+        <field name="currency_id" ref="base.VND"/>
+    </record>
+    <record id="company_factory" model="res.company">
+        <field name="name">LIFESFOOD - Nhà máy</field>
+        <field name="lfood_code">NM</field>
+        <field name="vat">1102021113</field>
+        <field name="street">Lô E4-E5, Đường N9, KCN Nam Thuận, Xã Mỹ Hạnh, Tây Ninh</field>
+        <field name="currency_id" ref="base.VND"/>
+    </record>
+</odoo>

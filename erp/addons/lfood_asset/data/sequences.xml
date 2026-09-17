@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_asset" model="ir.sequence">
+        <field name="name">Mã tài sản cố định</field>
+        <field name="code">lfood.asset</field>
+        <field name="prefix">TS</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+    <record id="seq_depreciation" model="ir.sequence">
+        <field name="name">Chứng từ khấu hao TSCĐ</field>
+        <field name="code">lfood.asset.depreciation</field>
+        <field name="prefix">KH</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+</odoo>

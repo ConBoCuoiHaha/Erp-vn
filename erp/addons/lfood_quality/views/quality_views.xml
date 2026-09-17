@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_lot_list_trace" model="ir.ui.view">
+        <field name="name">lfood.stock.lot.list.trace</field>
+        <field name="model">lfood.stock.lot</field>
+        <field name="inherit_id" ref="lfood_stock.view_lot_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='qty_on_hand']" position="after">
+                <button name="action_trace" type="object" string="Truy xuất" icon="fa-sitemap"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_trace_form" model="ir.ui.view">
+        <field name="name">lfood.trace.form</field>
+        <field name="model">lfood.trace</field>
+        <field name="arch" type="xml">
+            <form string="Truy xuất nguồn gốc lô">
+                <group>
+                    <field name="lot_id" options="{'no_create': True}"/>
+                </group>
+                <field name="html" readonly="1"/>
+            </form>
+        </field>
+    </record>
+    <record id="action_trace" model="ir.actions.act_window">
+        <field name="name">Truy xuất nguồn gốc lô</field>
+        <field name="res_model">lfood.trace</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="view_recall_list" model="ir.ui.view">
+        <field name="name">lfood.recall.list</field>
+        <field name="model">lfood.recall</field>
+        <field name="arch" type="xml">
+            <list string="Thu hồi sản phẩm">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="kind"/>
+                <field name="deadline"/>
+                <field name="qty_shipped"/>
+                <field name="qty_returned"/>
+                <field name="rate"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_recall_form" model="ir.ui.view">
+        <field name="name">lfood.recall.form</field>
+        <field name="model">lfood.recall</field>
+        <field name="arch" type="xml">
+            <form string="Thu hồi sản phẩm">
+                <header>
+                    <button name="action_start" type="object" string="Bắt đầu thu hồi" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Hoàn thành" class="btn-primary"
+                            invisible="state != 'running'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="lot_ids" widget="many2many_tags" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="kind" readonly="state != 'draft'"/>
+                            <field name="authority_ref" invisible="kind != 'mandatory'" readonly="state != 'draft'"/>
+                            <field name="deadline" readonly="state == 'done'"/>
+                            <field name="handling" readonly="state == 'done'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="qty_shipped"/>
+                            <field name="qty_returned"/>
+                            <field name="rate"/>
+                        </group>
+                    </group>
+                    <field name="reason" placeholder="Lý do sản phẩm không bảo đảm an toàn" readonly="state != 'draft'"/>
+                    <notebook>
+                        <page string="Khách hàng">
+                            <field name="line_ids" readonly="state == 'done'">
+                                <list editable="bottom" create="false" decoration-warning="not notified_on">
+                                    <field name="partner_id" readonly="1"/>
+                                    <field name="lot_id" readonly="1"/>
+                                    <field name="qty_shipped"/>
+                                    <field name="qty_returned"/>
+                                    <field name="notified_on"/>
+                                    <field name="note"/>
+                                    <button name="action_notify" type="object" string="Đã báo" invisible="notified_on"/>
+                                    <button name="action_receive" type="object" string="Nhập hàng thu hồi"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Báo cáo">
+                            <field name="result" placeholder="Kết quả xử lý, báo cáo gửi cơ quan quản lý"/>
+                            <field name="report_html" readonly="1"/>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">Luật An toàn thực phẩm, Điều 54, 55; Nghị định 46/2026/NĐ-CP, Điều 42, 43. Khi bắt đầu,
+                        app cách ly các lô (không xuất bán được) và lấy danh sách khách hàng đã nhận hàng từ thẻ kho. Hàng thu hồi
+                        nhập kho bằng phiếu Hàng bán bị trả lại; tiêu hủy bằng biên bản hủy hàng.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_recall" model="ir.actions.act_window">
+        <field name="name">Thu hồi sản phẩm</field>
+        <field name="res_model">lfood.recall</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_quality_root" name="Chất lượng" parent="lfood_stock.menu_stock_root" sequence="60"/>
+    <menuitem id="menu_trace" name="Truy xuất nguồn gốc lô" parent="menu_quality_root" action="action_trace" sequence="10"/>
+    <menuitem id="menu_recall" name="Thu hồi sản phẩm" parent="menu_quality_root" action="action_recall" sequence="20"/>
+</odoo>

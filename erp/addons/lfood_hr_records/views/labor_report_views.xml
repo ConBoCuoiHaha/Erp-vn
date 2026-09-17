@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_labor_report_list" model="ir.ui.view">
+        <field name="name">lfood.labor.report.list</field>
+        <field name="model">lfood.labor.report</field>
+        <field name="arch" type="xml">
+            <list string="Báo cáo tình hình thay đổi lao động">
+                <field name="name"/>
+                <field name="due_date"/>
+                <field name="count_end"/>
+                <field name="submitted_on"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_labor_report_form" model="ir.ui.view">
+        <field name="name">lfood.labor.report.form</field>
+        <field name="model">lfood.labor.report</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo tình hình thay đổi lao động">
+                <header>
+                    <button name="action_compute" type="object" string="Lập bảng số liệu" class="btn-primary"/>
+                    <button name="action_submitted" type="object" string="Đã nộp trên cổng" invisible="submitted_on"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="period"/>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="due_date"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="count_start"/>
+                            <field name="count_in"/>
+                            <field name="count_out"/>
+                            <field name="count_end"/>
+                            <field name="submitted_on"/>
+                            <field name="receipt_ref"/>
+                        </group>
+                    </group>
+                    <field name="html"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_labor_report" model="ir.actions.act_window">
+        <field name="name">Báo cáo thay đổi lao động</field>
+        <field name="res_model">lfood.labor.report</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_employee_form_birth" model="ir.ui.view">
+        <field name="name">lfood.employee.form.birth</field>
+        <field name="model">lfood.employee</field>
+        <field name="inherit_id" ref="lfood_payroll.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='department']" position="after">
+                <field name="birth_date"/>
+                <field name="gender"/>
+            </xpath>
+            <xpath expr="//sheet" position="inside">
+                <separator string="Người phụ thuộc (giảm trừ gia cảnh)"/>
+                <field name="dependent_ids">
+                    <list editable="bottom">
+                        <field name="name"/>
+                        <field name="relation"/>
+                        <field name="birth_date"/>
+                        <field name="id_number"/>
+                        <field name="date_from"/>
+                        <field name="date_to"/>
+                        <field name="registered"/>
+                        <field name="document" filename="document_name"/>
+                        <field name="document_name" column_invisible="1"/>
+                    </list>
+                </field>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_labor_report" name="Báo cáo thay đổi lao động" parent="lfood_hr.menu_hr_root" action="action_labor_report" sequence="45"/>
+</odoo>

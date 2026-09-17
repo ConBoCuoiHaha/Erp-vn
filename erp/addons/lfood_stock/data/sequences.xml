@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_stock_in" model="ir.sequence"><field name="name">Phiếu nhập kho</field><field name="code">lfood.stock.in</field><field name="prefix">PN%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_stock_out" model="ir.sequence"><field name="name">Phiếu xuất kho</field><field name="code">lfood.stock.out</field><field name="prefix">PX%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_stock_transfer" model="ir.sequence"><field name="name">Phiếu chuyển kho</field><field name="code">lfood.stock.transfer</field><field name="prefix">CK%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_move_stock" model="ir.sequence"><field name="name">Nhật ký kho</field><field name="code">lfood.move.stock</field><field name="prefix">KHO%(year)s/</field><field name="padding">5</field><field name="company_id" eval="False"/></record>
+    <record id="seq_stock_count" model="ir.sequence"><field name="name">Đợt kiểm kê</field><field name="code">lfood.stock.count</field><field name="prefix">KK%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+</odoo>

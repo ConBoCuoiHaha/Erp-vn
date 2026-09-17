@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_bank_account_list" model="ir.ui.view">
+        <field name="name">lfood.bank.account.list</field>
+        <field name="model">lfood.bank.account</field>
+        <field name="arch" type="xml">
+            <list string="Tài khoản ngân hàng" editable="bottom">
+                <field name="bank"/>
+                <field name="branch"/>
+                <field name="number"/>
+                <field name="currency_id" options="{'no_create': True}"/>
+                <field name="reconcile_from"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_bank_account" model="ir.actions.act_window">
+        <field name="name">Tài khoản ngân hàng</field>
+        <field name="res_model">lfood.bank.account</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_payment_form_bank" model="ir.ui.view">
+        <field name="name">lfood.payment.form.bank</field>
+        <field name="model">lfood.payment</field>
+        <field name="inherit_id" ref="lfood_ledger.view_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='method']" position="after">
+                <field name="bank_account_id" invisible="method != 'bank'" readonly="state != 'draft'"
+                       options="{'no_create': True}"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_statement_list" model="ir.ui.view">
+        <field name="name">lfood.bank.statement.list</field>
+        <field name="model">lfood.bank.statement</field>
+        <field name="arch" type="xml">
+            <list string="Sổ phụ ngân hàng">
+                <field name="name"/>
+                <field name="bank_account_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="balance_end"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_statement_form" model="ir.ui.view">
+        <field name="name">lfood.bank.statement.form</field>
+        <field name="model">lfood.bank.statement</field>
+        <field name="arch" type="xml">
+            <form string="Đối soát ngân hàng">
+                <header>
+                    <button name="action_import" type="object" string="Nhập tệp CSV" invisible="state != 'draft' or not import_file"/>
+                    <button name="action_match" type="object" string="Khớp tự động" class="btn-primary" invisible="state != 'draft'"/>
+                    <button name="action_done" type="object" string="Hoàn tất đối soát" invisible="state != 'draft'"/>
+                    <button name="action_reopen" type="object" string="Mở lại" groups="lfood_base.group_chief_accountant"
+                            invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <div class="alert alert-danger" role="alert" invisible="not statement_error">
+                        <field name="statement_error"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="bank_account_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="import_file" filename="import_filename" invisible="state != 'draft'"/>
+                            <field name="import_filename" invisible="1"/>
+                        </group>
+                        <group>
+                            <field name="balance_start" readonly="state != 'draft'"/>
+                            <field name="balance_end" readonly="state != 'draft'"/>
+                            <field name="book_balance"/>
+                            <field name="book_only"/>
+                            <field name="bank_only"/>
+                            <field name="difference"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Giao dịch sổ phụ">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom" decoration-warning="not move_line_id">
+                                    <field name="company_id" column_invisible="1"/>
+                                    <field name="date"/>
+                                    <field name="ref"/>
+                                    <field name="description"/>
+                                    <field name="amount" sum="Tổng"/>
+                                    <field name="move_line_id" options="{'no_create': True}"/>
+                                    <button name="action_make_payment" type="object" string="Lập phiếu"
+                                            invisible="move_line_id"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Bảng đối chiếu">
+                            <field name="report_html" readonly="1"/>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">
+                        Tệp CSV có dòng tiêu đề: ngay (dd/mm/yyyy), so_tham_chieu, noi_dung, tien_ra, tien_vao. Khớp tự động theo
+                        cùng số tiền, chênh ngày không quá 5 ngày, ưu tiên trùng số tham chiếu. Khoản ngân hàng đã ghi mà sổ chưa có
+                        (phí, lãi tiền gửi): bấm Lập phiếu, kiểm tra tài khoản đối ứng, ghi sổ rồi khớp lại.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_statement" model="ir.actions.act_window">
+        <field name="name">Đối soát ngân hàng</field>
+        <field name="res_model">lfood.bank.statement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_statement" name="Đối soát ngân hàng" parent="lfood_ledger.menu_ledger_root" action="action_statement" sequence="15"/>
+    <menuitem id="menu_bank_account" name="Tài khoản ngân hàng" parent="lfood_base.menu_config" action="action_bank_account" sequence="8"/>
+</odoo>

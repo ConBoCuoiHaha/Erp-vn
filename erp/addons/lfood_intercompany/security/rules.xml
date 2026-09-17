@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_ic_company" model="ir.rule">
+        <field name="name">Bán hàng giữa hai pháp nhân: người được phép ở bên bán</field>
+        <field name="model_id" ref="model_lfood_intercompany_transfer"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+</odoo>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Mặc định của công ty khi cài; sửa sau ở Cấu hình > Đăng nhập an toàn (nâng cấp module không ghi đè vì noupdate). -->
+<odoo noupdate="1">
+    <function model="ir.config_parameter" name="set_param"><value>base.login_cooldown_after</value><value>5</value></function>
+    <function model="ir.config_parameter" name="set_param"><value>base.login_cooldown_duration</value><value>900</value></function>
+    <function model="ir.config_parameter" name="set_param"><value>sessions.max_inactivity_seconds</value><value>1800</value></function>
+    <function model="ir.config_parameter" name="set_param"><value>auth_password_policy.minlength</value><value>10</value></function>
+</odoo>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="policy_accounting" model="lfood.archive.policy"><field name="name">Chứng từ dùng trực tiếp ghi sổ, lập báo cáo tài chính</field><field name="years">10</field><field name="legal_ref">Luật Kế toán 2015, Điều 41; Nghị định 174/2016/NĐ-CP, Điều 13</field></record>
+    <record id="policy_management" model="lfood.archive.policy"><field name="name">Tài liệu không dùng trực tiếp ghi sổ (quản lý, điều hành)</field><field name="years">5</field><field name="legal_ref">Nghị định 174/2016/NĐ-CP, Điều 12</field></record>
+    <record id="policy_contract" model="lfood.archive.policy"><field name="name">Hợp đồng kinh tế liên quan ghi sổ</field><field name="years">10</field><field name="legal_ref">Nghị định 174/2016/NĐ-CP, Điều 13</field></record>
+</odoo>

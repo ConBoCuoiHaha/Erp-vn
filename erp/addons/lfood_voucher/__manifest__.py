@@ -1,0 +1,28 @@
+{
+    'name': 'LiFeOOD - Chứng từ mua dịch vụ',
+    'summary': 'Chứng từ có phiên bản: Cất rồi vẫn Sửa được, tự động tính lại số liệu, '
+               'điều chỉnh hàng loạt, báo cáo chi phí theo cây khoản mục không đổi khi sửa',
+    'version': '19.0.1.0.0',
+    'category': 'LiFeOOD',
+    'author': 'LiFeOOD',
+    'license': 'LGPL-3',
+    'depends': ['base', 'web', 'lfood_base', 'lfood_audit'],
+    'data': [
+        'security/ir.model.access.csv',
+        'security/rules.xml',
+        'data/sequences.xml',
+        'data/legal_params.xml',
+        'data/holidays.xml',
+        'data/cost_items.xml',
+        'views/cost_item_views.xml',
+        'views/legal_param_views.xml',
+        'views/holiday_views.xml',
+        'views/param_tools_views.xml',
+        'views/bulk_views.xml',
+        'views/voucher_views.xml',
+        'views/analysis_views.xml',
+        'views/menus.xml',
+    ],
+    'post_init_hook': 'post_init_demo',
+    'installable': True,
+}

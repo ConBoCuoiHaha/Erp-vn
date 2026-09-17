@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_ledger_root" name="Sổ kế toán" parent="lfood_base.menu_root" sequence="30"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+    <menuitem id="menu_payment" name="Thu, chi tiền" parent="menu_ledger_root" action="action_payment" sequence="10"/>
+    <menuitem id="menu_move_general" name="Phiếu kế toán" parent="menu_ledger_root" action="action_move_general" sequence="20"/>
+    <menuitem id="menu_move" name="Tất cả bút toán" parent="menu_ledger_root" action="action_move" sequence="30"/>
+    <menuitem id="menu_move_line" name="Sổ nhật ký chung" parent="menu_ledger_root" action="action_move_line" sequence="40"/>
+    <menuitem id="menu_offset" name="Bù trừ công nợ" parent="menu_ledger_root" action="action_offset" sequence="50"/>
+    <menuitem id="menu_closing" name="Kết chuyển cuối kỳ" parent="menu_ledger_root" action="action_closing" sequence="60"
+              groups="lfood_base.group_chief_accountant"/>
+    <menuitem id="menu_lock" name="Khóa sổ" parent="menu_ledger_root" action="action_lock" sequence="70"
+              groups="lfood_base.group_chief_accountant"/>
+    <menuitem id="menu_move_opening" name="Số dư đầu kỳ" parent="menu_ledger_root" action="action_move_opening" sequence="80"/>
+
+    <menuitem id="menu_report_trial" name="Bảng cân đối số phát sinh" parent="lfood_base.menu_reports" action="action_report_trial" sequence="20"/>
+    <menuitem id="menu_report_ledger" name="Sổ cái" parent="lfood_base.menu_reports" action="action_report_ledger" sequence="30"/>
+    <menuitem id="menu_report_partner" name="Sổ chi tiết công nợ" parent="lfood_base.menu_reports" action="action_report_partner" sequence="40"/>
+    <menuitem id="menu_report_b01" name="Tình hình tài chính (B01-DN)" parent="lfood_base.menu_reports" action="action_report_b01" sequence="45"/>
+    <menuitem id="menu_report_b03" name="Lưu chuyển tiền tệ (B03-DN)" parent="lfood_base.menu_reports" action="action_report_b03" sequence="55"/>
+    <menuitem id="menu_report_b02" name="Kết quả kinh doanh (B02-DN)" parent="lfood_base.menu_reports" action="action_report_b02" sequence="50"/>
+
+    <menuitem id="menu_account" name="Hệ thống tài khoản" parent="lfood_base.menu_config" action="action_account" sequence="5"/>
+</odoo>

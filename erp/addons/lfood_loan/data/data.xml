@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_loan" model="ir.sequence"><field name="name">Hợp đồng vay</field><field name="code">lfood.loan</field><field name="prefix">HDV%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+    <record id="p_loan_cap" model="lfood.legal.param"><field name="code">LAI_VAY_TOI_DA_NAM</field><field name="name">Lãi suất vay tối đa được trừ khi vay ngoài tổ chức tín dụng (%/năm)</field><field name="group">cit</field><field name="value_type">percent</field></record>
+    <record id="pv_loan_cap" model="lfood.legal.param.value"><field name="param_id" ref="p_loan_cap"/><field name="value">20</field><field name="date_from">2025-01-01</field><field name="legal_ref">Nghị định 320/2025/NĐ-CP, áp dụng từ kỳ tính thuế 2025 (chi phí trả lãi vay của tổ chức, cá nhân không phải tổ chức tín dụng vượt mức theo Bộ luật Dân sự không được trừ); Bộ luật Dân sự 2015, Điều 468: lãi suất thỏa thuận không vượt quá 20%/năm</field><field name="state">approved</field></record>
+</odoo>

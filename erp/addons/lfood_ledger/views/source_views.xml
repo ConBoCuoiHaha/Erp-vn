@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_voucher_form_ledger" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.form.ledger</field>
+        <field name="model">lfood.service.voucher</field>
+        <field name="inherit_id" ref="lfood_voucher.view_voucher_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//div[@name='button_box']" position="inside">
+                <button name="action_view_moves" type="object" class="oe_stat_button" icon="fa-book" invisible="not move_count">
+                    <field name="move_count" widget="statinfo" string="Bút toán"/>
+                </button>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_asset_form_ledger" model="ir.ui.view">
+        <field name="name">lfood.asset.form.ledger</field>
+        <field name="model">lfood.asset</field>
+        <field name="inherit_id" ref="lfood_asset.view_asset_form"/>
+        <field name="arch" type="xml">
+            <field name="account_expense" position="before">
+                <field name="counterpart_account" invisible="voucher_id" readonly="state != 'draft'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_asset_dispose_form_ledger" model="ir.ui.view">
+        <field name="name">lfood.asset.dispose.form.ledger</field>
+        <field name="model">lfood.asset.dispose</field>
+        <field name="inherit_id" ref="lfood_asset.view_asset_dispose_form"/>
+        <field name="arch" type="xml">
+            <field name="proceeds" position="after">
+                <field name="counterpart_account" invisible="not proceeds"/>
+                <field name="partner_id" invisible="not proceeds"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_company_lfood_form_ledger" model="ir.ui.view">
+        <field name="name">res.company.lfood.form.ledger</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="lfood_base.view_company_lfood_form"/>
+        <field name="arch" type="xml">
+            <field name="lfood_edit_after_post_days" position="after">
+                <field name="lfood_lock_date" readonly="1"/>
+            </field>
+        </field>
+    </record>
+</odoo>

@@ -1,0 +1,343 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ================================================= danh sách -->
+    <record id="view_voucher_list" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.list</field>
+        <field name="model">lfood.service.voucher</field>
+        <field name="arch" type="xml">
+            <list string="Chứng từ mua dịch vụ" decoration-muted="state == 'cancel'" decoration-warning="state == 'editing'">
+                <header>
+                    <button name="%(action_voucher_bulk)d" type="action" string="Điều chỉnh hàng loạt" class="btn-primary" display="always"
+                            groups="lfood_base.group_chief_accountant"/>
+                </header>
+                <field name="name"/>
+                <field name="accounting_date"/>
+                <field name="partner_id"/>
+                <field name="memo"/>
+                <field name="invoice_ref" optional="hide"/>
+                <field name="amount_untaxed" sum="Tổng"/>
+                <field name="amount_tax" sum="Tổng" optional="show"/>
+                <field name="amount_total" sum="Tổng"/>
+                <field name="report_amount_total" optional="hide" sum="Tổng"/>
+                <field name="report_differs" string="Đã sửa sau báo cáo" optional="show" widget="boolean"/>
+                <field name="version_count" optional="hide"/>
+                <field name="posted_by" optional="show"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'posted'" decoration-warning="state in ('waiting', 'editing')"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_voucher_search" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.search</field>
+        <field name="model">lfood.service.voucher</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="memo"/>
+                <field name="invoice_ref"/>
+                <field name="line_ids" string="Tên dịch vụ, mã dịch vụ" filter_domain="['|', ('line_ids.name', 'ilike', self), ('line_ids.service_code', 'ilike', self)]"/>
+                <field name="line_ids" string="Khoản mục CP" filter_domain="[('line_ids.cost_item_id', 'child_of', self)]"/>
+                <filter name="f_draft" string="Nháp" domain="[('state', '=', 'draft')]"/>
+                <filter name="f_waiting" string="Chờ duyệt" domain="[('state', '=', 'waiting')]"/>
+                <filter name="f_posted" string="Đã cất" domain="[('state', '=', 'posted')]"/>
+                <filter name="f_editing" string="Đang sửa" domain="[('state', '=', 'editing')]"/>
+                <separator/>
+                <filter name="f_differs" string="Đã sửa khác số báo cáo" domain="[('report_differs', '=', True)]"/>
+                <separator/>
+                <filter name="f_date" string="Ngày hạch toán" date="accounting_date"/>
+                <group>
+                    <filter name="g_partner" string="Nhà cung cấp" context="{'group_by': 'partner_id'}"/>
+                    <filter name="g_month" string="Tháng hạch toán" context="{'group_by': 'accounting_date:month'}"/>
+                    <filter name="g_state" string="Trạng thái" context="{'group_by': 'state'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ================================================= form kiểu MISA -->
+    <record id="view_voucher_form" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.form</field>
+        <field name="model">lfood.service.voucher</field>
+        <field name="arch" type="xml">
+            <form string="Chứng từ mua dịch vụ">
+                <header>
+                    <button name="action_post" type="object" string="Cất" class="btn-primary"
+                            invisible="state != 'draft'" groups="lfood_base.group_accountant"/>
+                    <button name="action_approve" type="object" string="Duyệt" class="btn-primary"
+                            invisible="state != 'waiting'" groups="lfood_base.group_chief_accountant,lfood_base.group_director"/>
+                    <button name="action_reject" type="object" string="Trả lại"
+                            invisible="state != 'waiting'" groups="lfood_base.group_chief_accountant,lfood_base.group_director"/>
+                    <button name="action_edit" type="object" string="Sửa" class="btn-primary"
+                            invisible="state != 'posted'" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_open_save_edit" type="object" string="Lưu sửa đổi" class="btn-primary"
+                            invisible="state != 'editing'" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_cancel_edit" type="object" string="Hủy sửa"
+                            invisible="state != 'editing'" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_open_apply_total" type="object" string="Sửa tổng, tự phân bổ"
+                            invisible="state not in ('draft', 'editing')" groups="lfood_base.group_accountant"/>
+                    <button name="%(action_voucher_bulk)d" type="action" string="Điều chỉnh hàng loạt"
+                            invisible="state not in ('draft', 'posted')" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_open_restore" type="object" string="Khôi phục số gốc"
+                            invisible="state != 'posted' or version_count &lt; 2" groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_apply_to_report" type="object" string="Đưa sửa đổi vào báo cáo"
+                            invisible="state != 'posted' or not report_differs" groups="lfood_base.group_chief_accountant"
+                            confirm="Báo cáo sẽ đọc số liệu của phiên bản hiện hành thay cho phiên bản cũ. Tiếp tục?"/>
+                    <button name="action_cancel" type="object" string="Hủy chứng từ"
+                            invisible="state in ('cancel', 'draft')" groups="lfood_base.group_chief_accountant"
+                            confirm="Hủy chứng từ này?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_versions" type="object" class="oe_stat_button" icon="fa-files-o">
+                            <field name="version_count" widget="statinfo" string="Phiên bản"/>
+                        </button>
+                        <button name="action_view_audit" type="object" class="oe_stat_button" icon="fa-history"
+                                groups="lfood_base.group_chief_accountant,lfood_base.group_director,lfood_base.group_sysadmin">
+                            <field name="audit_count" widget="statinfo" string="Nhật ký"/>
+                        </button>
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="state != 'editing'">
+                        Đang sửa phiên bản mới. Báo cáo vẫn dùng số liệu phiên bản cũ cho tới khi Kế toán trưởng đưa sửa đổi vào báo cáo.
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="not report_differs or state == 'editing'">
+                        Chứng từ đã được sửa sau khi Cất. Tổng theo báo cáo: <field name="report_amount_total" class="oe_inline"/> đồng.
+                    </div>
+                    <div class="alert alert-warning" role="alert" invisible="not cash_warning">
+                        <field name="cash_warning" nolabel="1"/>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name" string="Chứng từ mua dịch vụ"/>
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="payment_state" widget="radio" options="{'horizontal': true}" readonly="state not in ('draft', 'editing')"/>
+                            <field name="payment_method" readonly="state not in ('draft', 'editing')"/>
+                            <field name="invoice_mode" readonly="state not in ('draft', 'editing')"/>
+                            <field name="is_purchase_cost" readonly="state not in ('draft', 'editing')"/>
+                        </group>
+                        <group>
+                            <div class="o_lfood_note" colspan="2">Tổng tiền thanh toán</div>
+                            <div class="o_lfood_big_total" colspan="2"><field name="amount_total" readonly="1"/></div>
+                        </group>
+                        <group string="Nhà cung cấp">
+                            <field name="partner_id" readonly="state not in ('draft', 'editing')" options="{'no_create': True}"/>
+                            <field name="partner_vat"/>
+                            <field name="partner_address"/>
+                            <field name="buyer_id" readonly="state not in ('draft', 'editing')"/>
+                            <field name="memo" readonly="state not in ('draft', 'editing')"/>
+                            <field name="invoice_ref" readonly="state not in ('draft', 'editing')"/>
+                        </group>
+                        <group string="Chứng từ">
+                            <field name="accounting_date" readonly="state not in ('draft', 'editing')"/>
+                            <field name="document_date" readonly="state not in ('draft', 'editing')"/>
+                            <field name="credit_days" readonly="state not in ('draft', 'editing')"/>
+                            <field name="due_date" readonly="state not in ('draft', 'editing')"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Hạch toán" name="lines">
+                            <field name="line_ids" readonly="state not in ('draft', 'editing')">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="service_code"/>
+                                    <field name="name"/>
+                                    <field name="acc_expense"/>
+                                    <field name="acc_payable"/>
+                                    <field name="uom"/>
+                                    <field name="quantity" sum="Tổng"/>
+                                    <field name="price_unit"/>
+                                    <field name="amount" sum="Tổng"/>
+                                    <field name="cost_item_id" options="{'no_create': True}"/>
+                                    <field name="locked" widget="boolean_toggle"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer">
+                                <field name="amount_untaxed"/>
+                                <field name="amount_tax"/>
+                                <field name="amount_total" class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Thuế" name="tax">
+                            <field name="line_ids" readonly="state not in ('draft', 'editing')">
+                                <list editable="bottom" create="false" delete="false">
+                                    <field name="service_code" readonly="1"/>
+                                    <field name="name" readonly="1"/>
+                                    <field name="amount" readonly="1" sum="Tổng"/>
+                                    <field name="vat_rate_id" options="{'no_create': True}"/>
+                                    <field name="vat_amount" sum="Tổng"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Phiên bản" name="versions">
+                            <field name="version_ids">
+                                <list create="false" delete="false">
+                                    <field name="number"/>
+                                    <field name="kind"/>
+                                    <field name="state"/>
+                                    <field name="accounting_date"/>
+                                    <field name="amount_untaxed"/>
+                                    <field name="amount_total"/>
+                                    <field name="reason"/>
+                                    <field name="saved_by"/>
+                                    <field name="saved_on"/>
+                                    <field name="is_report" string="Báo cáo đang dùng"/>
+                                </list>
+                            </field>
+                            <group>
+                                <field name="current_version_id"/>
+                                <field name="report_version_id"/>
+                            </group>
+                        </page>
+                        <page string="Người thực hiện" name="who">
+                            <group>
+                                <group>
+                                    <field name="create_uid" string="Người lập"/>
+                                    <field name="create_date" string="Thời điểm lập"/>
+                                    <field name="posted_by"/>
+                                    <field name="posted_on"/>
+                                </group>
+                                <group>
+                                    <field name="approved_by"/>
+                                    <field name="approved_on"/>
+                                    <field name="write_uid" string="Người sửa gần nhất"/>
+                                    <field name="write_date" string="Thời điểm sửa gần nhất"/>
+                                </group>
+                            </group>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- ================================================= phiên bản -->
+    <record id="view_version_form" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.version.form</field>
+        <field name="model">lfood.service.voucher.version</field>
+        <field name="arch" type="xml">
+            <form string="Phiên bản chứng từ" create="false" edit="false" delete="false">
+                <sheet>
+                    <div class="oe_title"><h2><field name="display_name"/></h2></div>
+                    <group>
+                        <group>
+                            <field name="voucher_id"/>
+                            <field name="kind"/>
+                            <field name="state"/>
+                            <field name="source_version_id"/>
+                            <field name="bulk_batch_id"/>
+                        </group>
+                        <group>
+                            <field name="saved_by"/>
+                            <field name="saved_on"/>
+                            <field name="is_current"/>
+                            <field name="is_report"/>
+                            <field name="reason"/>
+                        </group>
+                        <group string="Đầu chứng từ">
+                            <field name="partner_id"/>
+                            <field name="accounting_date"/>
+                            <field name="memo"/>
+                            <field name="invoice_ref"/>
+                        </group>
+                        <group string="Tổng">
+                            <field name="amount_untaxed"/>
+                            <field name="amount_tax"/>
+                            <field name="amount_total"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Thay đổi so với phiên bản trước">
+                            <field name="diff_ids">
+                                <list>
+                                    <field name="line_label"/>
+                                    <field name="label"/>
+                                    <field name="old_value"/>
+                                    <field name="new_value"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Dòng hạch toán">
+                            <field name="line_ids">
+                                <list>
+                                    <field name="service_code"/>
+                                    <field name="name"/>
+                                    <field name="acc_expense"/>
+                                    <field name="quantity"/>
+                                    <field name="price_unit"/>
+                                    <field name="amount" sum="Tổng"/>
+                                    <field name="vat_rate_id"/>
+                                    <field name="vat_amount" sum="Tổng"/>
+                                    <field name="cost_item_id"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_version_list" model="ir.ui.view">
+        <field name="name">lfood.service.voucher.version.list</field>
+        <field name="model">lfood.service.voucher.version</field>
+        <field name="arch" type="xml">
+            <list create="false" delete="false">
+                <field name="voucher_id"/>
+                <field name="number"/>
+                <field name="kind"/>
+                <field name="state"/>
+                <field name="amount_total"/>
+                <field name="reason"/>
+                <field name="saved_by"/>
+                <field name="saved_on"/>
+                <field name="is_report"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ================================================= wizard lý do, tổng -->
+    <record id="view_voucher_reason_form" model="ir.ui.view">
+        <field name="name">lfood.voucher.reason.form</field>
+        <field name="model">lfood.voucher.reason</field>
+        <field name="arch" type="xml">
+            <form>
+                <field name="mode" invisible="1"/>
+                <field name="voucher_id" invisible="1"/>
+                <div class="o_lfood_note" invisible="mode != 'total'">
+                    Nhập tổng tiền dịch vụ mới. Hệ thống chia lại thành tiền cho các dòng theo tỷ trọng hiện tại, bỏ qua dòng đang khóa,
+                    tổng các dòng khớp đúng tới từng đồng; đơn giá tự tính lại.
+                </div>
+                <div class="o_lfood_note" invisible="mode != 'save_edit'">
+                    Phiên bản mới sẽ được lưu và khóa. Báo cáo không đổi. Lý do được ghi vào nhật ký hệ thống kèm tên người sửa.
+                </div>
+                <div class="o_lfood_note" invisible="mode != 'restore'">
+                    Tạo phiên bản mới mang đúng số liệu lúc mua vào. Các phiên bản đã có vẫn được giữ.
+                </div>
+                <group>
+                    <field name="current_total" invisible="mode != 'total'"/>
+                    <field name="new_total" invisible="mode != 'total'"/>
+                    <field name="reason" invisible="mode == 'total'" required="mode != 'total'"/>
+                </group>
+                <footer>
+                    <button name="action_confirm" type="object" string="Đồng ý" class="btn-primary"/>
+                    <button string="Hủy" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_voucher" model="ir.actions.act_window">
+        <field name="name">Chứng từ mua dịch vụ</field>
+        <field name="res_model">lfood.service.voucher</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_voucher_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Chưa có chứng từ</p>
+            <p>Bấm Mới để lập chứng từ mua dịch vụ. Sau khi Cất, Kế toán trưởng vẫn Sửa được; báo cáo không đổi.</p>
+        </field>
+    </record>
+</odoo>

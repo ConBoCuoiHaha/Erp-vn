@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <!-- Thuế suất GTGT -->
+    <record id="vat_0" model="lfood.vat.rate"><field name="name">0%</field><field name="rate">0</field><field name="sequence">1</field></record>
+    <record id="vat_kct" model="lfood.vat.rate"><field name="name">Không chịu thuế</field><field name="rate">0</field><field name="sequence">2</field></record>
+    <record id="vat_5" model="lfood.vat.rate"><field name="name">5%</field><field name="rate">5</field><field name="sequence">3</field></record>
+    <record id="vat_8" model="lfood.vat.rate">
+        <field name="name">8% (giảm từ 10%)</field><field name="rate">8</field><field name="sequence">4</field>
+        <field name="date_from">2025-07-01</field><field name="date_to">2026-12-31</field>
+        <field name="legal_ref">Nghị quyết 204/2025/QH15, Nghị định 174/2025/NĐ-CP</field>
+    </record>
+    <record id="vat_10" model="lfood.vat.rate"><field name="name">10%</field><field name="rate">10</field><field name="sequence">5</field></record>
+
+    <!-- Tham số pháp lý (giá trị tra cứu 09/2026, Kế toán trưởng cần xác nhận) -->
+    <record id="p_cash_limit" model="lfood.legal.param">
+        <field name="code">NGUONG_TT_KHONG_TIEN_MAT</field><field name="name">Ngưỡng bắt buộc thanh toán không dùng tiền mặt</field>
+        <field name="group">vat</field><field name="value_type">amount</field>
+        <field name="description">Khấu trừ thuế GTGT đầu vào và chi phí được trừ thuế TNDN; cảnh báo trên chứng từ</field>
+    </record>
+    <record id="pv_cash_limit" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_cash_limit"/><field name="value">5000000</field><field name="date_from">2025-07-01</field>
+        <field name="legal_ref">Luật Thuế GTGT 48/2024/QH15, Nghị định 181/2025/NĐ-CP, Nghị định 320/2025/NĐ-CP</field><field name="state">approved</field>
+    </record>
+
+    <record id="p_base_salary" model="lfood.legal.param">
+        <field name="code">LUONG_CO_SO</field><field name="name">Lương cơ sở</field><field name="group">insurance</field>
+        <field name="description">Mức trần đóng BHXH, BHYT bằng 20 lần</field>
+    </record>
+    <record id="pv_base_salary_1" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_base_salary"/><field name="value">2340000</field><field name="date_from">2024-07-01</field>
+        <field name="date_to">2026-06-30</field><field name="legal_ref">Lương cơ sở từ 01/7/2024</field><field name="state">approved</field>
+    </record>
+    <record id="pv_base_salary_2" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_base_salary"/><field name="value">2530000</field><field name="date_from">2026-07-01</field>
+        <field name="legal_ref">Nghị định 161/2026/NĐ-CP</field><field name="state">approved</field>
+    </record>
+
+    <record id="p_ins_emp" model="lfood.legal.param">
+        <field name="code">TY_LE_BH_NLD</field><field name="name">Tỷ lệ bảo hiểm người lao động đóng</field>
+        <field name="group">insurance</field><field name="value_type">percent</field>
+    </record>
+    <record id="pv_ins_emp" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_ins_emp"/><field name="value">10.5</field><field name="date_from">2025-07-01</field>
+        <field name="legal_ref">Luật BHXH 2024, Luật Việc làm 2025</field><field name="state">approved</field>
+    </record>
+    <record id="p_ins_co" model="lfood.legal.param">
+        <field name="code">TY_LE_BH_DN</field><field name="name">Tỷ lệ bảo hiểm doanh nghiệp đóng</field>
+        <field name="group">insurance</field><field name="value_type">percent</field>
+    </record>
+    <record id="pv_ins_co" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_ins_co"/><field name="value">21.5</field><field name="date_from">2025-07-01</field>
+        <field name="legal_ref">Luật BHXH 2024, Luật Việc làm 2025</field><field name="state">approved</field>
+    </record>
+    <record id="p_union" model="lfood.legal.param">
+        <field name="code">TY_LE_KPCD</field><field name="name">Kinh phí công đoàn</field>
+        <field name="group">insurance</field><field name="value_type">percent</field>
+    </record>
+    <record id="pv_union" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_union"/><field name="value">2</field><field name="date_from">2026-01-01</field>
+        <field name="legal_ref">Luật Công đoàn 2024, Nghị định 105/2026/NĐ-CP</field><field name="state">approved</field>
+    </record>
+    <record id="p_pit_self" model="lfood.legal.param">
+        <field name="code">TNCN_GIAM_TRU_BAN_THAN</field><field name="name">Giảm trừ gia cảnh bản thân</field><field name="group">pit</field>
+    </record>
+    <record id="pv_pit_self" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_pit_self"/><field name="value">15500000</field><field name="date_from">2026-01-01</field>
+        <field name="legal_ref">Luật Thuế TNCN 109/2025/QH15</field><field name="state">approved</field>
+    </record>
+    <record id="p_pit_dep" model="lfood.legal.param">
+        <field name="code">TNCN_GIAM_TRU_NPT</field><field name="name">Giảm trừ mỗi người phụ thuộc</field><field name="group">pit</field>
+    </record>
+    <record id="pv_pit_dep" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_pit_dep"/><field name="value">6200000</field><field name="date_from">2026-01-01</field>
+        <field name="legal_ref">Luật Thuế TNCN 109/2025/QH15</field><field name="state">approved</field>
+    </record>
+    <record id="p_min_wage_1" model="lfood.legal.param">
+        <field name="code">LUONG_TOI_THIEU_VUNG_I</field><field name="name">Lương tối thiểu vùng I</field><field name="group">salary</field>
+    </record>
+    <record id="pv_min_wage_1" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_min_wage_1"/><field name="value">5310000</field><field name="date_from">2026-01-01</field>
+        <field name="legal_ref">Nghị định 293/2025/NĐ-CP</field><field name="state">approved</field>
+    </record>
+    <record id="p_asset_limit" model="lfood.legal.param">
+        <field name="code">NGUONG_TSCD</field><field name="name">Nguyên giá tối thiểu của tài sản cố định</field><field name="group">asset</field>
+    </record>
+    <record id="pv_asset_limit" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_asset_limit"/><field name="value">30000000</field><field name="date_from">2013-06-10</field>
+        <field name="legal_ref">Thông tư 45/2013/TT-BTC, sửa đổi bởi Thông tư 30/2025/TT-BTC</field><field name="state">approved</field>
+    </record>
+</odoo>

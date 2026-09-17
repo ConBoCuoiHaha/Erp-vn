@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_list" model="ir.ui.view">
+        <field name="name">lfood.product.list</field>
+        <field name="model">lfood.product</field>
+        <field name="arch" type="xml">
+            <list string="Hàng hóa, vật tư">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="uom"/>
+                <field name="kind"/>
+                <field name="account"/>
+                <field name="track_lot" optional="show"/>
+                <field name="qty_on_hand"/>
+                <field name="avg_cost" optional="show"/>
+                <field name="value_on_hand"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_product_form" model="ir.ui.view">
+        <field name="name">lfood.product.form</field>
+        <field name="model">lfood.product</field>
+        <field name="arch" type="xml">
+            <form string="Hàng hóa, vật tư">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="code"/>
+                            <field name="name"/>
+                            <field name="uom"/>
+                            <field name="kind"/>
+                            <field name="account"/>
+                        </group>
+                        <group>
+                            <field name="track_lot"/>
+                            <field name="shelf_life_days"/>
+                            <field name="vat_rate_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <group string="Tồn kho hiện tại">
+                        <field name="qty_on_hand"/>
+                        <field name="avg_cost"/>
+                        <field name="value_on_hand"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_product" model="ir.actions.act_window">
+        <field name="name">Hàng hóa, vật tư</field>
+        <field name="res_model">lfood.product</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_warehouse_list" model="ir.ui.view">
+        <field name="name">lfood.warehouse.list</field>
+        <field name="model">lfood.warehouse</field>
+        <field name="arch" type="xml">
+            <list string="Kho" editable="bottom">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_warehouse" model="ir.actions.act_window">
+        <field name="name">Kho</field>
+        <field name="res_model">lfood.warehouse</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_lot_list" model="ir.ui.view">
+        <field name="name">lfood.stock.lot.list</field>
+        <field name="model">lfood.stock.lot</field>
+        <field name="arch" type="xml">
+            <list string="Lô hàng">
+                <field name="product_id"/>
+                <field name="name"/>
+                <field name="production_date"/>
+                <field name="expiry_date"/>
+                <field name="days_left"/>
+                <field name="qty_on_hand"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_lot" model="ir.actions.act_window">
+        <field name="name">Lô hàng</field>
+        <field name="res_model">lfood.stock.lot</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_valuation_list" model="ir.ui.view">
+        <field name="name">lfood.stock.valuation.list</field>
+        <field name="model">lfood.stock.valuation</field>
+        <field name="arch" type="xml">
+            <list string="Thẻ kho" create="false" edit="false" delete="false">
+                <field name="date"/>
+                <field name="picking_id"/>
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="lot_id"/>
+                <field name="qty" sum="Tồn"/>
+                <field name="unit_cost"/>
+                <field name="value" sum="Giá trị"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_valuation_search" model="ir.ui.view">
+        <field name="name">lfood.stock.valuation.search</field>
+        <field name="model">lfood.stock.valuation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="product_id"/>
+                <field name="warehouse_id"/>
+                <field name="lot_id"/>
+                <filter name="f_date" string="Ngày" date="date"/>
+                <group>
+                    <filter name="g_product" string="Mặt hàng" context="{'group_by': 'product_id'}"/>
+                    <filter name="g_warehouse" string="Kho" context="{'group_by': 'warehouse_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_valuation" model="ir.actions.act_window">
+        <field name="name">Thẻ kho</field>
+        <field name="res_model">lfood.stock.valuation</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <record id="view_picking_list" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.list</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="arch" type="xml">
+            <list string="Phiếu nhập, xuất kho" decoration-muted="state == 'cancel'" decoration-info="state == 'draft'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="purpose"/>
+                <field name="warehouse_id"/>
+                <field name="partner_id"/>
+                <field name="memo"/>
+                <field name="amount" sum="Tổng"/>
+                <field name="state" widget="badge" decoration-success="state == 'done'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_picking_form" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.form</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="arch" type="xml">
+            <form string="Phiếu nhập, xuất kho">
+                <header>
+                    <button name="action_done" type="object" string="Ghi phiếu" class="btn-primary" invisible="state != 'draft'"
+                            groups="lfood_base.group_accountant"/>
+                    <button name="action_cancel" type="object" string="Hủy phiếu" invisible="state != 'done'"
+                            groups="lfood_base.group_chief_accountant" confirm="Hủy phiếu kho, tự đảo bút toán?"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_moves" type="object" class="oe_stat_button" icon="fa-book" string="Bút toán" invisible="state == 'draft'"/>
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="kind" widget="radio" options="{'horizontal': true}" readonly="state != 'draft'"/>
+                            <field name="purpose" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="warehouse_id" readonly="state != 'draft'"/>
+                            <field name="dest_warehouse_id" invisible="kind != 'transfer'" required="kind == 'transfer'" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="memo" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="counterpart_account" invisible="kind == 'transfer'" readonly="state != 'draft'"/>
+                            <field name="cost_item_id" invisible="purpose != 'internal'" readonly="state != 'draft'"/>
+                            <field name="invoice_symbol" invisible="purpose != 'purchase'" readonly="state != 'draft'"/>
+                            <field name="invoice_number" invisible="purpose != 'purchase'" readonly="state != 'draft'"/>
+                            <field name="invoice_date" invisible="purpose != 'purchase'" readonly="state != 'draft'"/>
+                            <field name="payment_method" invisible="purpose != 'purchase'" readonly="state != 'draft'"/>
+                            <field name="sale_invoice_id" invisible="not sale_invoice_id" readonly="1"/>
+                            <field name="amount" class="o_lfood_big_total"/>
+                            <field name="amount_tax" invisible="purpose not in ('purchase', 'return_out')"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="uom"/>
+                            <field name="lot_id" optional="show"/>
+                            <field name="lot_name" optional="show"/>
+                            <field name="production_date" optional="hide"/>
+                            <field name="expiry_date" optional="show"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="amount" sum="Tổng"/>
+                            <field name="vat_rate_id" optional="show"/>
+                            <field name="tax" sum="Thuế" optional="show"/>
+                            <field name="cost" sum="Giá vốn"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Nhập: ghi lô mới (số lô, hạn dùng) hoặc chọn lô có sẵn. Xuất: để trống lô thì tự lấy lô hết hạn trước.
+                        Giá xuất kho bình quân gia quyền theo từng lần phát sinh. Không cho xuất quá tồn, không cho ghi phiếu có ngày trước lần nhập xuất gần nhất.
+                        Mua hàng: Nợ 152, 153, 155, 156, Nợ 1331 / Có TK đối ứng. Xuất bán: Nợ 632 / Có TK kho. Kiểm kê thừa: Nợ TK kho / Có 3381; thiếu: Nợ 1381 / Có TK kho.
+                        Nhập tồn đầu kỳ không ghi sổ vì số dư đã nhập ở Số dư đầu kỳ.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_picking_search" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.search</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="partner_id"/>
+                <field name="line_ids" string="Mặt hàng" filter_domain="[('line_ids.product_id', 'ilike', self)]"/>
+                <filter name="f_in" string="Nhập" domain="[('kind', '=', 'in')]"/>
+                <filter name="f_out" string="Xuất" domain="[('kind', '=', 'out')]"/>
+                <filter name="f_transfer" string="Chuyển kho" domain="[('kind', '=', 'transfer')]"/>
+                <filter name="f_date" string="Ngày" date="date"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_picking" model="ir.actions.act_window">
+        <field name="name">Phiếu nhập, xuất kho</field>
+        <field name="res_model">lfood.stock.picking</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_stock_report_form" model="ir.ui.view">
+        <field name="name">lfood.stock.report.form</field>
+        <field name="model">lfood.stock.report</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo kho" create="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="report"/>
+                            <field name="warehouse_id" invisible="report != 'balance'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from" invisible="report != 'balance'"/>
+                            <field name="date_to"/>
+                            <field name="days" invisible="report != 'expiry'"/>
+                        </group>
+                    </group>
+                    <field name="html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_stock_report" model="ir.actions.act_window">
+        <field name="name">Báo cáo kho</field>
+        <field name="res_model">lfood.stock.report</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <record id="view_sale_invoice_form_stock" model="ir.ui.view">
+        <field name="name">lfood.sale.invoice.form.stock</field>
+        <field name="model">lfood.sale.invoice</field>
+        <field name="inherit_id" ref="lfood_sale.view_sale_invoice_form"/>
+        <field name="arch" type="xml">
+            <field name="receivable_account" position="after">
+                <field name="warehouse_id" readonly="state != 'draft'"/>
+            </field>
+            <xpath expr="//field[@name='line_ids']/list/field[@name='name']" position="before">
+                <field name="product_id" options="{'no_create': True}"/>
+                <field name="lot_id" options="{'no_create': True}" optional="show"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_payment_form_stock" model="ir.ui.view">
+        <field name="name">lfood.payment.form.stock</field>
+        <field name="model">lfood.payment</field>
+        <field name="inherit_id" ref="lfood_ledger.view_payment_form"/>
+        <field name="arch" type="xml">
+            <field name="voucher_id" position="after">
+                <field name="picking_id" invisible="purpose != 'supplier'" readonly="state != 'draft'"/>
+            </field>
+        </field>
+    </record>
+
+    <menuitem id="menu_stock_root" name="Kho" parent="lfood_base.menu_root" sequence="27"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+    <menuitem id="menu_picking" name="Phiếu nhập, xuất kho" parent="menu_stock_root" action="action_picking" sequence="10"/>
+    <menuitem id="menu_product" name="Hàng hóa, vật tư" parent="menu_stock_root" action="action_product" sequence="20"/>
+    <menuitem id="menu_lot" name="Lô hàng, hạn dùng" parent="menu_stock_root" action="action_lot" sequence="30"/>
+    <menuitem id="menu_valuation" name="Thẻ kho" parent="menu_stock_root" action="action_valuation" sequence="40"/>
+    <menuitem id="menu_stock_report" name="Nhập xuất tồn, hạn dùng" parent="menu_stock_root" action="action_stock_report" sequence="50"/>
+    <menuitem id="menu_warehouse" name="Kho" parent="lfood_base.menu_config" action="action_warehouse" sequence="50"/>
+</odoo>

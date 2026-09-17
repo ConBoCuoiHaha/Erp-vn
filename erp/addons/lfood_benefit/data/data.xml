@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+    <record id="seq_benefit" model="ir.sequence"><field name="name">Hồ sơ ốm đau, thai sản</field><field name="code">lfood.hr.benefit</field><field name="prefix">BHXH%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+    <record id="p_sick_rate" model="lfood.legal.param"><field name="code">OM_DAU_TY_LE</field><field name="name">Mức hưởng ốm đau so với tiền lương đóng BHXH tháng liền kề</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_sick_rate" model="lfood.legal.param.value"><field name="param_id" ref="p_sick_rate"/><field name="value">75</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15, Điều 45</field><field name="state">approved</field></record>
+    <record id="p_recovery_rate" model="lfood.legal.param"><field name="code">DUONG_SUC_TY_LE</field><field name="name">Dưỡng sức phục hồi sức khỏe: mức một ngày so với mức tham chiếu</field><field name="group">insurance</field><field name="value_type">percent</field></record>
+    <record id="pv_recovery_rate" model="lfood.legal.param.value"><field name="param_id" ref="p_recovery_rate"/><field name="value">30</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15, Điều 46 (tối đa 10 ngày/năm)</field><field name="state">approved</field></record>
+    <record id="p_birth_lump" model="lfood.legal.param"><field name="code">TRO_CAP_SINH_CON_LAN_THAM_CHIEU</field><field name="name">Trợ cấp một lần khi sinh con: số lần mức tham chiếu cho mỗi con</field><field name="group">insurance</field><field name="value_type">number</field></record>
+    <record id="pv_birth_lump" model="lfood.legal.param.value"><field name="param_id" ref="p_birth_lump"/><field name="value">2</field><field name="date_from">2025-07-01</field><field name="legal_ref">Luật Bảo hiểm xã hội 41/2024/QH15, Điều 58</field><field name="state">approved</field></record>
+</odoo>

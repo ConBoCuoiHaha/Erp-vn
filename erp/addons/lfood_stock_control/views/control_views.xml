@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Cách ly lô -->
+    <record id="view_lot_list_hold" model="ir.ui.view">
+        <field name="name">lfood.stock.lot.list.hold</field>
+        <field name="model">lfood.stock.lot</field>
+        <field name="inherit_id" ref="lfood_stock.view_lot_list"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="attributes">
+                <attribute name="decoration-danger">hold</attribute>
+            </xpath>
+            <xpath expr="//list/field[@name='product_id']" position="before">
+                <header>
+                    <button name="action_open_hold" type="object" string="Cách ly"/>
+                    <button name="action_release" type="object" string="Giải phóng"
+                            groups="lfood_base.group_chief_accountant,lfood_base.group_director"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='qty_on_hand']" position="after">
+                <field name="hold"/>
+                <field name="hold_reason" optional="show"/>
+                <field name="hold_date" optional="hide"/>
+                <field name="hold_by" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_lot_search_hold" model="ir.ui.view">
+        <field name="name">lfood.stock.lot.search.hold</field>
+        <field name="model">lfood.stock.lot</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="product_id"/>
+                <filter name="held" string="Đang cách ly" domain="[('hold', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="view_hold_wizard_form" model="ir.ui.view">
+        <field name="name">lfood.stock.hold.wizard.form</field>
+        <field name="model">lfood.stock.hold.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cách ly lô">
+                <group>
+                    <field name="lot_ids" widget="many2many_tags"/>
+                    <field name="reason" placeholder="Ví dụ: kết quả kiểm nghiệm vi sinh không đạt"/>
+                </group>
+                <div class="text-muted">Lô cách ly không được xuất bán, xuất dùng; chỉ được chuyển kho, trả nhà cung cấp,
+                    kiểm kê hoặc hủy. Kế toán trưởng hoặc Giám đốc giải phóng lô.</div>
+                <footer>
+                    <button name="action_apply" type="object" string="Cách ly" class="btn-primary"/>
+                    <button special="cancel" string="Bỏ qua"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Tồn tối thiểu -->
+    <record id="view_product_form_minmax" model="ir.ui.view">
+        <field name="name">lfood.product.form.minmax</field>
+        <field name="model">lfood.product</field>
+        <field name="inherit_id" ref="lfood_stock.view_product_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='value_on_hand']" position="after">
+                <field name="min_qty"/>
+                <field name="max_qty"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_reorder_form" model="ir.ui.view">
+        <field name="name">lfood.stock.reorder.form</field>
+        <field name="model">lfood.stock.reorder</field>
+        <field name="arch" type="xml">
+            <form string="Đề xuất đặt hàng">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                </group>
+                <field name="line_ids">
+                    <list editable="bottom" create="false">
+                        <field name="product_id" readonly="1"/>
+                        <field name="min_qty"/>
+                        <field name="on_hand" readonly="1"/>
+                        <field name="on_order" readonly="1"/>
+                        <field name="quantity"/>
+                    </list>
+                </field>
+                <div class="text-muted">Đề xuất = tồn tối đa (hoặc tồn tối thiểu) trừ tồn các kho của công ty và số đang đặt
+                    trên đơn mua chưa nhận đủ.</div>
+                <footer>
+                    <button name="action_compute" type="object" string="Tính đề xuất" class="btn-primary"/>
+                    <button name="action_make_request" type="object" string="Lập yêu cầu mua hàng"/>
+                    <button special="cancel" string="Đóng"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_reorder" model="ir.actions.act_window">
+        <field name="name">Đề xuất đặt hàng</field>
+        <field name="res_model">lfood.stock.reorder</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- Hủy hàng -->
+    <record id="view_disposal_list" model="ir.ui.view">
+        <field name="name">lfood.stock.disposal.list</field>
+        <field name="model">lfood.stock.disposal</field>
+        <field name="arch" type="xml">
+            <list string="Biên bản hủy hàng">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="warehouse_id"/>
+                <field name="reason"/>
+                <field name="decision_ref"/>
+                <field name="amount" sum="Tổng"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_disposal_form" model="ir.ui.view">
+        <field name="name">lfood.stock.disposal.form</field>
+        <field name="model">lfood.stock.disposal</field>
+        <field name="arch" type="xml">
+            <form string="Biên bản hủy hàng">
+                <header>
+                    <button name="action_load_holds" type="object" string="Lấy lô cách ly, hết hạn" invisible="state != 'draft'"/>
+                    <button name="action_approve" type="object" string="Duyệt hủy" class="btn-primary"
+                            groups="lfood_base.group_director" invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Xuất kho và ghi sổ" class="btn-primary"
+                            groups="lfood_base.group_accountant" invisible="state != 'approved'"/>
+                    <button name="action_cancel" type="object" string="Bỏ" invisible="state not in ('draft', 'approved')"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approved,done"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <div class="alert alert-warning" role="alert" invisible="not missing_docs or state != 'draft'">
+                        Hồ sơ còn thiếu: <field name="missing_docs" class="d-inline"/>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="warehouse_id" readonly="state != 'draft'"/>
+                            <field name="reason" readonly="state != 'draft'"/>
+                            <field name="method" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="decision_ref" readonly="state != 'draft'"/>
+                            <field name="decision_date" readonly="state != 'draft'"/>
+                            <field name="committee_ref" readonly="state != 'draft'"/>
+                            <field name="compensation" readonly="state != 'draft'"/>
+                            <field name="compensation_partner_id" readonly="state != 'draft'" invisible="not compensation"/>
+                            <field name="amount"/>
+                            <field name="approved_by" invisible="not approved_by"/>
+                            <field name="picking_id" invisible="not picking_id"/>
+                        </group>
+                    </group>
+                    <field name="reason_detail" placeholder="Mô tả nguyên nhân" readonly="state != 'draft'"/>
+                    <field name="members" placeholder="Họ tên, chức vụ các thành viên hội đồng, mỗi người một dòng"
+                           readonly="state != 'draft'"/>
+                    <notebook>
+                        <page string="Hàng hủy">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="product_id" options="{'no_create': True}"/>
+                                    <field name="lot_id" options="{'no_create': True}"/>
+                                    <field name="uom"/>
+                                    <field name="quantity"/>
+                                    <field name="value" sum="Giá trị"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Biên bản in">
+                            <field name="report_html" readonly="1"/>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">
+                        Hồ sơ để chi phí hủy hàng được trừ khi tính thuế TNDN (Thông tư 20/2026/TT-BTC): quyết định hủy của người có
+                        thẩm quyền, biên bản kiểm kê giá trị ghi nguyên nhân, chủng loại, số lượng, giá trị, phương án xử lý và quyết định
+                        thành lập hội đồng. Ghi sổ theo Thông tư 99/2025/TT-BTC: Nợ 632 / Có kho; bồi thường Nợ 1388 / Có 632.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_disposal" model="ir.actions.act_window">
+        <field name="name">Biên bản hủy hàng</field>
+        <field name="res_model">lfood.stock.disposal</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_disposal" name="Hủy hàng hư hỏng, hết hạn" parent="lfood_stock.menu_stock_root" action="action_disposal" sequence="35"/>
+    <menuitem id="menu_reorder" name="Đề xuất đặt hàng" parent="lfood_stock.menu_stock_root" action="action_reorder" sequence="36"/>
+</odoo>

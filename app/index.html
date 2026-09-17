@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ERP LiFeOOD — Tài sản cố định &amp; Khấu hao</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<div class="shell" id="shell">
+  <!-- thanh trên cùng: cao cố định 48px -->
+  <header class="top">
+    <button class="icon-btn only-m" data-act="nav" aria-label="Menu">
+      <svg viewBox="0 0 24 24" width="20" height="20"><path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <div class="logo"><span class="logo-dot">L</span><span>Kế toán</span></div>
+    <div class="company" title="CÔNG TY LiFeOOD">CÔNG TY LiFeOOD</div>
+    <div class="top-r">
+      <label class="role hide-s">Vai trò
+        <select id="role"></select>
+      </label>
+      <span class="avatar" title="Người dùng">TH</span>
+    </div>
+  </header>
+
+  <!-- menu trái: rộng cố định 232px -->
+  <aside class="side" id="side"></aside>
+  <div class="scrim" data-act="nav"></div>
+
+  <!-- vùng làm việc: đầu trang / thân cuộn / chân trang cố định -->
+  <main class="main">
+    <div class="ph" id="ph"></div>
+    <div class="pb" id="pb"></div>
+    <div class="pf" id="pf"></div>
+  </main>
+</div>
+
+<div id="modal"></div>
+<div id="toasts"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

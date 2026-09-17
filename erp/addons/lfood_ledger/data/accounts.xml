@@ -1,0 +1,873 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Sinh tự động bằng gen_accounts.py từ Phụ lục II Thông tư 99/2025/TT-BTC. Không sửa tay. -->
+<odoo noupdate="1">
+    <record id="acc_111" model="lfood.account">
+        <field name="code">111</field><field name="name">Tiền mặt</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_112" model="lfood.account">
+        <field name="code">112</field><field name="name">Tiền gửi không kỳ hạn</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_113" model="lfood.account">
+        <field name="code">113</field><field name="name">Tiền đang chuyển</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_121" model="lfood.account">
+        <field name="code">121</field><field name="name">Chứng khoán kinh doanh</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_128" model="lfood.account">
+        <field name="code">128</field><field name="name">Đầu tư nắm giữ đến ngày đáo hạn</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_1281" model="lfood.account">
+        <field name="code">1281</field><field name="name">Tiền gửi có kỳ hạn</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_128"/>
+    </record>
+    <record id="acc_1282" model="lfood.account">
+        <field name="code">1282</field><field name="name">Trái phiếu</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_128"/>
+    </record>
+    <record id="acc_1283" model="lfood.account">
+        <field name="code">1283</field><field name="name">Cho vay</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_128"/>
+    </record>
+    <record id="acc_1288" model="lfood.account">
+        <field name="code">1288</field><field name="name">Các khoản đầu tư khác nắm giữ đến ngày đáo hạn</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_128"/>
+    </record>
+    <record id="acc_131" model="lfood.account">
+        <field name="code">131</field><field name="name">Phải thu của khách hàng</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_1311" model="lfood.account">
+        <field name="code">1311</field><field name="name">Phải thu của khách hàng (chi tiết công ty)</field>
+        <field name="nature">both</field><field name="is_official" eval="False"/>
+        <field name="parent_id" ref="acc_131"/>
+    </record>
+    <record id="acc_133" model="lfood.account">
+        <field name="code">133</field><field name="name">Thuế GTGT được khấu trừ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_1331" model="lfood.account">
+        <field name="code">1331</field><field name="name">Thuế GTGT được khấu trừ của hàng hóa, dịch vụ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_133"/>
+    </record>
+    <record id="acc_1332" model="lfood.account">
+        <field name="code">1332</field><field name="name">Thuế GTGT được khấu trừ của TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_133"/>
+    </record>
+    <record id="acc_136" model="lfood.account">
+        <field name="code">136</field><field name="name">Phải thu nội bộ</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_1361" model="lfood.account">
+        <field name="code">1361</field><field name="name">Vốn kinh doanh ở đơn vị trực thuộc</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_136"/>
+    </record>
+    <record id="acc_1362" model="lfood.account">
+        <field name="code">1362</field><field name="name">Phải thu nội bộ về chênh lệch tỷ giá</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_136"/>
+    </record>
+    <record id="acc_1363" model="lfood.account">
+        <field name="code">1363</field><field name="name">Phải thu nội bộ về chi phí đi vay đủ điều kiện được vốn hoá</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_136"/>
+    </record>
+    <record id="acc_1368" model="lfood.account">
+        <field name="code">1368</field><field name="name">Phải thu nội bộ khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_136"/>
+    </record>
+    <record id="acc_138" model="lfood.account">
+        <field name="code">138</field><field name="name">Phải thu khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_1381" model="lfood.account">
+        <field name="code">1381</field><field name="name">Tài sản thiếu chờ xử lý</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_138"/>
+    </record>
+    <record id="acc_1383" model="lfood.account">
+        <field name="code">1383</field><field name="name">Thuế TTĐB của hàng nhập khẩu</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_138"/>
+    </record>
+    <record id="acc_1388" model="lfood.account">
+        <field name="code">1388</field><field name="name">Phải thu khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_138"/>
+    </record>
+    <record id="acc_141" model="lfood.account">
+        <field name="code">141</field><field name="name">Tạm ứng</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_151" model="lfood.account">
+        <field name="code">151</field><field name="name">Hàng mua đang đi đường</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_152" model="lfood.account">
+        <field name="code">152</field><field name="name">Nguyên liệu, vật liệu</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_153" model="lfood.account">
+        <field name="code">153</field><field name="name">Công cụ, dụng cụ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_154" model="lfood.account">
+        <field name="code">154</field><field name="name">Chi phí sản xuất, kinh doanh dở dang</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_155" model="lfood.account">
+        <field name="code">155</field><field name="name">Sản phẩm</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_156" model="lfood.account">
+        <field name="code">156</field><field name="name">Hàng hóa</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_157" model="lfood.account">
+        <field name="code">157</field><field name="name">Hàng gửi đi bán</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_158" model="lfood.account">
+        <field name="code">158</field><field name="name">Nguyên liệu, vật tư tại kho bảo thuế</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_171" model="lfood.account">
+        <field name="code">171</field><field name="name">Giao dịch mua, bán lại trái phiếu chính phủ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_211" model="lfood.account">
+        <field name="code">211</field><field name="name">Tài sản cố định hữu hình</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_2111" model="lfood.account">
+        <field name="code">2111</field><field name="name">Nhà cửa, vật kiến trúc</field>
+        <field name="nature">debit</field><field name="is_official" eval="False"/>
+        <field name="parent_id" ref="acc_211"/>
+    </record>
+    <record id="acc_2112" model="lfood.account">
+        <field name="code">2112</field><field name="name">Máy móc, thiết bị</field>
+        <field name="nature">debit</field><field name="is_official" eval="False"/>
+        <field name="parent_id" ref="acc_211"/>
+    </record>
+    <record id="acc_2113" model="lfood.account">
+        <field name="code">2113</field><field name="name">Phương tiện vận tải, truyền dẫn</field>
+        <field name="nature">debit</field><field name="is_official" eval="False"/>
+        <field name="parent_id" ref="acc_211"/>
+    </record>
+    <record id="acc_2114" model="lfood.account">
+        <field name="code">2114</field><field name="name">Thiết bị, dụng cụ quản lý</field>
+        <field name="nature">debit</field><field name="is_official" eval="False"/>
+        <field name="parent_id" ref="acc_211"/>
+    </record>
+    <record id="acc_212" model="lfood.account">
+        <field name="code">212</field><field name="name">Tài sản cố định thuê tài chính</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_213" model="lfood.account">
+        <field name="code">213</field><field name="name">Tài sản cố định vô hình</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_214" model="lfood.account">
+        <field name="code">214</field><field name="name">Hao mòn tài sản cố định</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_2141" model="lfood.account">
+        <field name="code">2141</field><field name="name">Hao mòn TSCĐ hữu hình</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_214"/>
+    </record>
+    <record id="acc_2142" model="lfood.account">
+        <field name="code">2142</field><field name="name">Hao mòn TSCĐ thuê tài chính</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_214"/>
+    </record>
+    <record id="acc_2143" model="lfood.account">
+        <field name="code">2143</field><field name="name">Hao mòn TSCĐ vô hình</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_214"/>
+    </record>
+    <record id="acc_2147" model="lfood.account">
+        <field name="code">2147</field><field name="name">Hao mòn BĐSĐT</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_214"/>
+    </record>
+    <record id="acc_215" model="lfood.account">
+        <field name="code">215</field><field name="name">Tài sản sinh học</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_2151" model="lfood.account">
+        <field name="code">2151</field><field name="name">Súc vật nuôi cho sản phẩm định kỳ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_215"/>
+    </record>
+    <record id="acc_21511" model="lfood.account">
+        <field name="code">21511</field><field name="name">Súc vật nuôi cho sản phẩm định kỳ chưa đạt đến giai đoạn trưởng thành</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_2151"/>
+    </record>
+    <record id="acc_21512" model="lfood.account">
+        <field name="code">21512</field><field name="name">Súc vật nuôi cho sản phẩm định kỳ đạt đến giai đoạn trưởng thành</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_2151"/>
+    </record>
+    <record id="acc_2152" model="lfood.account">
+        <field name="code">2152</field><field name="name">Súc vật nuôi lấy sản phẩm một lần</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_215"/>
+    </record>
+    <record id="acc_2153" model="lfood.account">
+        <field name="code">2153</field><field name="name">Cây trồng theo mùa vụ hoặc lấy sản phẩm một lần</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_215"/>
+    </record>
+    <record id="acc_217" model="lfood.account">
+        <field name="code">217</field><field name="name">Bất động sản đầu tư</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_221" model="lfood.account">
+        <field name="code">221</field><field name="name">Đầu tư vào công ty con</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_222" model="lfood.account">
+        <field name="code">222</field><field name="name">Đầu tư vào công ty liên doanh, liên kết</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_228" model="lfood.account">
+        <field name="code">228</field><field name="name">Đầu tư khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_2281" model="lfood.account">
+        <field name="code">2281</field><field name="name">Đầu tư góp vốn vào đơn vị khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_228"/>
+    </record>
+    <record id="acc_2288" model="lfood.account">
+        <field name="code">2288</field><field name="name">Đầu tư khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_228"/>
+    </record>
+    <record id="acc_229" model="lfood.account">
+        <field name="code">229</field><field name="name">Dự phòng tổn thất tài sản</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_2291" model="lfood.account">
+        <field name="code">2291</field><field name="name">Dự phòng giảm giá chứng khoán kinh doanh</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_229"/>
+    </record>
+    <record id="acc_2292" model="lfood.account">
+        <field name="code">2292</field><field name="name">Dự phòng tổn thất đầu tư vào đơn vị khác</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_229"/>
+    </record>
+    <record id="acc_2293" model="lfood.account">
+        <field name="code">2293</field><field name="name">Dự phòng phải thu khó đòi</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_229"/>
+    </record>
+    <record id="acc_2294" model="lfood.account">
+        <field name="code">2294</field><field name="name">Dự phòng giảm giá hàng tồn kho</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_229"/>
+    </record>
+    <record id="acc_2295" model="lfood.account">
+        <field name="code">2295</field><field name="name">Dự phòng tổn thất tài sản sinh học</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_229"/>
+    </record>
+    <record id="acc_241" model="lfood.account">
+        <field name="code">241</field><field name="name">Xây dựng cơ bản dở dang</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_2411" model="lfood.account">
+        <field name="code">2411</field><field name="name">Mua sắm TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_241"/>
+    </record>
+    <record id="acc_2412" model="lfood.account">
+        <field name="code">2412</field><field name="name">Xây dựng cơ bản</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_241"/>
+    </record>
+    <record id="acc_2413" model="lfood.account">
+        <field name="code">2413</field><field name="name">Sửa chữa, bảo dưỡng định kỳ TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_241"/>
+    </record>
+    <record id="acc_2414" model="lfood.account">
+        <field name="code">2414</field><field name="name">Nâng cấp, cải tạo TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_241"/>
+    </record>
+    <record id="acc_242" model="lfood.account">
+        <field name="code">242</field><field name="name">Chi phí chờ phân bổ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_243" model="lfood.account">
+        <field name="code">243</field><field name="name">Tài sản thuế thu nhập hoãn lại</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_244" model="lfood.account">
+        <field name="code">244</field><field name="name">Ký quỹ, ký cược</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_331" model="lfood.account">
+        <field name="code">331</field><field name="name">Phải trả cho người bán</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3311" model="lfood.account">
+        <field name="code">3311</field><field name="name">Phải trả cho người bán (chi tiết công ty)</field>
+        <field name="nature">both</field><field name="is_official" eval="False"/>
+        <field name="parent_id" ref="acc_331"/>
+    </record>
+    <record id="acc_332" model="lfood.account">
+        <field name="code">332</field><field name="name">Phải trả cổ tức, lợi nhuận</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_333" model="lfood.account">
+        <field name="code">333</field><field name="name">Thuế và các khoản phải nộp Nhà nước</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3331" model="lfood.account">
+        <field name="code">3331</field><field name="name">Thuế giá trị gia tăng phải nộp</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_33311" model="lfood.account">
+        <field name="code">33311</field><field name="name">Thuế GTGT đầu ra</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_3331"/>
+    </record>
+    <record id="acc_33312" model="lfood.account">
+        <field name="code">33312</field><field name="name">Thuế GTGT hàng nhập khẩu</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_3331"/>
+    </record>
+    <record id="acc_3332" model="lfood.account">
+        <field name="code">3332</field><field name="name">Thuế tiêu thụ đặc biệt</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_3333" model="lfood.account">
+        <field name="code">3333</field><field name="name">Thuế xuất, nhập khẩu</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_3334" model="lfood.account">
+        <field name="code">3334</field><field name="name">Thuế thu nhập doanh nghiệp</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_3335" model="lfood.account">
+        <field name="code">3335</field><field name="name">Thuế thu nhập cá nhân</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_3336" model="lfood.account">
+        <field name="code">3336</field><field name="name">Thuế tài nguyên</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_3337" model="lfood.account">
+        <field name="code">3337</field><field name="name">Thuế nhà đất, tiền thuê đất</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_3338" model="lfood.account">
+        <field name="code">3338</field><field name="name">Thuế bảo vệ môi trường và các loại thuế khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_33381" model="lfood.account">
+        <field name="code">33381</field><field name="name">Thuế bảo vệ môi trường</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_3338"/>
+    </record>
+    <record id="acc_33382" model="lfood.account">
+        <field name="code">33382</field><field name="name">Các loại thuế khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_3338"/>
+    </record>
+    <record id="acc_3339" model="lfood.account">
+        <field name="code">3339</field><field name="name">Phí, lệ phí và các khoản phải nộp khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_333"/>
+    </record>
+    <record id="acc_334" model="lfood.account">
+        <field name="code">334</field><field name="name">Phải trả người lao động</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_335" model="lfood.account">
+        <field name="code">335</field><field name="name">Chi phí phải trả</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_336" model="lfood.account">
+        <field name="code">336</field><field name="name">Phải trả nội bộ</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3361" model="lfood.account">
+        <field name="code">3361</field><field name="name">Phải trả nội bộ về vốn kinh doanh</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_336"/>
+    </record>
+    <record id="acc_3362" model="lfood.account">
+        <field name="code">3362</field><field name="name">Phải trả nội bộ về chênh lệch tỷ giá</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_336"/>
+    </record>
+    <record id="acc_3363" model="lfood.account">
+        <field name="code">3363</field><field name="name">Phải trả nội bộ về chi phí đi vay đủ điều kiện được vốn hóa</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_336"/>
+    </record>
+    <record id="acc_3368" model="lfood.account">
+        <field name="code">3368</field><field name="name">Phải trả nội bộ khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_336"/>
+    </record>
+    <record id="acc_337" model="lfood.account">
+        <field name="code">337</field><field name="name">Thanh toán theo tiến độ hợp đồng xây dựng</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_338" model="lfood.account">
+        <field name="code">338</field><field name="name">Phải trả, phải nộp khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3381" model="lfood.account">
+        <field name="code">3381</field><field name="name">Tài sản thừa chờ giải quyết</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_3382" model="lfood.account">
+        <field name="code">3382</field><field name="name">Kinh phí công đoàn</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_3383" model="lfood.account">
+        <field name="code">3383</field><field name="name">Bảo hiểm xã hội</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_3384" model="lfood.account">
+        <field name="code">3384</field><field name="name">Bảo hiểm y tế</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_3386" model="lfood.account">
+        <field name="code">3386</field><field name="name">Bảo hiểm thất nghiệp</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_3387" model="lfood.account">
+        <field name="code">3387</field><field name="name">Doanh thu chờ phân bổ</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_3388" model="lfood.account">
+        <field name="code">3388</field><field name="name">Phải trả, phải nộp khác</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_338"/>
+    </record>
+    <record id="acc_341" model="lfood.account">
+        <field name="code">341</field><field name="name">Vay và nợ thuê tài chính</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3411" model="lfood.account">
+        <field name="code">3411</field><field name="name">Các khoản đi vay</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_341"/>
+    </record>
+    <record id="acc_3412" model="lfood.account">
+        <field name="code">3412</field><field name="name">Nợ thuê tài chính</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_341"/>
+    </record>
+    <record id="acc_343" model="lfood.account">
+        <field name="code">343</field><field name="name">Trái phiếu phát hành</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3431" model="lfood.account">
+        <field name="code">3431</field><field name="name">Trái phiếu thường</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_343"/>
+    </record>
+    <record id="acc_3432" model="lfood.account">
+        <field name="code">3432</field><field name="name">Trái phiếu chuyển đổi</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_343"/>
+    </record>
+    <record id="acc_344" model="lfood.account">
+        <field name="code">344</field><field name="name">Nhận ký quỹ, ký cược</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_347" model="lfood.account">
+        <field name="code">347</field><field name="name">Thuế thu nhập hoãn lại phải trả</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_352" model="lfood.account">
+        <field name="code">352</field><field name="name">Dự phòng phải trả</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3521" model="lfood.account">
+        <field name="code">3521</field><field name="name">Dự phòng bảo hành sản phẩm, hàng hóa</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_352"/>
+    </record>
+    <record id="acc_3522" model="lfood.account">
+        <field name="code">3522</field><field name="name">Dự phòng bảo hành công trình xây dựng</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_352"/>
+    </record>
+    <record id="acc_3523" model="lfood.account">
+        <field name="code">3523</field><field name="name">Dự phòng tái cơ cấu doanh nghiệp</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_352"/>
+    </record>
+    <record id="acc_3525" model="lfood.account">
+        <field name="code">3525</field><field name="name">Dự phòng phải trả khác</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_352"/>
+    </record>
+    <record id="acc_353" model="lfood.account">
+        <field name="code">353</field><field name="name">Quỹ khen thưởng, phúc lợi</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3531" model="lfood.account">
+        <field name="code">3531</field><field name="name">Quỹ khen thưởng</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_353"/>
+    </record>
+    <record id="acc_3532" model="lfood.account">
+        <field name="code">3532</field><field name="name">Quỹ phúc lợi</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_353"/>
+    </record>
+    <record id="acc_3533" model="lfood.account">
+        <field name="code">3533</field><field name="name">Quỹ phúc lợi đã hình thành TSCĐ</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_353"/>
+    </record>
+    <record id="acc_3534" model="lfood.account">
+        <field name="code">3534</field><field name="name">Quỹ thưởng ban quản lý điều hành công ty</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_353"/>
+    </record>
+    <record id="acc_356" model="lfood.account">
+        <field name="code">356</field><field name="name">Quỹ phát triển khoa học và công nghệ</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_3561" model="lfood.account">
+        <field name="code">3561</field><field name="name">Quỹ phát triển khoa học và công nghệ</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_356"/>
+    </record>
+    <record id="acc_3562" model="lfood.account">
+        <field name="code">3562</field><field name="name">Quỹ phát triển khoa học và công nghệ đã hình thành tài sản</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_356"/>
+    </record>
+    <record id="acc_357" model="lfood.account">
+        <field name="code">357</field><field name="name">Quỹ bình ổn giá</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_411" model="lfood.account">
+        <field name="code">411</field><field name="name">Vốn đầu tư của chủ sở hữu</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_4111" model="lfood.account">
+        <field name="code">4111</field><field name="name">Vốn góp của chủ sở hữu</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_411"/>
+    </record>
+    <record id="acc_41111" model="lfood.account">
+        <field name="code">41111</field><field name="name">Cổ phiếu phổ thông có quyền biểu quyết</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_4111"/>
+    </record>
+    <record id="acc_41112" model="lfood.account">
+        <field name="code">41112</field><field name="name">Cổ phiếu ưu đãi</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_4111"/>
+    </record>
+    <record id="acc_4112" model="lfood.account">
+        <field name="code">4112</field><field name="name">Thặng dư vốn</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_411"/>
+    </record>
+    <record id="acc_4113" model="lfood.account">
+        <field name="code">4113</field><field name="name">Quyền chọn chuyển đổi trái phiếu</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_411"/>
+    </record>
+    <record id="acc_4118" model="lfood.account">
+        <field name="code">4118</field><field name="name">Vốn khác</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_411"/>
+    </record>
+    <record id="acc_412" model="lfood.account">
+        <field name="code">412</field><field name="name">Chênh lệch đánh giá lại tài sản</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_413" model="lfood.account">
+        <field name="code">413</field><field name="name">Chênh lệch tỷ giá hối đoái</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_414" model="lfood.account">
+        <field name="code">414</field><field name="name">Quỹ đầu tư phát triển</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_418" model="lfood.account">
+        <field name="code">418</field><field name="name">Các quỹ khác thuộc vốn chủ sở hữu</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_419" model="lfood.account">
+        <field name="code">419</field><field name="name">Cổ phiếu mua lại của chính mình</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_421" model="lfood.account">
+        <field name="code">421</field><field name="name">Lợi nhuận sau thuế chưa phân phối</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_4211" model="lfood.account">
+        <field name="code">4211</field><field name="name">Lợi nhuận sau thuế chưa phân phối lũy kế đến cuối năm trước</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_421"/>
+    </record>
+    <record id="acc_4212" model="lfood.account">
+        <field name="code">4212</field><field name="name">Lợi nhuận sau thuế chưa phân phối năm nay</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_421"/>
+    </record>
+    <record id="acc_511" model="lfood.account">
+        <field name="code">511</field><field name="name">Doanh thu bán hàng và cung cấp dịch vụ</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_515" model="lfood.account">
+        <field name="code">515</field><field name="name">Doanh thu hoạt động tài chính</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_521" model="lfood.account">
+        <field name="code">521</field><field name="name">Các khoản giảm trừ doanh thu</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_621" model="lfood.account">
+        <field name="code">621</field><field name="name">Chi phí nguyên liệu, vật liệu trực tiếp</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_622" model="lfood.account">
+        <field name="code">622</field><field name="name">Chi phí nhân công trực tiếp</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_623" model="lfood.account">
+        <field name="code">623</field><field name="name">Chi phí sử dụng máy thi công</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_6231" model="lfood.account">
+        <field name="code">6231</field><field name="name">Chi phí nhân công</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_623"/>
+    </record>
+    <record id="acc_6232" model="lfood.account">
+        <field name="code">6232</field><field name="name">Chi phí vật liệu</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_623"/>
+    </record>
+    <record id="acc_6233" model="lfood.account">
+        <field name="code">6233</field><field name="name">Chi phí dụng cụ sản xuất</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_623"/>
+    </record>
+    <record id="acc_6234" model="lfood.account">
+        <field name="code">6234</field><field name="name">Chi phí khấu hao máy thi công</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_623"/>
+    </record>
+    <record id="acc_6237" model="lfood.account">
+        <field name="code">6237</field><field name="name">Chi phí dịch vụ mua ngoài</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_623"/>
+    </record>
+    <record id="acc_6238" model="lfood.account">
+        <field name="code">6238</field><field name="name">Chi phí bằng tiền khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_623"/>
+    </record>
+    <record id="acc_627" model="lfood.account">
+        <field name="code">627</field><field name="name">Chi phí sản xuất chung</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_6271" model="lfood.account">
+        <field name="code">6271</field><field name="name">Chi phí nhân viên phân xưởng</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_6272" model="lfood.account">
+        <field name="code">6272</field><field name="name">Chi phí vật liệu</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_6273" model="lfood.account">
+        <field name="code">6273</field><field name="name">Chi phí dụng cụ sản xuất</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_6274" model="lfood.account">
+        <field name="code">6274</field><field name="name">Chi phí khấu hao TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_6275" model="lfood.account">
+        <field name="code">6275</field><field name="name">Thuế, phí, lệ phí</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_6277" model="lfood.account">
+        <field name="code">6277</field><field name="name">Chi phí dịch vụ mua ngoài</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_6278" model="lfood.account">
+        <field name="code">6278</field><field name="name">Chi phí bằng tiền khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_627"/>
+    </record>
+    <record id="acc_632" model="lfood.account">
+        <field name="code">632</field><field name="name">Giá vốn hàng bán</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_635" model="lfood.account">
+        <field name="code">635</field><field name="name">Chi phí tài chính</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_641" model="lfood.account">
+        <field name="code">641</field><field name="name">Chi phí bán hàng</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_6411" model="lfood.account">
+        <field name="code">6411</field><field name="name">Chi phí nhân viên</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_6412" model="lfood.account">
+        <field name="code">6412</field><field name="name">Chi phí vật liệu, bao bì</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_6413" model="lfood.account">
+        <field name="code">6413</field><field name="name">Chi phí dụng cụ, đồ dùng</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_6414" model="lfood.account">
+        <field name="code">6414</field><field name="name">Chi phí khấu hao TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_6415" model="lfood.account">
+        <field name="code">6415</field><field name="name">Thuế, phí, lệ phí</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_6417" model="lfood.account">
+        <field name="code">6417</field><field name="name">Chi phí dịch vụ mua ngoài</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_6418" model="lfood.account">
+        <field name="code">6418</field><field name="name">Chi phí bằng tiền khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_641"/>
+    </record>
+    <record id="acc_642" model="lfood.account">
+        <field name="code">642</field><field name="name">Chi phí quản lý doanh nghiệp</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_6421" model="lfood.account">
+        <field name="code">6421</field><field name="name">Chi phí nhân viên quản lý</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6422" model="lfood.account">
+        <field name="code">6422</field><field name="name">Chi phí vật liệu quản lý</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6423" model="lfood.account">
+        <field name="code">6423</field><field name="name">Chi phí đồ dùng văn phòng</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6424" model="lfood.account">
+        <field name="code">6424</field><field name="name">Chi phí khấu hao TSCĐ</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6425" model="lfood.account">
+        <field name="code">6425</field><field name="name">Thuế, phí và lệ phí</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6426" model="lfood.account">
+        <field name="code">6426</field><field name="name">Chi phí dự phòng</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6427" model="lfood.account">
+        <field name="code">6427</field><field name="name">Chi phí dịch vụ mua ngoài</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_6428" model="lfood.account">
+        <field name="code">6428</field><field name="name">Chi phí bằng tiền khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_642"/>
+    </record>
+    <record id="acc_711" model="lfood.account">
+        <field name="code">711</field><field name="name">Thu nhập khác</field>
+        <field name="nature">credit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_811" model="lfood.account">
+        <field name="code">811</field><field name="name">Chi phí khác</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_821" model="lfood.account">
+        <field name="code">821</field><field name="name">Chi phí thuế thu nhập doanh nghiệp</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+    </record>
+    <record id="acc_8211" model="lfood.account">
+        <field name="code">8211</field><field name="name">Chi phí thuế TNDN hiện hành</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_821"/>
+    </record>
+    <record id="acc_82111" model="lfood.account">
+        <field name="code">82111</field><field name="name">Chi phí thuế thu nhập doanh nghiệp hiện hành theo quy định của Luật thuế thu nhập doanh nghiệp</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_8211"/>
+    </record>
+    <record id="acc_82112" model="lfood.account">
+        <field name="code">82112</field><field name="name">Chi phí thuế thu nhập doanh nghiệp bổ sung theo quy định về thuế tối thiểu toàn cầu</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_8211"/>
+    </record>
+    <record id="acc_8212" model="lfood.account">
+        <field name="code">8212</field><field name="name">Chi phí thuế TNDN hoãn lại</field>
+        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="parent_id" ref="acc_821"/>
+    </record>
+    <record id="acc_911" model="lfood.account">
+        <field name="code">911</field><field name="name">Xác định kết quả kinh doanh</field>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
+    </record>
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_cost_analysis_pivot" model="ir.ui.view">
+        <field name="name">lfood.cost.analysis.pivot</field>
+        <field name="model">lfood.cost.analysis</field>
+        <field name="arch" type="xml">
+            <pivot string="Phân tích chi phí nhiều kỳ" disable_linking="0">
+                <field name="lvl1_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="amount" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="view_cost_analysis_list" model="ir.ui.view">
+        <field name="name">lfood.cost.analysis.list</field>
+        <field name="model">lfood.cost.analysis</field>
+        <field name="arch" type="xml">
+            <list string="Chứng từ gốc" create="false">
+                <field name="date"/>
+                <field name="voucher_id"/>
+                <field name="partner_id"/>
+                <field name="cost_item_id"/>
+                <field name="line_name"/>
+                <field name="acc_expense"/>
+                <field name="amount" sum="Tổng"/>
+                <field name="version_number"/>
+                <field name="has_later_edit"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_cost_analysis_search" model="ir.ui.view">
+        <field name="name">lfood.cost.analysis.search</field>
+        <field name="model">lfood.cost.analysis</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="cost_item_id" operator="child_of"/>
+                <field name="partner_id"/>
+                <field name="voucher_id"/>
+                <filter name="f_date" string="Ngày hạch toán" date="date"/>
+                <filter name="f_later" string="Có sửa sau" domain="[('has_later_edit', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+    <record id="action_cost_analysis" model="ir.actions.act_window">
+        <field name="name">Phân tích chi phí nhiều kỳ</field>
+        <field name="res_model">lfood.cost.analysis</field>
+        <field name="view_mode">pivot,list</field>
+        <field name="context">{'pivot_row_groupby': ['lvl1_id', 'lvl2_id', 'lvl3_id', 'lvl4_id'], 'pivot_column_groupby': ['date:month'], 'pivot_measures': ['amount']}</field>
+        <field name="help" type="html">
+            <p>Báo cáo đọc phiên bản báo cáo của từng chứng từ, nên Sửa chứng từ không làm thay đổi số liệu. Bấm vào ô số để xem chứng từ gốc.</p>
+        </field>
+    </record>
+</odoo>

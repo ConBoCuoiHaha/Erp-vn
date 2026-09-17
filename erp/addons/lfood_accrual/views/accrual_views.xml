@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_prepaid_list" model="ir.ui.view">
+        <field name="name">lfood.prepaid.list</field>
+        <field name="model">lfood.prepaid</field>
+        <field name="arch" type="xml">
+            <list string="Chi phí trả trước">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="label"/>
+                <field name="partner_id" optional="show"/>
+                <field name="amount" sum="Số tiền"/>
+                <field name="months"/>
+                <field name="allocated" sum="Đã phân bổ"/>
+                <field name="remaining" sum="Còn lại"/>
+                <field name="expense_account" optional="show"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_prepaid_form" model="ir.ui.view">
+        <field name="name">lfood.prepaid.form</field>
+        <field name="model">lfood.prepaid</field>
+        <field name="arch" type="xml">
+            <form string="Chi phí trả trước">
+                <header>
+                    <button name="action_confirm" type="object" string="Lập lịch phân bổ" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_cancel" type="object" string="Hủy"
+                            groups="lfood_base.group_chief_accountant" invisible="state not in ('running', 'done')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="label" placeholder="Ví dụ tiền thuê kho trả trước 12 tháng"/>
+                            <field name="partner_id"/>
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="months"/>
+                            <field name="date_start"/>
+                            <field name="expense_account"/>
+                            <field name="cost_item_id" options="{'no_create': True}"/>
+                            <field name="post_initial"/>
+                            <field name="counterpart_account" invisible="not post_initial"
+                                   required="post_initial"/>
+                            <field name="allocated"/>
+                            <field name="remaining"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" nolabel="1">
+                        <list>
+                            <field name="date"/>
+                            <field name="amount" sum="Tổng"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Khoản đã chi nhưng liên quan nhiều kỳ thì ghi vào TK 242 rồi phân bổ dần vào chi phí từng kỳ
+                        (Thông tư 99/2025/TT-BTC). Kỳ đầu tính theo số ngày kể từ ngày bắt đầu, kỳ cuối nhận phần còn lại
+                        nên tổng phân bổ bằng đúng số tiền gốc. Ghi sổ từng kỳ bằng màn hình Ghi phân bổ, trích trước.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_prepaid" model="ir.actions.act_window">
+        <field name="name">Chi phí trả trước</field>
+        <field name="res_model">lfood.prepaid</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_accrued_list" model="ir.ui.view">
+        <field name="name">lfood.accrued.list</field>
+        <field name="model">lfood.accrued</field>
+        <field name="arch" type="xml">
+            <list string="Chi phí trích trước">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="label"/>
+                <field name="partner_id" optional="show"/>
+                <field name="amount" sum="Tổng trích trước"/>
+                <field name="accrued_amount" sum="Đã trích"/>
+                <field name="actual_amount" optional="show"/>
+                <field name="difference" optional="show"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_accrued_form" model="ir.ui.view">
+        <field name="name">lfood.accrued.form</field>
+        <field name="model">lfood.accrued</field>
+        <field name="arch" type="xml">
+            <form string="Chi phí trích trước">
+                <header>
+                    <button name="action_confirm" type="object" string="Lập lịch trích trước" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_settle" type="object" string="Quyết toán theo số thực tế"
+                            invisible="state not in ('running', 'done')"/>
+                    <button name="action_cancel" type="object" string="Hủy"
+                            groups="lfood_base.group_chief_accountant" invisible="state not in ('running', 'done')"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="label" placeholder="Ví dụ trích trước chi phí sửa chữa lớn"/>
+                            <field name="partner_id"/>
+                            <field name="date"/>
+                            <field name="amount"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="months"/>
+                            <field name="date_start"/>
+                            <field name="expense_account"/>
+                            <field name="cost_item_id" options="{'no_create': True}"/>
+                            <field name="accrued_amount"/>
+                            <field name="actual_amount" readonly="state == 'settled'"
+                                   force_save="1"/>
+                            <field name="difference"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" nolabel="1">
+                        <list>
+                            <field name="date"/>
+                            <field name="amount" sum="Tổng"/>
+                            <field name="state"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Khoản chưa chi nhưng đã tính trước vào chi phí kỳ này thì ghi Có TK 335. Khi biết số thực tế,
+                        nhập vào ô Số thực tế phát sinh rồi bấm Quyết toán: thiếu thì ghi tăng chi phí, thừa thì hoàn nhập.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_accrued" model="ir.actions.act_window">
+        <field name="name">Chi phí trích trước</field>
+        <field name="res_model">lfood.accrued</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_accrual_run_form" model="ir.ui.view">
+        <field name="name">lfood.accrual.run.form</field>
+        <field name="model">lfood.accrual.run</field>
+        <field name="arch" type="xml">
+            <form string="Ghi phân bổ, trích trước theo kỳ">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="date_to"/>
+                    <field name="prepaid_count"/>
+                    <field name="prepaid_amount"/>
+                    <field name="accrued_count"/>
+                    <field name="accrued_amount"/>
+                </group>
+                <div class="text-muted">
+                    Ghi các kỳ đã đến hạn của chi phí trả trước (Nợ TK chi phí / Có 242) và chi phí trích trước
+                    (Nợ TK chi phí / Có 335). Làm trước khi khóa sổ tháng.
+                </div>
+                <footer>
+                    <button name="action_run" type="object" string="Ghi sổ" class="btn-primary"/>
+                    <button special="cancel" string="Đóng"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_accrual_run" model="ir.actions.act_window">
+        <field name="name">Ghi phân bổ, trích trước</field>
+        <field name="res_model">lfood.accrual.run</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_prepaid" name="Chi phí trả trước" parent="lfood_base.menu_documents"
+              action="action_prepaid" sequence="70"/>
+    <menuitem id="menu_accrued" name="Chi phí trích trước" parent="lfood_base.menu_documents"
+              action="action_accrued" sequence="72"/>
+    <menuitem id="menu_accrual_run" name="Ghi phân bổ, trích trước" parent="lfood_base.menu_documents"
+              action="action_accrual_run" sequence="74"/>
+</odoo>

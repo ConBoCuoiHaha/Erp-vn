@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_sale_invoice_list" model="ir.ui.view">
+        <field name="name">lfood.sale.invoice.list</field>
+        <field name="model">lfood.sale.invoice</field>
+        <field name="arch" type="xml">
+            <list string="Hóa đơn bán ra" decoration-muted="state == 'cancel'" decoration-info="state == 'draft'">
+                <field name="date"/>
+                <field name="name"/>
+                <field name="kind" optional="show"/>
+                <field name="invoice_symbol"/>
+                <field name="invoice_number"/>
+                <field name="partner_id"/>
+                <field name="amount_untaxed" sum="Tổng"/>
+                <field name="amount_tax" sum="Tổng"/>
+                <field name="amount_total" sum="Tổng"/>
+                <field name="amount_residual" optional="show"/>
+                <field name="due_date" optional="show"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'posted'"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_sale_invoice_form" model="ir.ui.view">
+        <field name="name">lfood.sale.invoice.form</field>
+        <field name="model">lfood.sale.invoice</field>
+        <field name="arch" type="xml">
+            <form string="Hóa đơn bán ra">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary" invisible="state != 'draft'"
+                            groups="lfood_base.group_accountant"/>
+                    <button name="action_cancel" type="object" string="Hủy" invisible="state != 'posted'"
+                            groups="lfood_base.group_chief_accountant"
+                            confirm="Chỉ hủy khi hóa đơn đã bị hủy trên hệ thống hóa đơn điện tử. Hệ thống tự đảo bút toán. Tiếp tục?"/>
+                    <button name="action_error_notice" type="object" string="Ghi nhận thông báo sai sót 04/SS" invisible="state != 'posted' or not error_notice_note"
+                            groups="lfood_base.group_accountant"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,posted"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_moves" type="object" class="oe_stat_button" icon="fa-book" string="Bút toán" invisible="state == 'draft'"/>
+                    </div>
+                    <div class="alert alert-info" role="alert" invisible="state != 'draft'">
+                        Lập và ký hóa đơn điện tử trên hệ thống hóa đơn điện tử của nhà cung cấp dịch vụ trước, rồi nhập ký hiệu, số hóa đơn,
+                        mã của cơ quan thuế vào đây để ghi sổ (Nghị định 254/2026/NĐ-CP).
+                    </div>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <group>
+                        <group string="Khách hàng">
+                            <field name="kind" widget="radio" options="{'horizontal': true}" readonly="state != 'draft'"/>
+                            <field name="correction" invisible="kind != 'invoice'" readonly="state != 'draft'"/>
+                            <field name="origin_id" invisible="kind == 'invoice' and correction == 'none'"
+                                   required="kind == 'refund' or correction != 'none'" readonly="state != 'draft'"/>
+                            <field name="correction_reason" invisible="kind == 'invoice' and correction == 'none'" readonly="state != 'draft'"/>
+                            <field name="agreement_file" filename="agreement_name" invisible="correction_reason != 'error'"/>
+                            <field name="agreement_name" invisible="1"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="partner_vat"/>
+                            <field name="memo" readonly="state != 'draft'"/>
+                            <field name="receivable_account" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Hóa đơn điện tử đã phát hành">
+                            <field name="invoice_template" readonly="state != 'draft'"/>
+                            <field name="invoice_symbol" readonly="state != 'draft'"/>
+                            <field name="invoice_number" readonly="state != 'draft'"/>
+                            <field name="tax_authority_code" readonly="state != 'draft'"/>
+                            <field name="invoice_date" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="due_date" readonly="state != 'draft'"/>
+                            <field name="error_notice_note" invisible="state != 'posted'" readonly="error_notice_date"
+                                   placeholder="Sai tên, địa chỉ... (không sai mã số thuế, tiền, thuế suất, hàng hóa)"/>
+                            <field name="error_notice_date" invisible="not error_notice_date" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="name"/>
+                            <field name="uom"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="amount" sum="Tổng"/>
+                            <field name="vat_rate_id" options="{'no_create': True}"/>
+                            <field name="tax" sum="Tổng"/>
+                            <field name="revenue_account" optional="show"/>
+                        </list>
+                    </field>
+                    <group class="oe_subtotal_footer">
+                        <field name="amount_untaxed"/>
+                        <field name="amount_tax"/>
+                        <field name="amount_total" class="o_lfood_big_total"/>
+                        <field name="amount_paid" invisible="state != 'posted'"/>
+                        <field name="amount_residual" invisible="state != 'posted'"/>
+                    </group>
+                    <div class="text-muted">
+                        Ghi sổ hóa đơn: Nợ TK phải thu / Có 511, Có 33311. Hàng bán trả lại, giảm giá: Nợ 521, Nợ 33311 / Có TK phải thu.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_sale_invoice_search" model="ir.ui.view">
+        <field name="name">lfood.sale.invoice.search</field>
+        <field name="model">lfood.sale.invoice</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="invoice_number" string="Số hóa đơn, chứng từ" filter_domain="['|', ('invoice_number', 'ilike', self), ('name', 'ilike', self)]"/>
+                <field name="partner_id"/>
+                <filter name="f_draft" string="Nháp" domain="[('state', '=', 'draft')]"/>
+                <filter name="f_posted" string="Đã ghi sổ" domain="[('state', '=', 'posted')]"/>
+                <filter name="f_refund" string="Trả lại, giảm giá" domain="[('kind', '=', 'refund')]"/>
+                <filter name="f_date" string="Ngày" date="date"/>
+                <group>
+                    <filter name="g_partner" string="Khách hàng" context="{'group_by': 'partner_id'}"/>
+                    <filter name="g_month" string="Tháng" context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_sale_invoice" model="ir.actions.act_window">
+        <field name="name">Hóa đơn bán ra</field>
+        <field name="res_model">lfood.sale.invoice</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_payment_form_sale" model="ir.ui.view">
+        <field name="name">lfood.payment.form.sale</field>
+        <field name="model">lfood.payment</field>
+        <field name="inherit_id" ref="lfood_ledger.view_payment_form"/>
+        <field name="arch" type="xml">
+            <field name="voucher_id" position="after">
+                <field name="sale_invoice_id" invisible="purpose != 'customer'" readonly="state != 'draft'"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_aging_form" model="ir.ui.view">
+        <field name="name">lfood.aging.form</field>
+        <field name="model">lfood.aging</field>
+        <field name="arch" type="xml">
+            <form string="Tuổi nợ" create="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="kind"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="as_of"/>
+                        </group>
+                    </group>
+                    <field name="html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_aging" model="ir.actions.act_window">
+        <field name="name">Tuổi nợ</field>
+        <field name="res_model">lfood.aging</field>
+        <field name="view_mode">form</field>
+    </record>
+
+    <menuitem id="menu_sale_root" name="Bán hàng" parent="lfood_base.menu_root" sequence="25"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+    <menuitem id="menu_sale_invoice" name="Hóa đơn bán ra" parent="menu_sale_root" action="action_sale_invoice" sequence="10"/>
+    <menuitem id="menu_aging" name="Tuổi nợ phải thu, phải trả" parent="lfood_base.menu_reports" action="action_aging" sequence="42"/>
+</odoo>

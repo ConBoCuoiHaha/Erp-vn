@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_partner_lfood_list" model="ir.ui.view">
+        <field name="name">res.partner.lfood.list</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <list string="Nhà cung cấp, khách hàng">
+                <field name="ref" string="Mã"/>
+                <field name="name" string="Tên"/>
+                <field name="vat" string="Mã số thuế"/>
+                <field name="street" string="Địa chỉ"/>
+                <field name="phone" string="Điện thoại"/>
+                <field name="email" string="Email" optional="hide"/>
+                <field name="company_id" string="Thuộc công ty" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_partner_lfood_form" model="ir.ui.view">
+        <field name="name">res.partner.lfood.form</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <form string="Đối tượng">
+                <header>
+                    <button name="action_archive" type="object" string="Ngừng theo dõi" invisible="not id or not active"/>
+                    <button name="action_unarchive" type="object" string="Theo dõi lại" invisible="active"/>
+                </header>
+                <sheet>
+                    <field name="active" invisible="1"/>
+                    <group>
+                        <group string="Thông tin chung">
+                            <field name="is_company" string="Là tổ chức"/>
+                            <field name="ref" string="Mã đối tượng"/>
+                            <field name="name" string="Tên" required="1"/>
+                            <field name="vat" string="Mã số thuế"/>
+                            <field name="street" string="Địa chỉ"/>
+                            <field name="city" string="Tỉnh/Thành phố"/>
+                        </group>
+                        <group string="Liên hệ">
+                            <field name="phone" string="Điện thoại"/>
+                            <field name="email" string="Email"/>
+                            <field name="website" string="Website"/>
+                            <field name="company_id" string="Chỉ dùng cho công ty"
+                                   help="Để trống nếu dùng chung cho cả Văn phòng và Nhà máy"/>
+                        </group>
+                    </group>
+                    <group string="Ghi chú">
+                        <field name="comment" nolabel="1"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_partner_lfood_search" model="ir.ui.view">
+        <field name="name">res.partner.lfood.search</field>
+        <field name="model">res.partner</field>
+        <field name="priority">90</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name" string="Tên, mã số thuế"
+                       filter_domain="['|', '|', ('name', 'ilike', self), ('vat', 'ilike', self), ('ref', 'ilike', self)]"/>
+                <filter name="companies" string="Tổ chức" domain="[('is_company', '=', True)]"/>
+                <filter name="archived" string="Ngừng theo dõi" domain="[('active', '=', False)]"/>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_partner_lfood" model="ir.actions.act_window">
+        <field name="name">Nhà cung cấp, khách hàng</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_partner_lfood_search"/>
+        <field name="domain">[('user_ids', '=', False), ('parent_id', '=', False)]</field>
+        <field name="context">{'default_is_company': True}</field>
+    </record>
+    <record id="action_partner_lfood_list" model="ir.actions.act_window.view">
+        <field name="sequence">1</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_partner_lfood_list"/>
+        <field name="act_window_id" ref="action_partner_lfood"/>
+    </record>
+    <record id="action_partner_lfood_form" model="ir.actions.act_window.view">
+        <field name="sequence">2</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_partner_lfood_form"/>
+        <field name="act_window_id" ref="action_partner_lfood"/>
+    </record>
+
+    <menuitem id="menu_partner_lfood" name="Nhà cung cấp, khách hàng" parent="menu_catalog"
+              action="action_partner_lfood" sequence="10"/>
+    <menuitem id="menu_cost_item_catalog" name="Khoản mục chi phí" parent="menu_catalog"
+              action="lfood_voucher.action_cost_item" sequence="20"/>
+</odoo>

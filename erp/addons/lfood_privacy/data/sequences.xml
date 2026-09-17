@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="seq_privacy_request" model="ir.sequence"><field name="name">Yêu cầu dữ liệu cá nhân</field><field name="code">lfood.privacy.request</field><field name="prefix">YCDL%(year)s/</field><field name="padding">4</field><field name="company_id" eval="False"/></record>
+</odoo>

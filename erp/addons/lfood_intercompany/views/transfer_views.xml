@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_ic_list" model="ir.ui.view">
+        <field name="name">lfood.intercompany.transfer.list</field>
+        <field name="model">lfood.intercompany.transfer</field>
+        <field name="arch" type="xml">
+            <list string="Bán hàng giữa hai pháp nhân">
+                <field name="name"/>
+                <field name="date"/>
+                <field name="company_id"/>
+                <field name="dest_company_id"/>
+                <field name="invoice_number"/>
+                <field name="amount_untaxed" sum="Tiền hàng"/>
+                <field name="amount_tax" sum="Thuế"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_ic_form" model="ir.ui.view">
+        <field name="name">lfood.intercompany.transfer.form</field>
+        <field name="model">lfood.intercompany.transfer</field>
+        <field name="arch" type="xml">
+            <form string="Bán hàng giữa hai pháp nhân">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ hai bên" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="1"/></h1></div>
+                    <div class="alert alert-warning" role="alert" invisible="not below_cost">
+                        <field name="below_cost"/>
+                    </div>
+                    <group>
+                        <group string="Bên bán">
+                            <field name="company_id" readonly="state != 'draft'"/>
+                            <field name="warehouse_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="invoice_template" readonly="state != 'draft'"/>
+                            <field name="invoice_symbol" readonly="state != 'draft'"/>
+                            <field name="invoice_number" readonly="state != 'draft'"/>
+                        </group>
+                        <group string="Bên mua">
+                            <field name="dest_company_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="dest_warehouse_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="price_basis" readonly="state != 'draft'"/>
+                            <field name="sale_invoice_id" invisible="not sale_invoice_id"/>
+                            <field name="in_picking_id" invisible="not in_picking_id"/>
+                        </group>
+                    </group>
+                    <field name="memo" placeholder="Diễn giải" readonly="state != 'draft'"/>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id" options="{'no_create': True}"/>
+                            <field name="uom"/>
+                            <field name="quantity"/>
+                            <field name="price_unit"/>
+                            <field name="vat_rate_id" options="{'no_create': True}"/>
+                            <field name="amount" sum="Tiền hàng"/>
+                            <field name="tax" sum="Thuế"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Văn phòng và Nhà máy có mã số thuế riêng nên chuyển hàng là mua bán: bên bán lập hóa đơn GTGT, bên mua
+                        ghi nhập kho và thuế đầu vào; lô và hạn dùng giữ nguyên. Hai bên có quan hệ liên kết: giá chuyển theo
+                        giá thị trường và kê khai giao dịch liên kết khi quyết toán thuế TNDN (Nghị định 132/2020/NĐ-CP).
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_ic" model="ir.actions.act_window">
+        <field name="name">Bán hàng giữa hai pháp nhân</field>
+        <field name="res_model">lfood.intercompany.transfer</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_company_form_manufacturer" model="ir.ui.view">
+        <field name="name">res.company.lfood.form.manufacturer</field>
+        <field name="model">res.company</field>
+        <field name="inherit_id" ref="lfood_base.view_company_lfood_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='lfood_edit_after_post_days']" position="after">
+                <field name="lfood_manufacturer"/>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_ic" name="Bán hàng giữa hai pháp nhân" parent="lfood_stock.menu_stock_root" action="action_ic" sequence="15"/>
+</odoo>

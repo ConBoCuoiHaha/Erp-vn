@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <menuitem id="menu_root" name="Kế toán LiFeOOD" sequence="5" groups="group_employee"/>
+    <menuitem id="menu_documents" name="Chứng từ" parent="menu_root" sequence="10"
+              groups="group_accountant,group_director"/>
+    <menuitem id="menu_reports" name="Báo cáo" parent="menu_root" sequence="50"
+              groups="group_accountant,group_director"/>
+    <menuitem id="menu_control" name="Kiểm soát" parent="menu_root" sequence="80"
+              groups="group_chief_accountant,group_director,group_sysadmin"/>
+    <menuitem id="menu_config" name="Cấu hình" parent="menu_root" sequence="90"
+              groups="group_accountant,group_director,group_sysadmin"/>
+</odoo>

@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_employee_list" model="ir.ui.view">
+        <field name="name">lfood.employee.list</field>
+        <field name="model">lfood.employee</field>
+        <field name="arch" type="xml">
+            <list string="Nhân viên">
+                <field name="code"/>
+                <field name="name"/>
+                <field name="department"/>
+                <field name="job" optional="show"/>
+                <field name="contract_type" optional="show"/>
+                <field name="region"/>
+                <field name="insurance_salary"/>
+                <field name="dependents"/>
+                <field name="cost_account" optional="show"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_employee_form" model="ir.ui.view">
+        <field name="name">lfood.employee.form</field>
+        <field name="model">lfood.employee</field>
+        <field name="arch" type="xml">
+            <form string="Nhân viên">
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" placeholder="Họ và tên"/></h1></div>
+                    <group>
+                        <group string="Hồ sơ">
+                            <field name="code"/>
+                            <field name="department"/>
+                            <field name="job"/>
+                            <field name="date_start"/>
+                            <field name="date_end"/>
+                            <field name="tax_code"/>
+                            <field name="id_number"/>
+                            <field name="social_insurance_code"/>
+                            <field name="bank_account"/>
+                            <field name="partner_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group string="Hợp đồng, bảo hiểm, thuế">
+                            <field name="contract_type"/>
+                            <field name="resident"/>
+                            <field name="region"/>
+                            <field name="insurance_enrolled"/>
+                            <field name="unemployment_enrolled"/>
+                            <field name="insurance_salary"/>
+                            <field name="dependents"/>
+                            <field name="cost_account"/>
+                            <field name="cost_item_id"/>
+                        </group>
+                    </group>
+                    <field name="component_line_ids">
+                        <list editable="bottom">
+                            <field name="component_id" options="{'no_create': True}"/>
+                            <field name="amount" sum="Tổng"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Tham gia BHXH, BHTN do nhân sự, kế toán xác định theo loại và thời hạn hợp đồng. Số người phụ thuộc chỉ tính người đã đăng ký
+                        với cơ quan thuế. Dữ liệu cá nhân của người lao động được bảo vệ theo Luật Bảo vệ dữ liệu cá nhân: chỉ người có quyền mới xem.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_employee" model="ir.actions.act_window">
+        <field name="name">Nhân viên</field>
+        <field name="res_model">lfood.employee</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_component_list" model="ir.ui.view">
+        <field name="name">lfood.payroll.component.list</field>
+        <field name="model">lfood.payroll.component</field>
+        <field name="arch" type="xml">
+            <list string="Khoản lương" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="code"/>
+                <field name="name"/>
+                <field name="kind"/>
+                <field name="taxable"/>
+                <field name="pit_exempt_code" optional="show"/>
+                <field name="prorate"/>
+                <field name="deduction_account"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_component" model="ir.actions.act_window">
+        <field name="name">Khoản lương</field>
+        <field name="res_model">lfood.payroll.component</field>
+        <field name="view_mode">list</field>
+        <field name="help" type="html"><p>Kế toán trưởng xác định khoản nào tính thu nhập chịu thuế TNCN theo quy định hiện hành; app không tự đặt mức miễn thuế.</p></field>
+    </record>
+
+    <record id="view_run_list" model="ir.ui.view">
+        <field name="name">lfood.payroll.run.list</field>
+        <field name="model">lfood.payroll.run</field>
+        <field name="arch" type="xml">
+            <list string="Bảng lương">
+                <field name="name"/>
+                <field name="total_gross" sum="Tổng"/>
+                <field name="total_pit" sum="Tổng"/>
+                <field name="total_net" sum="Tổng"/>
+                <field name="total_employer" sum="Tổng"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+                <field name="state" widget="badge" decoration-success="state == 'paid'" decoration-info="state == 'posted'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_run_form" model="ir.ui.view">
+        <field name="name">lfood.payroll.run.form</field>
+        <field name="model">lfood.payroll.run</field>
+        <field name="arch" type="xml">
+            <form string="Bảng lương">
+                <header>
+                    <button name="action_load_employees" type="object" string="Lấy nhân viên" class="btn-primary" invisible="state != 'draft'"
+                            groups="lfood_base.group_accountant"/>
+                    <button name="action_load_extras" type="object" string="Lấy tạm ứng, thưởng" invisible="state != 'draft'" groups="lfood_base.group_accountant"/>
+                    <button name="action_compute" type="object" string="Tính lương" invisible="state != 'draft'" groups="lfood_base.group_accountant"/>
+                    <button name="action_post" type="object" string="Ghi sổ" invisible="state != 'draft'" groups="lfood_base.group_chief_accountant"
+                            confirm="Ghi sổ bảng lương: chi phí lương, các khoản trích theo lương, thuế TNCN khấu trừ. Tiếp tục?"/>
+                    <button name="action_pay" type="object" string="Chi lương" class="btn-primary" invisible="state != 'posted'"
+                            groups="lfood_base.group_accountant" confirm="Ghi sổ chi lương thực lĩnh cho nhân viên?"/>
+                    <button name="action_reset" type="object" string="Hủy ghi sổ" invisible="state == 'draft'"
+                            groups="lfood_base.group_chief_accountant" confirm="Đảo các bút toán lương và chi lương của bảng này?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="year" readonly="state != 'draft'"/>
+                            <field name="month" readonly="state != 'draft'"/>
+                            <field name="standard_days" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="total_gross"/>
+                            <field name="total_pit"/>
+                            <field name="total_net" class="o_lfood_big_total"/>
+                            <field name="total_employer"/>
+                            <field name="pay_method" readonly="state == 'paid'"/>
+                            <field name="pay_date" readonly="state == 'paid'"/>
+                        </group>
+                    </group>
+                    <field name="slip_ids" readonly="state != 'draft'">
+                        <list editable="bottom" decoration-warning="warning">
+                            <field name="employee_id"/>
+                            <field name="worked_days"/>
+                            <field name="unpaid_days" optional="show"/>
+                            <field name="skip_insurance" optional="hide"/>
+                            <field name="gross" sum="Tổng"/>
+                            <field name="si_base" optional="hide"/>
+                            <field name="emp_si" sum="Tổng" optional="show"/>
+                            <field name="emp_hi" sum="Tổng" optional="show"/>
+                            <field name="emp_ui" sum="Tổng" optional="show"/>
+                            <field name="family_deduction" optional="hide"/>
+                            <field name="assessable" optional="show"/>
+                            <field name="pit" sum="Tổng"/>
+                            <field name="other_deductions" optional="hide"/>
+                            <field name="net" sum="Tổng"/>
+                            <field name="co_si" sum="Tổng" optional="hide"/>
+                            <field name="co_hi" sum="Tổng" optional="hide"/>
+                            <field name="co_ui" sum="Tổng" optional="hide"/>
+                            <field name="co_union" sum="Tổng" optional="hide"/>
+                            <field name="warning" optional="show"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">
+                        Bảo hiểm: người lao động BHXH 8%, BHYT 1,5%, BHTN 1%; doanh nghiệp BHXH 17,5% (ốm đau, thai sản 3%; hưu trí, tử tuất 14%;
+                        tai nạn lao động, bệnh nghề nghiệp 0,5%), BHYT 3%, BHTN 1%, kinh phí công đoàn 2%. Tiền lương đóng không thấp hơn lương tối thiểu vùng;
+                        BHXH, BHYT tối đa 20 lần mức tham chiếu, BHTN tối đa 20 lần lương tối thiểu vùng. Thuế TNCN: biểu lũy tiến 5 bậc (5%, 10%, 20%, 30%, 35%),
+                        giảm trừ bản thân và người phụ thuộc. Mọi tỷ lệ, mức lấy từ Tham số pháp lý theo tháng lương.
+                        Ghi sổ: Nợ 622, 6271, 6411, 6421 / Có 334; Nợ 334 / Có 3383, 3384, 3386, 3335; Nợ chi phí / Có 3382, 3383, 3384, 3386. Chi lương: Nợ 334 / Có 111, 112.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_run" model="ir.actions.act_window">
+        <field name="name">Bảng lương</field>
+        <field name="res_model">lfood.payroll.run</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_slip_form" model="ir.ui.view">
+        <field name="name">lfood.payroll.slip.form</field>
+        <field name="model">lfood.payroll.slip</field>
+        <field name="arch" type="xml">
+            <form string="Phiếu lương">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="run_id" readonly="1"/>
+                            <field name="employee_id" readonly="1"/>
+                            <field name="worked_days"/>
+                            <field name="unpaid_days"/>
+                            <field name="skip_insurance"/>
+                            <field name="note"/>
+                        </group>
+                        <group>
+                            <field name="gross"/>
+                            <field name="si_base"/>
+                            <field name="ui_base"/>
+                            <field name="emp_si"/>
+                            <field name="emp_hi"/>
+                            <field name="emp_ui"/>
+                            <field name="family_deduction"/>
+                            <field name="assessable"/>
+                            <field name="pit"/>
+                            <field name="other_deductions"/>
+                            <field name="net" class="o_lfood_big_total"/>
+                            <field name="warning"/>
+                        </group>
+                    </group>
+                    <field name="line_ids">
+                        <list editable="bottom">
+                            <field name="component_id" options="{'no_create': True}"/>
+                            <field name="kind"/>
+                            <field name="amount"/>
+                            <field name="paid_amount"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_slip_list" model="ir.ui.view">
+        <field name="name">lfood.payroll.slip.list</field>
+        <field name="model">lfood.payroll.slip</field>
+        <field name="arch" type="xml">
+            <list string="Tổng hợp khấu trừ thuế TNCN, bảo hiểm" create="false" edit="false" delete="false">
+                <field name="run_id"/>
+                <field name="employee_id"/>
+                <field name="taxable_income" sum="Tổng"/>
+                <field name="emp_si" sum="Tổng"/>
+                <field name="emp_hi" sum="Tổng"/>
+                <field name="emp_ui" sum="Tổng"/>
+                <field name="family_deduction" sum="Tổng"/>
+                <field name="assessable" sum="Tổng"/>
+                <field name="pit" sum="Tổng"/>
+                <field name="co_si" sum="Tổng"/>
+                <field name="co_hi" sum="Tổng"/>
+                <field name="co_ui" sum="Tổng"/>
+                <field name="co_union" sum="Tổng"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_slip_pivot" model="ir.ui.view">
+        <field name="name">lfood.payroll.slip.pivot</field>
+        <field name="model">lfood.payroll.slip</field>
+        <field name="arch" type="xml">
+            <pivot string="Tổng hợp lương">
+                <field name="employee_id" type="row"/>
+                <field name="run_id" type="col"/>
+                <field name="pit" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    <record id="action_slip_report" model="ir.actions.act_window">
+        <field name="name">Tổng hợp thuế TNCN, bảo hiểm theo nhân viên</field>
+        <field name="res_model">lfood.payroll.slip</field>
+        <field name="view_mode">list,pivot</field>
+        <field name="domain">[('run_id.state', '!=', 'draft')]</field>
+        <field name="help" type="html"><p>Số liệu đối chiếu khi lập tờ khai khấu trừ thuế TNCN và hồ sơ đóng bảo hiểm; tờ khai lập trên phần mềm của cơ quan thuế, cơ quan bảo hiểm.</p></field>
+    </record>
+
+    <menuitem id="menu_payroll_root" name="Tiền lương" parent="lfood_base.menu_root" sequence="32"
+              groups="lfood_base.group_accountant,lfood_base.group_director"/>
+    <menuitem id="menu_run" name="Bảng lương" parent="menu_payroll_root" action="action_run" sequence="10"/>
+    <menuitem id="menu_employee" name="Nhân viên" parent="menu_payroll_root" action="action_employee" sequence="20"/>
+    <menuitem id="menu_slip_report" name="Tổng hợp thuế TNCN, bảo hiểm" parent="menu_payroll_root" action="action_slip_report" sequence="30"/>
+    <menuitem id="menu_component" name="Khoản lương" parent="lfood_base.menu_config" action="action_component" sequence="60"/>
+</odoo>

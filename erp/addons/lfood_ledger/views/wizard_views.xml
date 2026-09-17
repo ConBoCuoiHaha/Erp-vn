@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_report_form" model="ir.ui.view">
+        <field name="name">lfood.ledger.report.form</field>
+        <field name="model">lfood.ledger.report</field>
+        <field name="arch" type="xml">
+            <form string="Báo cáo sổ kế toán" create="false" delete="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="report"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="date_from"/>
+                            <field name="date_to"/>
+                            <field name="account_id" invisible="report not in ('ledger', 'partner')"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Đổi điều kiện thì báo cáo tự tính lại. In bằng Ctrl+P. Sổ công nợ để trống tài khoản thì lấy 331.</div>
+                    <field name="html" nolabel="1" readonly="1"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_report_trial" model="ir.actions.act_window">
+        <field name="name">Bảng cân đối số phát sinh</field>
+        <field name="res_model">lfood.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_report': 'trial'}</field>
+    </record>
+    <record id="action_report_ledger" model="ir.actions.act_window">
+        <field name="name">Sổ cái</field>
+        <field name="res_model">lfood.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_report': 'ledger'}</field>
+    </record>
+    <record id="action_report_partner" model="ir.actions.act_window">
+        <field name="name">Sổ chi tiết công nợ</field>
+        <field name="res_model">lfood.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_report': 'partner'}</field>
+    </record>
+    <record id="action_report_b01" model="ir.actions.act_window">
+        <field name="name">Báo cáo tình hình tài chính</field>
+        <field name="res_model">lfood.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_report': 'b01'}</field>
+    </record>
+    <record id="action_report_b03" model="ir.actions.act_window">
+        <field name="name">Báo cáo lưu chuyển tiền tệ</field>
+        <field name="res_model">lfood.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_report': 'b03'}</field>
+    </record>
+    <record id="action_report_b02" model="ir.actions.act_window">
+        <field name="name">Báo cáo kết quả hoạt động kinh doanh</field>
+        <field name="res_model">lfood.ledger.report</field>
+        <field name="view_mode">form</field>
+        <field name="context">{'default_report': 'b02'}</field>
+    </record>
+
+    <record id="view_offset_form" model="ir.ui.view">
+        <field name="name">lfood.offset.form</field>
+        <field name="model">lfood.offset</field>
+        <field name="arch" type="xml">
+            <form string="Bù trừ công nợ">
+                <group>
+                    <group>
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="partner_id" options="{'no_create': True}"/>
+                        <field name="date"/>
+                    </group>
+                    <group>
+                        <field name="receivable"/>
+                        <field name="payable"/>
+                        <field name="max_amount"/>
+                        <field name="amount"/>
+                    </group>
+                </group>
+                <field name="memo"/>
+                <field name="preview" nolabel="1"/>
+                <div class="text-muted">
+                    Đối tác vừa mua vừa bán thì bù trừ phải thu với phải trả: Nợ 3311 / Có 1311, tối đa bằng số nhỏ hơn
+                    giữa hai bên. Phải có biên bản bù trừ công nợ hai bên ký, kế toán lưu kèm để chứng minh khoản thanh
+                    toán không dùng tiền mặt khi xét khấu trừ thuế GTGT và chi phí được trừ.
+                </div>
+                <footer>
+                    <button name="action_apply" type="object" string="Ghi sổ bù trừ" class="btn-primary"
+                            confirm="Lập và ghi sổ bút toán bù trừ công nợ?"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_offset" model="ir.actions.act_window">
+        <field name="name">Bù trừ công nợ</field>
+        <field name="res_model">lfood.offset</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_closing_form" model="ir.ui.view">
+        <field name="name">lfood.closing.form</field>
+        <field name="model">lfood.closing</field>
+        <field name="arch" type="xml">
+            <form string="Kết chuyển cuối kỳ">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="date_to"/>
+                </group>
+                <div class="text-muted">
+                    Kết chuyển 621, 622, 623, 627 sang 154; 521 giảm 511; 511, 515, 711 và 632, 635, 641, 642, 811, 821 sang 911;
+                    kết quả 911 sang 4212. Tính giá thành và nhập kho thành phẩm (154 sang 155, 632) làm bằng phiếu kế toán.
+                </div>
+                <field name="preview" nolabel="1"/>
+                <footer>
+                    <button name="action_preview" type="object" string="Xem trước" class="btn-primary"/>
+                    <button name="action_apply" type="object" string="Kết chuyển" confirm="Lập và ghi sổ bút toán kết chuyển?"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_closing" model="ir.actions.act_window">
+        <field name="name">Kết chuyển cuối kỳ</field>
+        <field name="res_model">lfood.closing</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <record id="view_lock_form" model="ir.ui.view">
+        <field name="name">lfood.lock.form</field>
+        <field name="model">lfood.lock</field>
+        <field name="arch" type="xml">
+            <form string="Khóa sổ kế toán">
+                <group>
+                    <field name="company_id" groups="base.group_multi_company"/>
+                    <field name="current_lock"/>
+                    <field name="lock_date"/>
+                    <field name="reason"/>
+                    <field name="draft_count"/>
+                </group>
+                <div class="text-muted">
+                    Khóa sổ thì không ai ghi, sửa, đảo bút toán có ngày từ ngày khóa trở về trước, kể cả Quản trị.
+                    Đưa ngày khóa về trước là mở khóa: bắt buộc ghi lý do, nhật ký ghi đích danh người mở.
+                </div>
+                <footer>
+                    <button name="action_apply" type="object" string="Áp dụng" class="btn-primary"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_lock" model="ir.actions.act_window">
+        <field name="name">Khóa sổ</field>
+        <field name="res_model">lfood.lock</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

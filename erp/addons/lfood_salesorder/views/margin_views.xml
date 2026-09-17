@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_margin_report_form" model="ir.ui.view">
+        <field name="name">lfood.margin.report.form</field>
+        <field name="model">lfood.margin.report</field>
+        <field name="arch" type="xml">
+            <form string="Lãi gộp">
+                <group>
+                    <group><field name="date_from"/><field name="date_to"/></group>
+                    <group><field name="dimension"/><field name="company_id" groups="base.group_multi_company"/></group>
+                </group>
+                <field name="report_html"/>
+                <div class="text-muted">Doanh thu thuần theo hóa đơn bán ra (trả lại, giảm giá ghi âm), giá vốn theo phiếu kho gắn hóa đơn.
+                    Báo cáo quản trị, có thể khác sổ 511, 632 nếu có bút toán không đi qua hóa đơn.</div>
+                <footer>
+                    <button name="action_compute" type="object" string="Xem" class="btn-primary"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_margin_report" model="ir.actions.act_window">
+        <field name="name">Lãi gộp</field>
+        <field name="res_model">lfood.margin.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <record id="view_product_form_brand" model="ir.ui.view">
+        <field name="name">lfood.product.form.brand</field>
+        <field name="model">lfood.product</field>
+        <field name="inherit_id" ref="lfood_stock.view_product_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='name']" position="after">
+                <field name="brand"/>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_margin_report" name="Lãi gộp theo nhãn hàng, kênh, vùng" parent="lfood_base.menu_reports" action="action_margin_report" sequence="60"/>
+</odoo>

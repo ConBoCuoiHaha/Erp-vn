@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_obligation_list" model="ir.ui.view">
+        <field name="name">lfood.tax.obligation.list</field>
+        <field name="model">lfood.tax.obligation</field>
+        <field name="arch" type="xml">
+            <list string="Nghĩa vụ nộp thuế" decoration-danger="state == 'open' and due_date &lt; current_date"
+                  decoration-muted="state != 'open'">
+                <field name="due_date"/>
+                <field name="name"/>
+                <field name="tax_type"/>
+                <field name="amount" sum="Phải nộp"/>
+                <field name="paid" optional="show"/>
+                <field name="remaining"/>
+                <field name="interest"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_obligation_search" model="ir.ui.view">
+        <field name="name">lfood.tax.obligation.search</field>
+        <field name="model">lfood.tax.obligation</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <filter name="open" string="Chưa nộp đủ" domain="[('state', '=', 'open')]"/>
+                <filter name="overdue" string="Quá hạn" domain="[('state', '=', 'open'), ('due_date', '&lt;', context_today().strftime('%Y-%m-%d'))]"/>
+                <group>
+                    <filter name="by_type" string="Loại thuế" context="{'group_by': 'tax_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="view_obligation_form" model="ir.ui.view">
+        <field name="name">lfood.tax.obligation.form</field>
+        <field name="model">lfood.tax.obligation</field>
+        <field name="arch" type="xml">
+            <form string="Nghĩa vụ nộp thuế">
+                <header>
+                    <button name="action_pay" type="object" string="Lập phiếu nộp thuế" class="btn-primary"
+                            invisible="state != 'open'" groups="lfood_base.group_accountant"/>
+                    <button name="action_post_interest" type="object" string="Ghi sổ tiền chậm nộp đến hôm nay"
+                            invisible="interest &lt;= interest_posted" groups="lfood_base.group_accountant"/>
+                    <button name="action_pay_interest" type="object" string="Lập phiếu nộp tiền chậm nộp"
+                            invisible="interest_posted &lt;= interest_paid" groups="lfood_base.group_accountant"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="source_model"/>
+                            <field name="tax_type" readonly="source_model"/>
+                            <field name="account" readonly="source_model"/>
+                            <field name="amount" readonly="source_model"/>
+                            <field name="due_date" readonly="source_model"/>
+                            <field name="source_model" invisible="not source_model"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="paid"/>
+                            <field name="remaining"/>
+                            <field name="last_paid"/>
+                            <field name="interest"/>
+                            <field name="interest_posted"/>
+                            <field name="interest_paid"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Phiếu nộp">
+                            <field name="payment_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="date"/>
+                                    <field name="tax_interest"/>
+                                    <field name="amount"/>
+                                    <field name="state"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Cách tính tiền chậm nộp">
+                            <field name="detail_html" readonly="1"/>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">
+                        Tiền chậm nộp 0,03%/ngày trên số thuế nộp chậm, tính từ ngày tiếp theo ngày hết hạn nộp đến ngày liền kề trước
+                        ngày nộp tiền (Luật Quản lý thuế 108/2025/QH15, Nghị định 252/2026/NĐ-CP). Ghi sổ Nợ 811 / Có 3339; khoản này
+                        không được tính vào chi phí được trừ khi quyết toán thuế TNDN.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_obligation" model="ir.actions.act_window">
+        <field name="name">Lịch nghĩa vụ thuế</field>
+        <field name="res_model">lfood.tax.obligation</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_open': 1}</field>
+    </record>
+    <menuitem id="menu_obligation" name="Lịch nghĩa vụ thuế, tiền chậm nộp" parent="lfood_vat.menu_tax_root"
+              action="action_obligation" sequence="5"/>
+
+    <record id="view_payment_form_tax" model="ir.ui.view">
+        <field name="name">lfood.payment.form.tax</field>
+        <field name="model">lfood.payment</field>
+        <field name="inherit_id" ref="lfood_ledger.view_payment_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='purpose']" position="after">
+                <field name="tax_obligation_id" invisible="purpose != 'tax'" required="purpose == 'tax'"
+                       readonly="state != 'draft'" options="{'no_create': True}"/>
+                <field name="tax_interest" invisible="purpose != 'tax'" readonly="state != 'draft'"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
