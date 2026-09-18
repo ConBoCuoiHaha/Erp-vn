@@ -16,6 +16,8 @@ services:
     # chỉ nghe trên 127.0.0.1 nên máy khác trong mạng không kết nối được
     ports:
       - "127.0.0.1:5433:5432"
+    # DBeaver, Java gửi múi giờ tên cũ Asia/Saigon; bộ múi giờ của container đã bỏ tên này nên tạo lại khi khởi động
+    entrypoint: ["sh", "-c", "ln -sf Ho_Chi_Minh /usr/share/zoneinfo/Asia/Saigon && exec docker-entrypoint.sh postgres"]
 
   odoo:
     image: odoo:19.0
