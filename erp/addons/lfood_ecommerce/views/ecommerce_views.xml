@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_ecom_shop_company" model="ir.rule">
+        <field name="name">Gian hàng sàn theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_ecom_shop"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_ecom_order_company" model="ir.rule">
+        <field name="name">Đơn sàn theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_ecom_order"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_ecom_settlement_company" model="ir.rule">
+        <field name="name">Đối soát sàn theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_ecom_settlement"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="view_ecom_shop_list" model="ir.ui.view">
+        <field name="name">lfood.ecom.shop.list</field>
+        <field name="model">lfood.ecom.shop</field>
+        <field name="arch" type="xml">
+            <list string="Gian hàng"><field name="name"/><field name="platform"/><field name="warehouse_id"/><field name="customer_id"/></list>
+        </field>
+    </record>
+    <record id="view_ecom_shop_form" model="ir.ui.view">
+        <field name="name">lfood.ecom.shop.form</field>
+        <field name="model">lfood.ecom.shop</field>
+        <field name="arch" type="xml">
+            <form string="Gian hàng">
+                <header>
+                    <button name="action_import_orders" type="object" string="Nhập đơn từ tệp" class="btn-primary"/>
+                    <button name="action_invoice_orders" type="object" string="Lập hóa đơn đơn hoàn thành"/>
+                    <button name="action_export_stock" type="object" string="Xuất tồn khả dụng"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="name"/><field name="platform"/><field name="warehouse_id" options="{'no_create': True}"/>
+                            <field name="customer_id"/><field name="platform_partner_id"/></group>
+                        <group><field name="fee_account"/><field name="vat_rate_id" options="{'no_create': True}"/>
+                            <field name="import_file" filename="import_name"/><field name="import_name" invisible="1"/>
+                            <field name="stock_file" filename="stock_name"/><field name="stock_name" invisible="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/></group>
+                    </group>
+                    <div class="text-muted">Tệp đơn: các cột ma_don; ngay; trang_thai; sku; so_luong; don_gia (mỗi dòng một mặt hàng). SKU trùng mã vạch hoặc
+                        mã hàng. Trạng thái nhận: hoàn thành, hủy, trả hàng; khác thì là chờ giao.</div>
+                    <field name="order_ids" readonly="1">
+                        <list limit="30"><field name="name"/><field name="date"/><field name="status"/><field name="amount" sum="Tổng"/>
+                            <field name="invoice_id"/><field name="settled_amount"/><field name="fee"/></list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_ecom_shop" model="ir.actions.act_window">
+        <field name="name">Gian hàng sàn thương mại điện tử</field>
+        <field name="res_model">lfood.ecom.shop</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_ecom_order_list" model="ir.ui.view">
+        <field name="name">lfood.ecom.order.list</field>
+        <field name="model">lfood.ecom.order</field>
+        <field name="arch" type="xml">
+            <list string="Đơn sàn" decoration-warning="status == 'done' and not settlement_id">
+                <field name="shop_id"/><field name="name"/><field name="date"/><field name="status"/>
+                <field name="amount" sum="Tổng"/><field name="invoice_id"/><field name="settled_amount" sum="Tổng"/>
+                <field name="fee" sum="Tổng"/><field name="settlement_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_ecom_order_search" model="ir.ui.view">
+        <field name="name">lfood.ecom.order.search</field>
+        <field name="model">lfood.ecom.order</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/><field name="shop_id"/>
+                <filter name="unpaid" string="Hoàn thành, sàn chưa chuyển tiền" domain="[('status', '=', 'done'), ('settlement_id', '=', False)]"/>
+                <filter name="noinv" string="Hoàn thành, chưa có hóa đơn" domain="[('status', '=', 'done'), ('invoice_id', '=', False)]"/>
+                <group><filter name="g_shop" string="Gian hàng" context="{'group_by': 'shop_id'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="action_ecom_order" model="ir.actions.act_window">
+        <field name="name">Đơn sàn</field>
+        <field name="res_model">lfood.ecom.order</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="view_ecom_settlement_list" model="ir.ui.view">
+        <field name="name">lfood.ecom.settlement.list</field>
+        <field name="model">lfood.ecom.settlement</field>
+        <field name="arch" type="xml">
+            <list string="Đối soát sàn"><field name="shop_id"/><field name="name"/><field name="date"/>
+                <field name="gross" sum="Tổng"/><field name="fee" sum="Tổng"/><field name="net" sum="Tổng"/><field name="state"/></list>
+        </field>
+    </record>
+    <record id="view_ecom_settlement_form" model="ir.ui.view">
+        <field name="name">lfood.ecom.settlement.form</field>
+        <field name="model">lfood.ecom.settlement</field>
+        <field name="arch" type="xml">
+            <form string="Đối soát tiền sàn">
+                <header>
+                    <button name="action_load" type="object" string="Đọc tệp đối soát" invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="shop_id" readonly="state != 'draft'"/><field name="name" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/><field name="import_file" readonly="state != 'draft'"/></group>
+                        <group><field name="gross"/><field name="fee"/><field name="net"/></group>
+                    </group>
+                    <field name="issues" invisible="not issues" class="text-danger"/>
+                    <field name="line_ids" readonly="1">
+                        <list><field name="order_ref"/><field name="order_id"/><field name="gross"/><field name="fee"/><field name="net"/></list>
+                    </field>
+                    <div class="text-muted">Tệp đối soát: ma_don; tien_hang; phi_san; thuc_nhan. Ghi sổ: Nợ 112 thực nhận, Nợ TK phí sàn / Có 1311 tiền hàng.
+                        Phí sàn có hóa đơn GTGT của đơn vị vận hành sàn thì ghi thuế đầu vào bằng chứng từ mua dịch vụ.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_ecom_settlement" model="ir.actions.act_window">
+        <field name="name">Đối soát tiền sàn</field>
+        <field name="res_model">lfood.ecom.settlement</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_ecom_root" name="Sàn thương mại điện tử" parent="lfood_sale.menu_sale_root" sequence="50"/>
+    <menuitem id="menu_ecom_shop" name="Gian hàng" parent="menu_ecom_root" action="action_ecom_shop" sequence="10"/>
+    <menuitem id="menu_ecom_order" name="Đơn sàn" parent="menu_ecom_root" action="action_ecom_order" sequence="20"/>
+    <menuitem id="menu_ecom_settlement" name="Đối soát tiền sàn" parent="menu_ecom_root" action="action_ecom_settlement" sequence="30"/>
+</odoo>

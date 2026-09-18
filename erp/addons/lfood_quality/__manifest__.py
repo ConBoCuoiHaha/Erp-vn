@@ -16,6 +16,7 @@
         'views/quality_views.xml',
         'views/qc_views.xml',
         'views/compliance_views.xml',
+        'views/haccp_views.xml',
     ],
     'installable': True,
 }

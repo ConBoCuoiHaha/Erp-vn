@@ -15,6 +15,8 @@
         'views/records_views.xml',
         'views/labor_report_views.xml',
         'views/safety_views.xml',
+        'views/recruit_views.xml',
+        'views/performance_views.xml',
     ],
     'installable': True,
 }

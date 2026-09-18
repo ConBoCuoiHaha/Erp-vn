@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_quick_search_form" model="ir.ui.view">
+        <field name="name">lfood.quick.search.form</field>
+        <field name="model">lfood.quick.search</field>
+        <field name="arch" type="xml">
+            <form string="Tìm kiếm nhanh">
+                <group>
+                    <field name="query" placeholder="Số chứng từ, số hóa đơn, mã số thuế, mã hàng, mã vạch, số lô, tên"/>
+                    <field name="limit"/>
+                </group>
+                <field name="result_html"/>
+                <footer><button string="Đóng" special="cancel"/></footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_quick_search" model="ir.actions.act_window">
+        <field name="name">Tìm kiếm nhanh</field>
+        <field name="res_model">lfood.quick.search</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_quick_search" name="Tìm kiếm nhanh" parent="lfood_base.menu_root" action="action_quick_search" sequence="1"/>
+</odoo>

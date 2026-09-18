@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Quên mật khẩu: bật liên kết "Đặt lại mật khẩu" trên trang đăng nhập; người ngoài không tự đăng ký tài khoản được.
+     Thư đặt lại mật khẩu gửi qua máy chủ Gmail bên dưới. Mật khẩu ứng dụng Gmail KHÔNG ghi ở đây: quản trị viên tự nhập
+     trong Cài đặt > Kỹ thuật > Máy chủ thư đi. -->
+<odoo>
+    <function model="ir.config_parameter" name="set_param"><value>auth_signup.reset_password</value><value>True</value></function>
+    <function model="ir.config_parameter" name="set_param"><value>auth_signup.invitation_scope</value><value>b2b</value></function>
+    <data noupdate="1">
+        <function model="ir.config_parameter" name="set_param"><value>mail.default.from</value><value>hugoboss.v6@gmail.com</value></function>
+        <record id="mail_server_gmail" model="ir.mail_server">
+            <field name="name">Gmail (thư hệ thống)</field>
+            <field name="smtp_host">smtp.gmail.com</field>
+            <field name="smtp_port">587</field>
+            <field name="smtp_encryption">starttls</field>
+            <field name="smtp_authentication">login</field>
+            <field name="smtp_user">hugoboss.v6@gmail.com</field>
+            <field name="from_filter">hugoboss.v6@gmail.com</field>
+            <field name="sequence">1</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_rnd_project_list" model="ir.ui.view">
+        <field name="name">lfood.rnd.project.list</field>
+        <field name="model">lfood.rnd.project</field>
+        <field name="arch" type="xml">
+            <list string="Dự án sản phẩm mới">
+                <field name="code"/><field name="name"/><field name="brand"/><field name="manager_id"/>
+                <field name="stage"/><field name="target_date"/><field name="approved_formula_id"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_rnd_project_form" model="ir.ui.view">
+        <field name="name">lfood.rnd.project.form</field>
+        <field name="model">lfood.rnd.project</field>
+        <field name="arch" type="xml">
+            <form string="Dự án sản phẩm mới">
+                <header><field name="stage" widget="statusbar" options="{'clickable': '1'}"/></header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="code" readonly="1"/> <field name="name"/></h1></div>
+                    <group>
+                        <group><field name="brand"/><field name="target_price"/><field name="target_date"/></group>
+                        <group><field name="manager_id"/><field name="member_ids" widget="many2many_tags"/><field name="approved_formula_id"/></group>
+                    </group>
+                    <notebook>
+                        <page string="Ý tưởng"><field name="idea"/></page>
+                        <page string="Công thức">
+                            <field name="formula_ids" readonly="1">
+                                <list><field name="version"/><field name="name"/><field name="state"/><field name="approved_by"/><field name="change_note"/></list>
+                            </field>
+                        </page>
+                        <page string="Chuyển giao"><field name="transfer_note"/></page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_rnd_project" model="ir.actions.act_window">
+        <field name="name">Dự án sản phẩm mới</field>
+        <field name="res_model">lfood.rnd.project</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_rnd_formula_list" model="ir.ui.view">
+        <field name="name">lfood.rnd.formula.list</field>
+        <field name="model">lfood.rnd.formula</field>
+        <field name="arch" type="xml">
+            <list string="Công thức" decoration-muted="state == 'obsolete'" decoration-success="state == 'approved'">
+                <field name="project_id"/><field name="name"/><field name="version"/><field name="state"/>
+                <field name="locked_by"/><field name="approved_by"/><field name="approved_on"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_rnd_formula_form" model="ir.ui.view">
+        <field name="name">lfood.rnd.formula.form</field>
+        <field name="model">lfood.rnd.formula</field>
+        <field name="arch" type="xml">
+            <form string="Công thức">
+                <header>
+                    <button name="action_lock" type="object" string="Chốt công thức" class="btn-primary" invisible="state != 'draft'"
+                            groups="lfood_base.group_rnd"/>
+                    <button name="action_approve" type="object" string="Duyệt" class="btn-primary" invisible="state != 'locked'"
+                            groups="lfood_base.group_director" confirm="Duyệt công thức này làm công thức áp dụng của dự án?"/>
+                    <button name="action_new_version" type="object" string="Tạo phiên bản mới" invisible="state == 'draft'"
+                            groups="lfood_base.group_rnd"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name" readonly="state != 'draft'"/> v<field name="version" class="oe_inline"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="project_id" readonly="state != 'draft'"/>
+                            <field name="batch_size" readonly="state != 'draft'"/>
+                            <field name="total_pct"/>
+                            <field name="change_note" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="locked_by"/>
+                            <field name="approved_by"/>
+                            <field name="approved_on"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Nguyên liệu">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="ingredient"/><field name="ingredient_code"/>
+                                    <field name="pct" sum="Tổng"/><field name="qty" sum="Tổng"/><field name="note"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Quy trình"><field name="process" readonly="state != 'draft'"/></page>
+                        <page string="Mẫu thử">
+                            <field name="sample_ids" context="{'default_formula_id': id}">
+                                <list><field name="name"/><field name="date"/><field name="sensory_avg"/><field name="result"/></list>
+                            </field>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_rnd_formula" model="ir.actions.act_window">
+        <field name="name">Công thức</field>
+        <field name="res_model">lfood.rnd.formula</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_rnd_sample_form" model="ir.ui.view">
+        <field name="name">lfood.rnd.sample.form</field>
+        <field name="model">lfood.rnd.sample</field>
+        <field name="arch" type="xml">
+            <form string="Mẫu thử">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="formula_id"/><field name="name"/><field name="date"/><field name="panel"/>
+                        </group>
+                        <group>
+                            <field name="color"/><field name="smell"/><field name="taste"/><field name="texture"/>
+                            <field name="min_sensory"/><field name="sensory_avg"/><field name="result"/>
+                        </group>
+                    </group>
+                    <field name="test_ids">
+                        <list editable="bottom">
+                            <field name="indicator"/><field name="value"/><field name="unit"/>
+                            <field name="limit_min"/><field name="limit_max"/><field name="passed"/>
+                        </list>
+                    </field>
+                    <field name="note" placeholder="Nhận xét"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_rnd_sample_list" model="ir.ui.view">
+        <field name="name">lfood.rnd.sample.list</field>
+        <field name="model">lfood.rnd.sample</field>
+        <field name="arch" type="xml">
+            <list string="Mẫu thử">
+                <field name="project_id"/><field name="formula_id"/><field name="name"/><field name="date"/>
+                <field name="sensory_avg"/><field name="result"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_rnd_sample" model="ir.actions.act_window">
+        <field name="name">Mẫu thử</field>
+        <field name="res_model">lfood.rnd.sample</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_rnd_root" name="Nghiên cứu phát triển" sequence="6"
+              groups="lfood_base.group_rnd,lfood_base.group_director"/>
+    <menuitem id="menu_rnd_project" name="Dự án sản phẩm mới" parent="menu_rnd_root" action="action_rnd_project" sequence="10"/>
+    <menuitem id="menu_rnd_formula" name="Công thức" parent="menu_rnd_root" action="action_rnd_formula" sequence="20"/>
+    <menuitem id="menu_rnd_sample" name="Mẫu thử" parent="menu_rnd_root" action="action_rnd_sample" sequence="30"/>
+</odoo>

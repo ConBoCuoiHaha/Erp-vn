@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_import_declaration_company" model="ir.rule">
+        <field name="name">Tờ khai nhập khẩu theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_import_declaration"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_export_declaration_company" model="ir.rule">
+        <field name="name">Hồ sơ xuất khẩu theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_export_declaration"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_fct_payment_company" model="ir.rule">
+        <field name="name">Thanh toán nhà thầu nước ngoài theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_fct_payment"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="view_import_list" model="ir.ui.view">
+        <field name="name">lfood.import.declaration.list</field>
+        <field name="model">lfood.import.declaration</field>
+        <field name="arch" type="xml">
+            <list string="Tờ khai nhập khẩu">
+                <field name="name"/><field name="date"/><field name="partner_id"/><field name="value_total" sum="Tổng"/>
+                <field name="duty_total" sum="Tổng"/><field name="vat_total" sum="Tổng"/><field name="tax_paid_ref"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_import_form" model="ir.ui.view">
+        <field name="name">lfood.import.declaration.form</field>
+        <field name="model">lfood.import.declaration</field>
+        <field name="arch" type="xml">
+            <form string="Tờ khai nhập khẩu">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ, nhập kho" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="commercial_invoice" readonly="state != 'draft'"/>
+                            <field name="currency_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="rate" readonly="state != 'draft'"/>
+                            <field name="warehouse_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="value_total"/><field name="duty_total"/><field name="vat_total"/>
+                            <field name="cost_total"/><field name="landed_total"/>
+                            <field name="tax_paid_ref"/><field name="tax_paid_date"/>
+                            <field name="document" filename="document_name"/><field name="document_name" invisible="1"/>
+                            <field name="picking_id"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Hàng nhập khẩu">
+                            <field name="line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="product_id" options="{'no_create': True}"/><field name="hs_code"/>
+                                    <field name="quantity"/><field name="price_currency"/><field name="amount_currency" sum="Tổng"/>
+                                    <field name="value" sum="Tổng"/><field name="duty_rate"/><field name="duty" sum="Tổng"/>
+                                    <field name="vat_rate"/><field name="vat" sum="Tổng"/>
+                                    <field name="lot_name"/><field name="production_date" optional="hide"/><field name="expiry_date"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Chi phí nhập khẩu">
+                            <field name="cost_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="name"/><field name="partner_id"/><field name="invoice_ref"/>
+                                    <field name="amount" sum="Tổng"/><field name="vat" sum="Tổng"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">Giá nhập kho = trị giá tính thuế + thuế nhập khẩu + chi phí nhập khẩu phân bổ theo trị giá. Thuế GTGT hàng nhập
+                        khẩu (Nợ 1331 / Có 33312) được khấu trừ khi có chứng từ nộp thuế (Luật Thuế GTGT, Điều 14 khoản 2).</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_import" model="ir.actions.act_window">
+        <field name="name">Tờ khai nhập khẩu</field>
+        <field name="res_model">lfood.import.declaration</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_export_list" model="ir.ui.view">
+        <field name="name">lfood.export.declaration.list</field>
+        <field name="model">lfood.export.declaration</field>
+        <field name="arch" type="xml">
+            <list string="Hồ sơ xuất khẩu" decoration-warning="not complete">
+                <field name="name"/><field name="date"/><field name="partner_id"/><field name="sale_invoice_id"/>
+                <field name="amount"/><field name="paid_non_cash"/><field name="complete"/><field name="missing"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_export_form" model="ir.ui.view">
+        <field name="name">lfood.export.declaration.form</field>
+        <field name="model">lfood.export.declaration</field>
+        <field name="arch" type="xml">
+            <form string="Hồ sơ xuất khẩu">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/><field name="date"/>
+                            <field name="sale_invoice_id" options="{'no_create': True}"/><field name="partner_id"/><field name="amount"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="contract_ref"/><field name="contract_file" filename="contract_name"/><field name="contract_name" invisible="1"/>
+                            <field name="declaration_file" filename="declaration_name"/><field name="declaration_name" invisible="1"/>
+                            <field name="bill_of_lading"/><field name="packing_list"/><field name="insurance_ref"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="zero_rate_ok"/><field name="paid_non_cash"/><field name="complete"/><field name="missing"/>
+                    </group>
+                    <div class="text-muted">Thuế suất 0% (Luật Thuế GTGT 48/2024, Điều 9); hồ sơ khấu trừ, hoàn thuế hàng xuất khẩu (Điều 14 khoản 2 điểm c):
+                        hợp đồng, hóa đơn, chứng từ thanh toán không dùng tiền mặt, tờ khai hải quan, phiếu đóng gói, vận đơn, chứng từ bảo hiểm (nếu có).
+                        Thanh toán lấy từ phiếu thu chuyển khoản gắn với hóa đơn.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_export" model="ir.actions.act_window">
+        <field name="name">Hồ sơ xuất khẩu</field>
+        <field name="res_model">lfood.export.declaration</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_fct_list" model="ir.ui.view">
+        <field name="name">lfood.fct.payment.list</field>
+        <field name="model">lfood.fct.payment</field>
+        <field name="arch" type="xml">
+            <list string="Nhà thầu nước ngoài">
+                <field name="date"/><field name="partner_id"/><field name="name"/><field name="service_type"/>
+                <field name="base" sum="Tổng"/><field name="vat" sum="Tổng"/><field name="cit" sum="Tổng"/>
+                <field name="pay_amount" sum="Tổng"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_fct_form" model="ir.ui.view">
+        <field name="name">lfood.fct.payment.form</field>
+        <field name="model">lfood.fct.payment</field>
+        <field name="arch" type="xml">
+            <form string="Thanh toán cho nhà thầu nước ngoài">
+                <header>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="partner_id" readonly="state != 'draft'"/>
+                            <field name="contract_ref" readonly="state != 'draft'"/>
+                            <field name="date" readonly="state != 'draft'"/>
+                            <field name="service_type" readonly="state != 'draft'"/>
+                            <field name="amount" readonly="state != 'draft'"/>
+                            <field name="net_contract" readonly="state != 'draft'"/>
+                            <field name="expense_account" readonly="state != 'draft'"/>
+                            <field name="cost_item_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="vat_pct" readonly="state != 'draft'"/><field name="cit_pct" readonly="state != 'draft'"/>
+                            <field name="base"/><field name="vat"/><field name="cit"/><field name="pay_amount"/>
+                            <field name="tax_paid_ref"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <div class="text-muted">Tỷ lệ TNDN theo Nghị định 320/2025/NĐ-CP Điều 12 khoản 3; tỷ lệ GTGT theo Luật Thuế GTGT Điều 12 khoản 2 (tham số
+                        NHA_THAU_*). Khai thuế theo Thông tư 89/2026/TT-BTC Điều 30. Hợp đồng chưa gồm thuế: doanh thu tính thuế = số trả nhà thầu /
+                        (1 - tỷ lệ GTGT - tỷ lệ TNDN).</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_fct" model="ir.actions.act_window">
+        <field name="name">Nhà thầu nước ngoài</field>
+        <field name="res_model">lfood.fct.payment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <menuitem id="menu_trade_root" name="Nhập khẩu, xuất khẩu" parent="lfood_base.menu_documents" sequence="60"/>
+    <menuitem id="menu_import" name="Tờ khai nhập khẩu" parent="menu_trade_root" action="action_import" sequence="10"/>
+    <menuitem id="menu_export" name="Hồ sơ xuất khẩu" parent="menu_trade_root" action="action_export" sequence="20"/>
+    <menuitem id="menu_fct" name="Nhà thầu nước ngoài" parent="lfood_vat.menu_tax_root" action="action_fct" sequence="30"/>
+</odoo>

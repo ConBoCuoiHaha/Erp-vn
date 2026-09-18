@@ -6,12 +6,13 @@
     'category': 'LiFeOOD',
     'author': 'LiFeOOD',
     'license': 'LGPL-3',
-    'depends': ['lfood_base', 'lfood_audit', 'lfood_voucher', 'lfood_ledger', 'lfood_vat'],
+    'depends': ['lfood_base', 'lfood_audit', 'lfood_voucher', 'lfood_ledger', 'lfood_vat', 'lfood_admin'],
     'data': [
         'security/ir.model.access.csv',
         'security/rules.xml',
         'data/sequences.xml',
         'views/sale_views.xml',
+        'views/payment_term_views.xml',
     ],
     'installable': True,
 }

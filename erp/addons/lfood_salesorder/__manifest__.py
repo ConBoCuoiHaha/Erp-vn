@@ -13,6 +13,7 @@
         'data/sequences.xml',
         'views/sale_order_views.xml',
         'views/margin_views.xml',
+        'views/lead_views.xml',
     ],
     'installable': True,
 }

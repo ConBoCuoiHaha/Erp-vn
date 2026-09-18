@@ -3,8 +3,8 @@
 Giải ngân: Nợ 112 / Có 3411. Cuối kỳ trích lãi theo dư nợ thực tế từng ngày: Nợ 635 / Có 335. Trả lãi: Nợ 335 / Có 112;
 trả gốc: Nợ 3411 / Có 112 (phiếu chi nội dung Trả nợ vay). Vay của tổ chức, cá nhân không phải tổ chức tín dụng:
 phần lãi suất vượt mức Bộ luật Dân sự (20%/năm) không được trừ khi tính thuế TNDN (Nghị định 320/2025/NĐ-CP);
-app ghi riêng phần vượt để điều chỉnh khi quyết toán. Chưa xét giới hạn lãi vay giao dịch liên kết (Nghị định
-132/2020/NĐ-CP) và vốn hóa lãi vay.
+app ghi riêng phần vượt để điều chỉnh khi quyết toán. Giới hạn lãi vay giao dịch liên kết (Nghị định
+255/2026/NĐ-CP) tính ở phân hệ giao dịch liên kết; chưa xét vốn hóa lãi vay.
 """
 from datetime import timedelta
 

@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_equipment_company" model="ir.rule">
+        <field name="name">Thiết bị theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_equipment"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_maintenance_company" model="ir.rule">
+        <field name="name">Phiếu bảo trì theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_maintenance"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_vehicle_company" model="ir.rule">
+        <field name="name">Xe theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_vehicle"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_carrier_company" model="ir.rule">
+        <field name="name">Chành xe theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_carrier"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="view_equipment_list" model="ir.ui.view">
+        <field name="name">lfood.equipment.list</field>
+        <field name="model">lfood.equipment</field>
+        <field name="arch" type="xml">
+            <list string="Thiết bị" decoration-danger="next_date and next_date &lt; current_date">
+                <field name="name"/><field name="location"/><field name="interval_days"/>
+                <field name="last_date"/><field name="next_date"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_equipment_form" model="ir.ui.view">
+        <field name="name">lfood.equipment.form</field>
+        <field name="model">lfood.equipment</field>
+        <field name="arch" type="xml">
+            <form string="Thiết bị">
+                <sheet>
+                    <group>
+                        <group><field name="name"/><field name="asset_id"/><field name="location"/><field name="company_id" groups="base.group_multi_company"/></group>
+                        <group><field name="interval_days"/><field name="start_date"/><field name="last_date"/><field name="next_date"/>
+                            <field name="downtime_hours"/><field name="cost_total"/></group>
+                    </group>
+                    <field name="maintenance_ids" context="{'default_equipment_id': id, 'default_company_id': company_id}">
+                        <list><field name="date"/><field name="kind"/><field name="description"/><field name="downtime_hours"/>
+                            <field name="cost" sum="Tổng"/><field name="state"/></list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_equipment" model="ir.actions.act_window">
+        <field name="name">Thiết bị, bảo trì</field>
+        <field name="res_model">lfood.equipment</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_maintenance_form" model="ir.ui.view">
+        <field name="name">lfood.maintenance.form</field>
+        <field name="model">lfood.maintenance</field>
+        <field name="arch" type="xml">
+            <form string="Phiếu bảo trì, sửa chữa">
+                <header>
+                    <button name="action_done" type="object" string="Hoàn thành" class="btn-primary" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="equipment_id"/><field name="vehicle_id"/><field name="kind"/><field name="date"/>
+                            <field name="odometer" invisible="not vehicle_id"/></group>
+                        <group><field name="vendor_id"/><field name="downtime_hours"/><field name="cost"/><field name="cost_item_id"/>
+                            <field name="company_id" groups="base.group_multi_company"/></group>
+                    </group>
+                    <field name="description" placeholder="Nội dung bảo trì, sửa chữa"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="view_maintenance_list" model="ir.ui.view">
+        <field name="name">lfood.maintenance.list</field>
+        <field name="model">lfood.maintenance</field>
+        <field name="arch" type="xml">
+            <list string="Bảo trì, sửa chữa">
+                <field name="date"/><field name="equipment_id"/><field name="vehicle_id"/><field name="kind"/>
+                <field name="downtime_hours" sum="Tổng"/><field name="cost" sum="Tổng"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_maintenance" model="ir.actions.act_window">
+        <field name="name">Phiếu bảo trì, sửa chữa</field>
+        <field name="res_model">lfood.maintenance</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_vehicle_list" model="ir.ui.view">
+        <field name="name">lfood.vehicle.list</field>
+        <field name="model">lfood.vehicle</field>
+        <field name="arch" type="xml">
+            <list string="Đội xe">
+                <field name="plate"/><field name="model"/><field name="region"/><field name="driver"/>
+                <field name="registration_expiry"/><field name="insurance_expiry"/><field name="odometer"/><field name="next_service_km"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_vehicle_form" model="ir.ui.view">
+        <field name="name">lfood.vehicle.form</field>
+        <field name="model">lfood.vehicle</field>
+        <field name="arch" type="xml">
+            <form string="Xe">
+                <sheet>
+                    <group>
+                        <group><field name="plate"/><field name="model"/><field name="asset_id"/><field name="region"/><field name="driver"/>
+                            <field name="company_id" groups="base.group_multi_company"/></group>
+                        <group><field name="registration_expiry"/><field name="insurance_expiry"/><field name="body_insurance_expiry"/>
+                            <field name="fuel_norm"/><field name="service_km"/><field name="odometer"/><field name="next_service_km"/></group>
+                    </group>
+                    <notebook>
+                        <page string="Nhiên liệu">
+                            <field name="fuel_ids">
+                                <list editable="bottom" decoration-danger="over_norm">
+                                    <field name="date"/><field name="odometer"/><field name="liters" sum="Tổng"/>
+                                    <field name="amount" sum="Tổng"/><field name="full_tank"/><field name="consumption"/><field name="over_norm"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Bảo dưỡng, sửa chữa">
+                            <field name="maintenance_ids" context="{'default_vehicle_id': id, 'default_company_id': company_id}">
+                                <list><field name="date"/><field name="kind"/><field name="odometer"/><field name="cost" sum="Tổng"/><field name="state"/></list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <div class="text-muted">Nhập hạn kiểm định, hạn bảo hiểm theo giấy tờ thực tế; app nhắc trước khi hết hạn. Tiêu hao tính giữa hai lần
+                        đổ đầy bình; vượt định mức trên 10% thì đánh dấu đỏ.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_vehicle" model="ir.actions.act_window">
+        <field name="name">Đội xe</field>
+        <field name="res_model">lfood.vehicle</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_carrier_list" model="ir.ui.view">
+        <field name="name">lfood.carrier.list</field>
+        <field name="model">lfood.carrier</field>
+        <field name="arch" type="xml">
+            <list string="Chành xe" editable="bottom">
+                <field name="partner_id"/><field name="region"/><field name="route"/><field name="rate_per_kg"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_carrier" model="ir.actions.act_window">
+        <field name="name">Chành xe theo vùng</field>
+        <field name="res_model">lfood.carrier</field>
+        <field name="view_mode">list</field>
+    </record>
+    <record id="view_freight_list" model="ir.ui.view">
+        <field name="name">lfood.freight.log.list</field>
+        <field name="model">lfood.freight.log</field>
+        <field name="arch" type="xml">
+            <list string="Chuyến hàng gửi chành" editable="top" decoration-warning="above_rate">
+                <field name="date"/><field name="carrier_id"/><field name="region"/><field name="destination"/>
+                <field name="weight" sum="Tổng"/><field name="cost" sum="Tổng"/><field name="cost_per_kg"/>
+                <field name="above_rate"/><field name="reference"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_freight_search" model="ir.ui.view">
+        <field name="name">lfood.freight.log.search</field>
+        <field name="model">lfood.freight.log</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="carrier_id"/><field name="destination"/>
+                <group>
+                    <filter name="g_region" string="Vùng" context="{'group_by': 'region'}"/>
+                    <filter name="g_carrier" string="Chành xe" context="{'group_by': 'carrier_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_freight" model="ir.actions.act_window">
+        <field name="name">Chuyến hàng gửi chành</field>
+        <field name="res_model">lfood.freight.log</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <menuitem id="menu_equipment_root" name="Thiết bị, đội xe" parent="lfood_base.menu_documents" sequence="70"/>
+    <menuitem id="menu_equipment" name="Thiết bị, bảo trì" parent="menu_equipment_root" action="action_equipment" sequence="10"/>
+    <menuitem id="menu_maintenance" name="Phiếu bảo trì, sửa chữa" parent="menu_equipment_root" action="action_maintenance" sequence="20"/>
+    <menuitem id="menu_vehicle" name="Đội xe" parent="menu_equipment_root" action="action_vehicle" sequence="30"/>
+    <menuitem id="menu_carrier" name="Chành xe theo vùng" parent="menu_equipment_root" action="action_carrier" sequence="40"/>
+    <menuitem id="menu_freight" name="Chuyến hàng gửi chành" parent="menu_equipment_root" action="action_freight" sequence="50"/>
+</odoo>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_cert_company" model="ir.rule">
+        <field name="name">Chứng thư số theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_digital_cert"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_cert_list" model="ir.ui.view">
+        <field name="name">lfood.digital.cert.list</field>
+        <field name="model">lfood.digital.cert</field>
+        <field name="arch" type="xml">
+            <list string="Chứng thư số" decoration-danger="expired" decoration-warning="days_left &lt; 30 and not expired">
+                <field name="name"/><field name="provider"/><field name="serial"/><field name="purpose"/>
+                <field name="valid_from"/><field name="valid_to"/><field name="days_left"/><field name="holder"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_cert_form" model="ir.ui.view">
+        <field name="name">lfood.digital.cert.form</field>
+        <field name="model">lfood.digital.cert</field>
+        <field name="arch" type="xml">
+            <form string="Chứng thư số">
+                <sheet>
+                    <group>
+                        <group><field name="name"/><field name="provider"/><field name="serial"/><field name="purpose"/>
+                            <field name="purposes"/></group>
+                        <group><field name="valid_from"/><field name="valid_to"/><field name="days_left"/><field name="expired"/>
+                            <field name="holder"/><field name="remote_signing"/>
+                            <field name="company_id" groups="base.group_multi_company"/></group>
+                    </group>
+                    <field name="note" placeholder="Ghi chú: nơi cất token, người liên hệ nhà cung cấp"/>
+                    <div class="text-muted">App không ký số thay người dùng. Ký hóa đơn, tờ khai, hồ sơ bảo hiểm thực hiện trên phần mềm của nhà cung cấp
+                        hoặc cơ quan quản lý; app lưu chứng thư, nhắc hạn và ghi nhận tệp đã ký trong Lưu trữ tài liệu.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_cert" model="ir.actions.act_window">
+        <field name="name">Chứng thư số</field>
+        <field name="res_model">lfood.digital.cert</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_document_form_sign" model="ir.ui.view">
+        <field name="name">lfood.document.form.sign</field>
+        <field name="model">lfood.document</field>
+        <field name="inherit_id" ref="lfood_archive.view_document_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='note']" position="before">
+                <group string="Chữ ký số">
+                    <field name="signed"/>
+                    <field name="cert_id" invisible="not signed" required="signed" options="{'no_create': True}"/>
+                    <field name="signature_format" invisible="not signed"/>
+                    <field name="signer" invisible="not signed" required="signed"/>
+                    <field name="signed_at" invisible="not signed" required="signed"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_cert" name="Chứng thư số" parent="lfood_base.menu_config" action="action_cert" sequence="64"/>
+</odoo>

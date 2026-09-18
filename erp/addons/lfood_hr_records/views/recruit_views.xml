@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+    <record id="p_td_luu" model="lfood.legal.param">
+        <field name="code">TUYEN_DUNG_LUU_HO_SO_THANG</field>
+        <field name="name">Số tháng lưu hồ sơ ứng viên không trúng tuyển</field>
+        <field name="group">labor</field><field name="value_type">number</field><field name="kind">policy</field>
+    </record>
+    <record id="pv_td_luu" model="lfood.legal.param.value">
+        <field name="param_id" ref="p_td_luu"/><field name="value">12</field><field name="date_from">2026-01-01</field>
+        <field name="legal_ref">Quy chế công ty (mặc định, chờ công ty chốt); Luật Bảo vệ dữ liệu cá nhân 91/2025/QH15</field>
+        <field name="state">approved</field>
+    </record>
+    </data>
+    <record id="cron_applicant_purge" model="ir.cron">
+        <field name="name">LiFeOOD: xóa hồ sơ ứng viên quá hạn lưu</field>
+        <field name="model_id" ref="model_lfood_hr_applicant"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_purge()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">weeks</field>
+    </record>
+    <record id="rule_job_request_company" model="ir.rule">
+        <field name="name">Yêu cầu tuyển theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_job_request"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_applicant_company" model="ir.rule">
+        <field name="name">Ứng viên theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_hr_applicant"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+
+    <record id="view_job_request_list" model="ir.ui.view">
+        <field name="name">lfood.hr.job.request.list</field>
+        <field name="model">lfood.hr.job.request</field>
+        <field name="arch" type="xml">
+            <list string="Yêu cầu tuyển dụng">
+                <field name="name"/><field name="department_id"/><field name="quantity"/><field name="hired"/>
+                <field name="date_needed"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_job_request_form" model="ir.ui.view">
+        <field name="name">lfood.hr.job.request.form</field>
+        <field name="model">lfood.hr.job.request</field>
+        <field name="arch" type="xml">
+            <form string="Yêu cầu tuyển dụng">
+                <header>
+                    <button name="action_approve" type="object" string="Duyệt" class="btn-primary" invisible="state != 'draft'"
+                            groups="lfood_base.group_director"/>
+                    <button name="action_close" type="object" string="Đóng tuyển" invisible="state != 'approved'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="department_id" readonly="state != 'draft'"/>
+                            <field name="job_id" readonly="state != 'draft'"/>
+                            <field name="quantity" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="reason" readonly="state != 'draft'"/>
+                            <field name="salary_range"/>
+                            <field name="date_needed"/>
+                            <field name="hired"/>
+                            <field name="approved_by"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                    </group>
+                    <field name="applicant_ids" readonly="1">
+                        <list><field name="name"/><field name="stage"/><field name="score"/><field name="interview_date"/></list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_job_request" model="ir.actions.act_window">
+        <field name="name">Yêu cầu tuyển dụng</field>
+        <field name="res_model">lfood.hr.job.request</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <record id="view_applicant_kanban" model="ir.ui.view">
+        <field name="name">lfood.hr.applicant.kanban</field>
+        <field name="model">lfood.hr.applicant</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="stage" quick_create="false">
+                <templates>
+                    <t t-name="card">
+                        <field name="name" class="fw-bold"/>
+                        <field name="request_id"/>
+                        <field name="interview_date"/>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    <record id="view_applicant_list" model="ir.ui.view">
+        <field name="name">lfood.hr.applicant.list</field>
+        <field name="model">lfood.hr.applicant</field>
+        <field name="arch" type="xml">
+            <list string="Ứng viên">
+                <field name="name"/><field name="request_id"/><field name="stage"/><field name="score"/>
+                <field name="interview_date"/><field name="consent"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_applicant_form" model="ir.ui.view">
+        <field name="name">lfood.hr.applicant.form</field>
+        <field name="model">lfood.hr.applicant</field>
+        <field name="arch" type="xml">
+            <form string="Ứng viên">
+                <header>
+                    <button name="action_hire" type="object" string="Nhận việc" class="btn-primary" invisible="stage != 'offer'"/>
+                    <field name="stage" widget="statusbar" options="{'clickable': '1'}" statusbar_visible="new,screening,interview,offer,hired"/>
+                </header>
+                <sheet>
+                    <div class="oe_title"><h1><field name="name"/></h1></div>
+                    <group>
+                        <group>
+                            <field name="request_id" options="{'no_create': True}" domain="[('state', '=', 'approved')]"/>
+                            <field name="phone"/>
+                            <field name="email"/>
+                            <field name="source"/>
+                            <field name="cv" filename="cv_name"/>
+                            <field name="cv_name" invisible="1"/>
+                            <field name="consent"/>
+                            <field name="consent_date"/>
+                            <field name="keep_longer"/>
+                        </group>
+                        <group>
+                            <field name="interview_date"/>
+                            <field name="interviewer"/>
+                            <field name="score"/>
+                            <field name="employee_code" invisible="stage not in ('offer', 'hired')"/>
+                            <field name="date_start" invisible="stage not in ('offer', 'hired')"/>
+                            <field name="employee_id" invisible="not employee_id"/>
+                            <field name="closed_on" invisible="not closed_on"/>
+                        </group>
+                    </group>
+                    <field name="evaluation" placeholder="Nhận xét phỏng vấn"/>
+                    <div class="text-muted">Hồ sơ ứng viên là dữ liệu cá nhân: cần ứng viên đồng ý trước khi sàng lọc; hồ sơ không trúng tuyển
+                        tự xóa sau số tháng lưu theo quy chế (tham số TUYEN_DUNG_LUU_HO_SO_THANG), trừ khi ứng viên đồng ý lưu lâu hơn.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_applicant" model="ir.actions.act_window">
+        <field name="name">Ứng viên</field>
+        <field name="res_model">lfood.hr.applicant</field>
+        <field name="view_mode">kanban,list,form</field>
+    </record>
+    <menuitem id="menu_recruit_root" name="Tuyển dụng" parent="lfood_hr.menu_hr_root" sequence="5"/>
+    <menuitem id="menu_job_request" name="Yêu cầu tuyển dụng" parent="menu_recruit_root" action="action_job_request" sequence="10"/>
+    <menuitem id="menu_applicant" name="Ứng viên" parent="menu_recruit_root" action="action_applicant" sequence="20"/>
+</odoo>

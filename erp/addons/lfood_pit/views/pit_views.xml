@@ -158,4 +158,29 @@
     <menuitem id="menu_salary_advance" name="Tạm ứng lương" parent="lfood_payroll.menu_payroll_root" action="action_salary_advance" sequence="15"/>
     <menuitem id="menu_pit_freelance" name="Thu nhập vãng lai" parent="lfood_payroll.menu_payroll_root" action="action_pit_freelance" sequence="35"/>
     <menuitem id="menu_pit_settlement" name="Quyết toán thuế TNCN" parent="lfood_payroll.menu_payroll_root" action="action_pit_settlement" sequence="40"/>
+    <record id="view_labor_cost_report_form" model="ir.ui.view">
+        <field name="name">lfood.labor.cost.report.form</field>
+        <field name="model">lfood.labor.cost.report</field>
+        <field name="arch" type="xml">
+            <form string="Lao động, tiền lương, bảo hiểm">
+                <group>
+                    <group><field name="year"/></group>
+                    <group><field name="company_id" groups="base.group_multi_company"/></group>
+                </group>
+                <field name="report_html"/>
+                <footer>
+                    <button name="action_compute" type="object" string="Xem" class="btn-primary"/>
+                    <button string="Đóng" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_labor_cost_report" model="ir.actions.act_window">
+        <field name="name">Lao động, tiền lương, bảo hiểm</field>
+        <field name="res_model">lfood.labor.cost.report</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+    <menuitem id="menu_labor_cost_report" name="Lao động, tiền lương, bảo hiểm theo tháng" parent="lfood_base.menu_reports"
+              action="action_labor_cost_report" sequence="65"/>
 </odoo>

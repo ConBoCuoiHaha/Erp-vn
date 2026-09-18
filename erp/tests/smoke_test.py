@@ -3634,6 +3634,687 @@ check('Giám đốc xem lãi gộp theo kênh: cộng doanh thu 525.000, lãi g�
       mr._rows()[channel_mt.name] == [525_000, 350_000] and '175.000' in mr.report_html and '33.3%' in mr.report_html,
       mr._rows())
 
+# ---- phân bổ chi phí chung
+ci_common = env['lfood.cost.item'].create({'code': 'PBC', 'name': 'Chi phí quản lý chung (phân bổ)'})
+ci_yv = env['lfood.cost.item'].create({'code': 'PBYV', 'name': 'Nhãn Yến Việt'})
+ci_bx = env['lfood.cost.item'].create({'code': 'PBBX', 'name': 'Nhãn Biển Xanh'})
+common_pay = PayF.create({'kind': 'out', 'method': 'bank', 'purpose': 'expense', 'amount': 1_000_000, 'memo': 'Phí quản lý chung',
+                          'date': date(2029, 8, 10), 'company_id': factory.id, 'cash_account': '112',
+                          'counterpart_account': '6428', 'cost_item_id': ci_common.id})
+common_pay.action_post()
+ALC = env['lfood.cost.allocation'].with_user(users['ketoanvien']).with_company(factory)
+alc = ALC.create({'name': 'Chi phí chung tháng 8/2029', 'company_id': factory.id, 'date_from': date(2029, 8, 1),
+                  'date_to': date(2029, 8, 31), 'source_cost_item_id': ci_common.id, 'basis': 'revenue_brand',
+                  'line_ids': [(0, 0, {'cost_item_id': ci_yv.id, 'key': 'Yến Việt'}),
+                               (0, 0, {'cost_item_id': ci_bx.id, 'key': 'Biển Xanh'})]})
+alc.action_compute()
+check('Phân bổ chi phí chung 1.000.000 theo doanh thu nhãn hàng 300.000 : 225.000',
+      alc.amount == 1_000_000 and alc.line_ids.mapped('amount') == [571_429, 428_571], alc.line_ids.mapped('amount'))
+try:
+    alc.action_post(); check('Kế toán viên không ghi sổ phân bổ', False)
+except UserError:
+    check('Kế toán viên không ghi sổ phân bổ', True)
+alc_kt = env['lfood.cost.allocation'].with_user(users['ketoantruong']).browse(alc.id)
+alc_kt.action_post()
+check('Ghi sổ phân bổ: khoản mục chung về 0, nhãn hàng nhận đúng số, tổng 6428 không đổi',
+      (gl(factory, '6428', cost_item_id=ci_common.id), gl(factory, '6428', cost_item_id=ci_yv.id),
+       gl(factory, '6428', cost_item_id=ci_bx.id)) == (0, 571_429, 428_571),
+      (gl(factory, '6428', cost_item_id=ci_common.id), gl(factory, '6428', cost_item_id=ci_yv.id)))
+alc_kt.action_reset()
+check('Hủy phân bổ trả chi phí về khoản mục chung', gl(factory, '6428', cost_item_id=ci_common.id) == 1_000_000
+      and alc.state == 'draft')
+
+# ---- quét mã vạch, tem lô
+mg_p1.barcode = '8930000000017'
+scan_pk = PK.create({'kind': 'out', 'purpose': 'internal', 'date': date(2029, 8, 20), 'warehouse_id': wh_mg.id,
+                     'company_id': factory.id})
+for code in ('8930000000017', '8930000000017', 'LG02', '8930000000017'):
+    scan_pk.scan(code)
+check('Quét mã vạch vào phiếu xuất: 3 lần cháo yến gộp một dòng, súp cua theo mã hàng',
+      sorted((l.product_id.code, l.quantity) for l in scan_pk.line_ids) == [('LG01', 3), ('LG02', 1)],
+      [(l.product_id.code, l.quantity) for l in scan_pk.line_ids])
+try:
+    scan_pk.scan('KHONGCO'); check('Mã không có trong danh mục báo lỗi', False)
+except UserError:
+    check('Mã không có trong danh mục báo lỗi', True)
+env.flush_all()
+env.cr.execute('SAVEPOINT bc_dup')
+try:
+    env['lfood.product'].create({'code': 'LG09', 'name': 'Trùng mã vạch', 'uom': 'hũ', 'barcode': '8930000000017',
+                                 'company_id': factory.id})
+    env.flush_all()
+    check('Không gán một mã vạch cho hai mặt hàng', False)
+except Exception:
+    check('Không gán một mã vạch cho hai mặt hàng', True)
+env.cr.execute('ROLLBACK TO SAVEPOINT bc_dup')
+env.clear()
+from odoo.addons.lfood_stock.models.barcode import lookup as _lookup
+check('Tem lô có mã dạng MÃ HÀNG/SỐ LÔ và tra ngược được',
+      lot_sb.label_code == 'SO01/SB' and _lookup(env, 'SO01/SB') == (so_prod, lot_sb, 1))
+html_label = env['ir.actions.report']._render_qweb_html('lfood_stock.report_lot_label', lot_sb.ids)[0].decode()
+check('In tem lô: có tên hàng, số lô, hạn dùng, mã vạch Code128', 'SO01/SB' in html_label and 'Code128' in html_label
+      and '30/06/2027' in html_label)
+cnt = env['lfood.stock.count'].with_user(users['ketoanvien']).with_company(factory).create(
+    {'warehouse_id': wh_mg.id, 'date': date(2029, 8, 31), 'members': 'Thủ kho, kế toán', 'company_id': factory.id})
+cnt.action_load()
+cnt.action_scan_mode()
+for _i in range(99):
+    cnt.scan('8930000000017')
+c1 = cnt.line_ids.filtered(lambda l: l.product_id == mg_p1)
+check('Kiểm kê bằng máy quét: đếm lại từ 0, quét 99 hũ cháo yến, sổ còn 90 thì thừa 9',
+      (c1.book_qty, c1.real_qty, c1.diff_qty) == (90, 99, 9), (c1.book_qty, c1.real_qty, c1.diff_qty))
+cnt.scan('LG02')
+c2 = cnt.line_ids.filtered(lambda l: l.product_id == mg_p2)
+check('Súp cua quét 1 hũ, sổ còn 85 thì thiếu 84', (c2.book_qty, c2.real_qty) == (85, 1), (c2.book_qty, c2.real_qty))
+
+# ---- cơ hội bán hàng
+LEAD = env['lfood.sale.lead'].with_user(users['ketoanvien']).with_company(factory)
+ld = LEAD.create({'name': 'Chuỗi cửa hàng Xanh - cháo hũ', 'prospect': 'Công ty Cửa hàng Xanh', 'vat': '0319999999',
+                  'contact_name': 'Chị Mai', 'phone': '0900000000', 'channel_id': channel_mt.id, 'company_id': factory.id,
+                  'expected_revenue': 50_000_000, 'next_action': 'Gửi mẫu', 'next_date': date(2029, 9, 5)})
+ld.write({'stage': 'negotiation'})
+check('Đàm phán: xác suất 70%, doanh số có trọng số 35 triệu', (ld.probability, ld.weighted_revenue) == (70, 35_000_000))
+try:
+    ld.write({'stage': 'won'}); check('Không kéo thẳng sang Thành công', False)
+except UserError:
+    check('Không kéo thẳng sang Thành công', True)
+ld.action_won()
+check('Thành công: tạo khách hàng có kênh, người liên hệ và báo giá nháp',
+      ld.stage == 'won' and ld.partner_id.vat == '0319999999' and ld.partner_id.lfood_channel_id == channel_mt
+      and ld.partner_id.child_ids.name == 'Chị Mai' and ld.order_id.state == 'draft' and ld.order_id.partner_id == ld.partner_id)
+ld2 = LEAD.create({'name': 'Siêu thị Y', 'prospect': 'Siêu thị Y', 'company_id': factory.id})
+try:
+    ld2.action_lost(); check('Thất bại phải ghi lý do', False)
+except UserError:
+    check('Thất bại phải ghi lý do', True)
+ld2.write({'lost_reason': 'Giá cao hơn đối thủ'})
+ld2.action_lost()
+check('Cơ hội thất bại xác suất 0', ld2.stage == 'lost' and ld2.weighted_revenue == 0)
+
+# ---- báo cáo lao động, tiền lương
+LCR = env['lfood.labor.cost.report'].with_user(users['giamdoc']).with_company(office)
+lcr = LCR.create({'year': 2028, 'company_id': office.id})
+lcd = lcr._data()
+check('Báo cáo lao động, lương 2028: tháng 1 có 2 người, quỹ lương cả năm có thưởng tháng 12, vãng lai 14 triệu',
+      lcd['headcount'][0] >= 2 and lcd['gross'][11] - lcd['gross'][10] == 60_000_000
+      and sum(lcd['freelance']) == 14_000_000 and sum(lcd['freelance_pit']) == 800_000, (lcd['headcount'][0], sum(lcd['freelance'])))
+lcr.action_compute()
+check('Bảng báo cáo có 12 tháng và cột cả năm', 'T12' in lcr.report_html and 'Cả năm' in lcr.report_html)
+
+# ---- tuyển dụng
+JR = env['lfood.hr.job.request'].with_user(users['ketoanvien']).with_company(factory)
+jr = JR.create({'name': 'Công nhân đóng gói', 'quantity': 1, 'reason': 'Mở thêm ca 3', 'company_id': factory.id})
+try:
+    jr.action_approve(); check('Kế toán không duyệt yêu cầu tuyển', False)
+except UserError:
+    check('Kế toán không duyệt yêu cầu tuyển', True)
+jr.with_user(users['giamdoc']).action_approve()
+AP = env['lfood.hr.applicant'].with_user(users['ketoanvien'])
+ap1 = AP.create({'name': 'Ứng viên A', 'request_id': jr.id, 'phone': '0911111111'})
+try:
+    ap1.write({'stage': 'screening'}); check('Chưa đồng ý xử lý dữ liệu thì không sàng lọc được', False)
+except UserError:
+    check('Chưa đồng ý xử lý dữ liệu thì không sàng lọc được', True)
+ap1.write({'consent': True, 'consent_date': date(2029, 3, 1)})
+ap1.write({'stage': 'offer', 'employee_code': 'TD01', 'date_start': date(2029, 4, 1)})
+ap1.action_hire()
+check('Nhận việc: tạo hồ sơ nhân viên, đủ số lượng thì đóng yêu cầu',
+      ap1.stage == 'hired' and ap1.employee_id.code == 'TD01' and ap1.employee_id.date_start == date(2029, 4, 1)
+      and jr.state == 'closed')
+ap2 = AP.create({'name': 'Ứng viên B', 'request_id': jr.id, 'consent': True})
+ap2.write({'stage': 'rejected'})
+ap3 = AP.create({'name': 'Ứng viên C', 'request_id': jr.id, 'consent': True, 'keep_longer': True})
+ap3.write({'stage': 'rejected'})
+env['lfood.hr.applicant'].search([('id', 'in', (ap2 | ap3).ids)]).write({'closed_on': date(2028, 1, 1)})
+purged = env['lfood.hr.applicant']._cron_purge(date(2029, 6, 1))
+check('Xóa hồ sơ không trúng tuyển quá 12 tháng, giữ người đồng ý lưu lâu hơn',
+      purged >= 1 and not ap2.exists() and ap3.exists() and ap1.exists(), purged)
+
+# ---- R&D
+rnd_user = AU.create({'name': 'Chuyên viên R&D thử', 'login': 'rnd_thu', 'company_id': factory.id,
+                      'company_ids': [(6, 0, factory.ids)], 'lfood_role': 'rnd'})
+RP = env['lfood.rnd.project'].with_user(rnd_user)
+rp = RP.create({'name': 'Cháo yến hạt sen', 'brand': 'Yến Việt', 'idea': 'Cháo ăn sáng cho người lớn tuổi'})
+check('Dự án R&D có mã RD', rp.code.startswith('RD'), rp.code)
+for u, label in ((users['ketoanvien'], 'Kế toán viên'), (users['ketoantruong'], 'Kế toán trưởng')):
+    try:
+        env['lfood.rnd.project'].with_user(u).search_count([]); check('%s không xem được R&D' % label, False)
+    except AccessError:
+        check('%s không xem được R&D' % label, True)
+RF = env['lfood.rnd.formula'].with_user(rnd_user)
+rf1 = RF.create({'project_id': rp.id, 'name': 'Cháo yến', 'batch_size': 200,
+                'line_ids': [(0, 0, {'ingredient': 'Gạo', 'pct': 60}), (0, 0, {'ingredient': 'Nước', 'pct': 35}),
+                             (0, 0, {'ingredient': 'Yến', 'pct': 4})]})
+try:
+    rf1.action_lock(); check('Chốt công thức khi tổng tỷ lệ khác 100% bị chặn', False)
+except UserError:
+    check('Chốt công thức khi tổng tỷ lệ khác 100% bị chặn', True)
+rf1.line_ids.filtered(lambda l: l.ingredient == 'Yến').write({'pct': 5})
+check('Khối lượng theo mẻ 200 kg: gạo 120 kg', rf1.line_ids.filtered(lambda l: l.ingredient == 'Gạo').qty == 120)
+rf1.action_lock()
+try:
+    rf1.line_ids[0].write({'pct': 61}); check('Công thức đã chốt không sửa được', False)
+except UserError:
+    check('Công thức đã chốt không sửa được', True)
+try:
+    env['lfood.rnd.formula'].with_user(users['giamdoc']).browse(rf1.id).action_approve()
+    check('Chưa có mẫu thử đạt thì không duyệt', False)
+except UserError:
+    check('Chưa có mẫu thử đạt thì không duyệt', True)
+RS = env['lfood.rnd.sample'].with_user(rnd_user)
+s_bad = RS.create({'formula_id': rf1.id, 'name': 'M1', 'color': 7, 'smell': 7, 'taste': 5, 'texture': 6,
+                   'test_ids': [(0, 0, {'indicator': 'Độ ẩm', 'value': 80, 'unit': '%', 'limit_min': 70, 'limit_max': 85})]})
+s_ok = RS.create({'formula_id': rf1.id, 'name': 'M2', 'color': 8, 'smell': 7, 'taste': 7, 'texture': 7,
+                  'test_ids': [(0, 0, {'indicator': 'Coliform', 'value': 12, 'limit_max': 10})]})
+check('Mẫu cảm quan 6,25 đạt; mẫu có chỉ tiêu vượt giới hạn không đạt',
+      (s_bad.sensory_avg, s_bad.result, s_ok.result) == (6.25, 'pass', 'fail'), (s_bad.sensory_avg, s_bad.result, s_ok.result))
+try:
+    rf1.action_approve(); check('R&D không tự duyệt công thức', False)
+except AccessError:
+    check('R&D không tự duyệt công thức', True)
+env['lfood.rnd.formula'].with_user(users['giamdoc']).browse(rf1.id).action_approve()
+act_v2 = rf1.action_new_version()
+rf2 = RF.browse(act_v2['res_id'])
+check('Giám đốc duyệt v1; tạo v2 là bản nháp chép nguyên liệu',
+      rf1.state == 'approved' and rf1.approved_by == users['giamdoc'] and rf2.version == 2 and rf2.state == 'draft'
+      and len(rf2.line_ids) == 3 and rp.approved_formula_id == rf1)
+rf2.write({'change_note': 'Tăng yến'})
+rf2.line_ids.filtered(lambda l: l.ingredient == 'Nước').write({'pct': 34})
+rf2.line_ids.filtered(lambda l: l.ingredient == 'Yến').write({'pct': 6})
+rf2.action_lock()
+RS.create({'formula_id': rf2.id, 'name': 'M3', 'color': 8, 'smell': 8, 'taste': 8, 'texture': 8})
+env['lfood.rnd.formula'].with_user(users['giamdoc']).browse(rf2.id).action_approve()
+check('Duyệt v2 thì v1 hết hiệu lực; nhật ký ghi người duyệt',
+      rf1.state == 'obsolete' and rp.approved_formula_id == rf2
+      and Log.sudo().search_count([('model', '=', 'lfood.rnd.formula'), ('res_id', '=', rf2.id),
+                                   ('user_id', '=', users['giamdoc'].id)]) >= 1)
+rp.write({'stage': 'transfer', 'transfer_note': 'Bàn giao công thức v2 cho nhà máy'})
+check('Chuyển giao khi đã có công thức duyệt', rp.stage == 'transfer')
+
+# ---- bảo trì thiết bị, đội xe
+EQ = env['lfood.equipment'].with_user(users['ketoanvien']).with_company(factory)
+eq = EQ.create({'name': 'Máy chiết rót 1', 'location': 'Dây chuyền cháo', 'interval_days': 90,
+                'start_date': date(2029, 1, 1), 'company_id': factory.id})
+check('Thiết bị mới: đến hạn bảo trì sau 90 ngày từ ngày theo dõi', eq.next_date == date(2029, 4, 1))
+MT = env['lfood.maintenance'].with_user(users['ketoanvien']).with_company(factory)
+MT.create({'equipment_id': eq.id, 'kind': 'preventive', 'date': date(2029, 3, 20), 'description': 'Thay gioăng',
+           'downtime_hours': 4, 'cost': 1_500_000, 'company_id': factory.id, 'state': 'done'})
+MT.create({'equipment_id': eq.id, 'kind': 'repair', 'date': date(2029, 5, 2), 'description': 'Hỏng motor',
+           'downtime_hours': 10, 'cost': 6_000_000, 'company_id': factory.id, 'state': 'done'})
+check('Bảo trì định kỳ 20/3 thì hạn tiếp 18/6; tổng dừng máy 14 giờ, chi phí 7,5 triệu',
+      (eq.next_date, eq.downtime_hours, eq.cost_total) == (date(2029, 6, 18), 14, 7_500_000),
+      (eq.next_date, eq.downtime_hours, eq.cost_total))
+env.flush_all()
+env.cr.execute('SAVEPOINT mt_bad')
+try:
+    MT.create({'kind': 'repair', 'description': 'x', 'company_id': factory.id})
+    env.flush_all()
+    check('Phiếu bảo trì phải chọn thiết bị hoặc xe', False)
+except ValidationError:
+    check('Phiếu bảo trì phải chọn thiết bị hoặc xe', True)
+env.cr.execute('ROLLBACK TO SAVEPOINT mt_bad')
+env.clear()
+VH = env['lfood.vehicle'].with_user(users['ketoanvien']).with_company(factory)
+vh = VH.create({'plate': '70C-123.45', 'model': 'Tải 1,5 tấn', 'region': 'south', 'fuel_norm': 12,
+                'registration_expiry': date(2029, 6, 30), 'insurance_expiry': date(2029, 9, 1), 'company_id': factory.id})
+FL2 = env['lfood.fuel.log'].with_user(users['ketoanvien'])
+FL2.create({'vehicle_id': vh.id, 'date': date(2029, 6, 1), 'liters': 50, 'odometer': 10_000})
+FL2.create({'vehicle_id': vh.id, 'date': date(2029, 6, 5), 'liters': 20, 'odometer': 10_200, 'full_tank': False})
+fl_last = FL2.create({'vehicle_id': vh.id, 'date': date(2029, 6, 10), 'liters': 40, 'odometer': 10_400})
+check('Tiêu hao giữa hai lần đổ đầy: 60 lít / 400 km = 15 lít/100 km, vượt định mức 12',
+      (fl_last.consumption, fl_last.over_norm) == (15, True), (fl_last.consumption, fl_last.over_norm))
+MT.create({'vehicle_id': vh.id, 'kind': 'preventive', 'date': date(2029, 6, 11), 'description': 'Bảo dưỡng 10.000 km',
+           'odometer': 10_450, 'company_id': factory.id, 'state': 'done'})
+check('Số km hiện tại 10.450, bảo dưỡng tiếp ở 20.450', (vh.odometer, vh.next_service_km) == (10_450, 20_450))
+env['lfood.reminder']._cron_refresh(date(2029, 6, 10))
+check('Nhắc hạn đăng kiểm xe và bảo trì thiết bị',
+      env['lfood.reminder'].search_count([('key', '=', 'veh-registration_expiry-%s-2029-06-30' % vh.id), ('state', '=', 'open')]) == 1
+      and env['lfood.reminder'].search_count([('key', '=', 'maint-%s-2029-06-18' % eq.id), ('state', '=', 'open')]) == 1)
+chanh = env['lfood.carrier'].with_user(users['ketoanvien']).with_company(factory).create(
+    {'partner_id': env['res.partner'].create({'name': 'Chành Bắc Nam thử'}).id, 'region': 'north',
+     'rate_per_kg': 2_000, 'company_id': factory.id})
+fr = env['lfood.freight.log'].with_user(users['ketoanvien']).create(
+    {'carrier_id': chanh.id, 'destination': 'Hà Nội', 'weight': 500, 'cost': 1_250_000})
+check('Chuyến gửi chành 2.500 đồng/kg cao hơn cước tham chiếu', (fr.cost_per_kg, fr.above_rate, fr.region) == (2_500, True, 'north'))
+
+# ---- đánh giá hiệu suất, đào tạo
+from odoo.addons.lfood_hr_records.models.performance import rate as _rate
+check('Xếp loại theo điểm', [_rate(x) for x in (105, 90, 70, 69.9)] == ['A', 'B', 'C', 'D'])
+KP = env['lfood.kpi.period'].with_user(users['ketoanvien']).with_company(factory)
+kp = KP.create({'name': 'Quý 2/2029', 'date_from': date(2029, 4, 1), 'date_to': date(2029, 6, 30), 'bonus_base': 3_000_000,
+                'company_id': factory.id,
+                'review_ids': [(0, 0, {'employee_id': f1.id, 'line_ids': [
+                    (0, 0, {'name': 'Sản lượng', 'weight': 60, 'target': 1000, 'actual': 1100}),
+                    (0, 0, {'name': 'Tỷ lệ hàng hỏng (%)', 'weight': 40, 'target': 2, 'actual': 2.5, 'lower_better': True})]})]})
+rv = kp.review_ids
+check('KPI: sản lượng 110%, hàng hỏng 80%; tổng 98 điểm xếp B, thưởng 3 triệu',
+      (rv.line_ids.mapped('achievement'), rv.score, rv.rating, rv.bonus) == ([110, 80], 98, 'B', 3_000_000),
+      (rv.line_ids.mapped('achievement'), rv.score, rv.rating, rv.bonus))
+try:
+    kp.action_approve(); check('Kế toán không duyệt kết quả đánh giá', False)
+except UserError:
+    check('Kế toán không duyệt kết quả đánh giá', True)
+kp.with_user(users['giamdoc']).action_approve()
+check('Duyệt đánh giá tạo quyết định khen thưởng 3 triệu ngày cuối kỳ',
+      rv.reward_id.amount == 3_000_000 and rv.reward_id.date == date(2029, 6, 30) and rv.reward_id.employee_id == f1)
+TC = env['lfood.training.course'].with_user(users['ketoanvien']).with_company(factory)
+tc = TC.create({'name': 'Vận hành nồi hơi', 'date_start': date(2028, 7, 1), 'valid_months': 12, 'cost': 6_000_000,
+                'company_id': factory.id,
+                'attendee_ids': [(0, 0, {'employee_id': f1.id, 'result': 'pass'}),
+                                 (0, 0, {'employee_id': e_hr.id, 'result': 'fail'})]})
+tc.action_done()
+check('Học xong: người đạt có hạn chứng chỉ 01/07/2029, chi phí 3 triệu/người',
+      tc.attendee_ids.filtered(lambda a: a.result == 'pass').expiry == date(2029, 7, 1) and tc.cost_per_head == 3_000_000
+      and not tc.attendee_ids.filtered(lambda a: a.result == 'fail').expiry)
+env['lfood.reminder']._cron_refresh(date(2029, 6, 15))
+check('Nhắc chứng chỉ đào tạo sắp hết hạn',
+      env['lfood.reminder'].search_count([('key', '=like', 'training-%'), ('state', '=', 'open'), ('title', 'ilike', 'nồi hơi')]) == 1)
+
+# ---- giám sát HACCP
+CCP = env['lfood.ccp'].with_user(users['ketoantruong']).with_company(factory)
+ccp1 = CCP.create({'code': 'CCP1', 'name': 'Tiệt trùng', 'hazard': 'Clostridium botulinum', 'parameter': 'Nhiệt độ tiệt trùng',
+                   'unit': '°C', 'limit_min': 121, 'has_min': True, 'corrective_action': 'Dừng dây chuyền, tiệt trùng lại mẻ',
+                   'company_id': factory.id})
+hlot = env['lfood.stock.lot'].create({'name': 'HACCP1', 'product_id': so_prod.id})
+RD_ = env['lfood.ccp.reading'].with_user(users['ketoanvien'])
+ok_read = RD_.create({'ccp_id': ccp1.id, 'value': 121.5, 'lot_id': hlot.id, 'operator': 'Tổ trưởng ca 1',
+                      'measured_at': '2029-09-03 08:00:00'})
+check('Đo trong giới hạn: không giữ lô', ok_read.in_limit and not ok_read.action_id)
+bad_read = RD_.create({'ccp_id': ccp1.id, 'value': 118, 'lot_id': hlot.id, 'operator': 'Tổ trưởng ca 1',
+                       'measured_at': '2029-09-03 09:00:00', 'deviation_note': 'Áp suất hơi thấp'})
+check('Đo ngoài giới hạn: tự cách ly lô và mở hành động khắc phục có biện pháp định sẵn',
+      not bad_read.in_limit and hlot.hold and 'CCP1' in hlot.hold_reason
+      and bad_read.action_id.measure == 'Dừng dây chuyền, tiệt trùng lại mẻ' and bad_read.action_id.state == 'open',
+      (bad_read.in_limit, hlot.hold, hlot.hold_reason))
+try:
+    bad_read.write({'value': 122}); check('Không sửa giá trị đã đo', False)
+except UserError:
+    check('Không sửa giá trị đã đo', True)
+try:
+    bad_read.action_verify(); check('Chưa khắc phục xong thì không xác nhận hồ sơ', False)
+except UserError:
+    check('Chưa khắc phục xong thì không xác nhận hồ sơ', True)
+bad_read.action_id.sudo().write({'responsible': 'Quản đốc'})
+bad_read.action_id.sudo().action_done()
+(ok_read | bad_read).action_verify()
+check('Khắc phục xong thì xác nhận hồ sơ', bad_read.verified_by == users['ketoanvien'] and ok_read.verified_by)
+try:
+    ok_read.unlink(); check('Không xóa hồ sơ giám sát', False)
+except UserError:
+    check('Không xóa hồ sơ giám sát', True)
+env['lfood.stock.lot'].with_user(users['ketoantruong']).browse(hlot.id).action_release()
+env['lfood.reminder']._cron_refresh(date(2029, 9, 7))
+check('Quá một ngày làm việc không đo CCP thì nhắc',
+      env['lfood.reminder'].search_count([('key', '=like', 'ccp-gap-%s-%%' % ccp1.id), ('state', '=', 'open')]) == 1)
+
+# ---- nhập khẩu, xuất khẩu, nhà thầu nước ngoài
+usd = env.ref('base.USD')
+usd.sudo().active = True
+wh_imp = WH.create({'code': 'KNK', 'name': 'Kho hàng nhập khẩu', 'company_id': factory.id})
+imp_p = env['lfood.product'].with_user(users['ketoanvien']).with_company(factory).create(
+    {'code': 'NK01', 'name': 'Yến sào nhập khẩu', 'uom': 'kg', 'kind': 'goods', 'company_id': factory.id})
+foreign = env['res.partner'].create({'name': 'Swiftlet Co. Ltd (Indonesia)', 'is_company': True})
+forwarder = env['res.partner'].create({'name': 'Công ty giao nhận thử', 'is_company': True})
+IMP = env['lfood.import.declaration'].with_user(users['ketoanvien']).with_company(factory)
+imp = IMP.create({'name': '10600000001', 'date': date(2029, 10, 5), 'partner_id': foreign.id, 'currency_id': usd.id,
+                  'rate': 25_000, 'warehouse_id': wh_imp.id, 'company_id': factory.id,
+                  'line_ids': [(0, 0, {'product_id': imp_p.id, 'quantity': 100, 'price_currency': 10, 'duty_rate': 5,
+                                       'vat_rate': 8, 'lot_name': 'NK-A', 'expiry_date': date(2031, 10, 1)})],
+                  'cost_ids': [(0, 0, {'name': 'Cước vận chuyển nội địa', 'partner_id': forwarder.id, 'amount': 1_000_000,
+                                       'vat': 80_000})]})
+check('Tờ khai nhập khẩu: trị giá 25 triệu, thuế NK 1,25 triệu, thuế GTGT 2,1 triệu, giá nhập kho 27,25 triệu',
+      (imp.value_total, imp.duty_total, imp.vat_total, imp.landed_total) == (25_000_000, 1_250_000, 2_100_000, 27_250_000),
+      (imp.value_total, imp.duty_total, imp.vat_total, imp.landed_total))
+imp.action_post()
+mimp = Move._active_for(imp)
+supplier_line = mimp.line_ids.filtered(lambda l: l.account_code == '3311' and l.partner_id == foreign)
+check('Ghi sổ nhập khẩu: kho 27,25 triệu qua 3388 về 0; Có 3333, 33312; công nợ người bán 1.000 USD',
+      imp.picking_id.state == 'done' and imp.picking_id.amount == 27_250_000
+      and sum(ML.sudo().search([('account_code', '=', '3388'),
+                                ('move_id', 'in', (mimp | Move._active_for(imp.picking_id)).ids)]).mapped('balance')) == 0
+      and gl(factory, '3333', move_id=mimp.id) == -1_250_000 and gl(factory, '33312', move_id=mimp.id) == -2_100_000
+      and supplier_line.balance == -25_000_000 and supplier_line.amount_currency == -1000,
+      (imp.picking_id.amount, supplier_line.balance, supplier_line.amount_currency))
+check('Giá vốn đơn vị hàng nhập khẩu 272.500/kg', round(imp_p._position(upto=date(2029, 10, 31))[1]) == 27_250_000)
+vr_imp = env['lfood.vat.return'].sudo().new({'company_id': factory.id, 'period_type': 'month', 'year': 2029, 'month': 10})
+li = [v for v in vr_imp._purchase_lines() if v.get('source_model') == 'lfood.import.declaration']
+check('Bảng kê mua vào: thuế GTGT nhập khẩu chưa có chứng từ nộp thuế thì chưa được khấu trừ',
+      len(li) == 1 and li[0]['tax'] == 2_100_000 and not li[0]['deductible'])
+imp.write({'tax_paid_ref': 'GNT-0001', 'tax_paid_date': date(2029, 10, 6)})
+li = [v for v in vr_imp._purchase_lines() if v.get('source_model') == 'lfood.import.declaration']
+check('Có chứng từ nộp thuế thì được khấu trừ', li[0]['deductible'] and li[0]['ref'] == 'GNT-0001')
+try:
+    imp.write({'rate': 26_000}); check('Tờ khai đã ghi sổ không sửa trị giá', False)
+except UserError:
+    check('Tờ khai đã ghi sổ không sửa trị giá', True)
+
+buyer = env['res.partner'].create({'name': 'Nest Import Pte Ltd (Singapore)', 'is_company': True})
+exp_inv = SI.create({'partner_id': buyer.id, 'date': date(2029, 10, 10), 'invoice_template': '1', 'invoice_symbol': 'C29TXK',
+                     'invoice_number': '00000001', 'company_id': factory.id,
+                     'line_ids': [(0, 0, {'name': 'Yến sào xuất khẩu', 'quantity': 1, 'price_unit': 200_000_000,
+                                          'vat_rate_id': ref('lfood_voucher.vat_0').id})]})
+exp_inv.action_post()
+EXD = env['lfood.export.declaration'].with_user(users['ketoanvien']).with_company(factory)
+exd = EXD.create({'name': '30600000001', 'date': date(2029, 10, 10), 'sale_invoice_id': exp_inv.id, 'company_id': factory.id})
+check('Hồ sơ xuất khẩu thiếu hợp đồng, tờ khai, vận đơn, phiếu đóng gói, thanh toán',
+      exd.zero_rate_ok and not exd.complete and 'hợp đồng' in exd.missing and 'không dùng tiền mặt' in exd.missing, exd.missing)
+exd.write({'contract_ref': 'SC-2029-01', 'contract_file': _b64.b64encode(b'hd'), 'contract_name': 'hd.pdf',
+           'declaration_file': _b64.b64encode(b'tk'), 'declaration_name': 'tk.pdf', 'bill_of_lading': 'BL-001',
+           'packing_list': True})
+Pay.create({'kind': 'in', 'method': 'bank', 'purpose': 'customer', 'partner_id': buyer.id, 'amount': 200_000_000,
+            'memo': 'Thu tiền xuất khẩu', 'date': date(2029, 11, 5), 'sale_invoice_id': exp_inv.id,
+            'company_id': factory.id}).action_post()
+exd.invalidate_recordset()
+check('Đủ hồ sơ xuất khẩu khi đã thu chuyển khoản đủ', exd.complete and not exd.missing, exd.missing)
+
+from odoo.addons.lfood_trade.models.fct import fct_amounts as _fa
+check('Thuế nhà thầu: giá gồm thuế 100 triệu dịch vụ -> GTGT 5 triệu, TNDN 5 triệu, trả 90 triệu; giá chưa gồm thuế 90 triệu cho cùng kết quả',
+      _fa(100_000_000, 5, 5, False) == (100_000_000, 5_000_000, 5_000_000, 90_000_000)
+      and _fa(90_000_000, 5, 5, True) == (100_000_000, 5_000_000, 5_000_000, 90_000_000))
+FCTP = env['lfood.fct.payment'].with_user(users['ketoanvien']).with_company(factory)
+fct1 = FCTP.create({'name': 'Phí tư vấn tiếp thị', 'partner_id': foreign.id, 'contract_ref': 'CT-01', 'date': date(2029, 10, 20),
+                    'service_type': 'SERVICE', 'amount': 100_000_000, 'company_id': factory.id})
+fct2 = FCTP.create({'name': 'Phí bản quyền nhãn hiệu', 'partner_id': foreign.id, 'contract_ref': 'CT-02', 'date': date(2029, 10, 20),
+                    'service_type': 'ROYALTY', 'amount': 50_000_000, 'net_contract': True, 'company_id': factory.id})
+check('Tỷ lệ lấy từ tham số: dịch vụ 5%/5%; bản quyền không chịu GTGT, TNDN 10%, giá chưa gồm thuế 50 triệu -> doanh thu 55.555.556',
+      (fct1.vat_pct, fct1.cit_pct, fct2.vat_pct, fct2.cit_pct) == (5, 5, 0, 10)
+      and (fct2.base, fct2.vat, fct2.cit, fct2.pay_amount) == (55_555_556, 0, 5_555_556, 50_000_000),
+      (fct2.base, fct2.cit, fct2.pay_amount))
+(fct1 | fct2).action_post()
+check('Ghi sổ nhà thầu: Có 3334 10,55 triệu, Có 33311 5 triệu, Nợ 1331 5 triệu',
+      gl(factory, '3334', move_id=Move._active_for(fct1).id) + gl(factory, '3334', move_id=Move._active_for(fct2).id) == -10_555_556
+      and gl(factory, '1331', move_id=Move._active_for(fct1).id) == 5_000_000
+      and gl(factory, '33311', move_id=Move._active_for(fct1).id) == -5_000_000)
+li_f = [v for v in vr_imp._purchase_lines() if v.get('source_model') == 'lfood.fct.payment']
+check('Bảng kê: thuế GTGT nộp thay nhà thầu, chưa có chứng từ nộp thì chưa khấu trừ; bản quyền không vào bảng kê',
+      len(li_f) == 1 and li_f[0]['tax'] == 5_000_000 and not li_f[0]['deductible'])
+
+# ---- hợp nhất hai pháp nhân
+ic2 = env['lfood.product'].sudo().create({'code': 'IC02', 'name': 'Nước yến lon', 'uom': 'lon', 'kind': 'finished',
+                                          'track_lot': True, 'vat_rate_id': vat8.id, 'company_id': False})
+PK.create({'kind': 'in', 'purpose': 'factory', 'date': date(2029, 12, 1), 'warehouse_id': wh_icn.id,
+           'line_ids': [(0, 0, {'product_id': ic2.id, 'lot_name': 'L2912', 'expiry_date': date(2031, 12, 1),
+                                'quantity': 50, 'price_unit': 10_000})]}).action_done()
+ic_b = IC.create({'company_id': factory.id, 'dest_company_id': office.id, 'warehouse_id': wh_icn.id,
+                  'dest_warehouse_id': wh_icv.id, 'date': date(2029, 12, 10), 'invoice_symbol': 'C29TNM',
+                  'invoice_number': '00000901', 'price_basis': 'Giá bán nhà phân phối độc lập',
+                  'line_ids': [(0, 0, {'product_id': ic2.id, 'quantity': 30, 'price_unit': 15_000, 'vat_rate_id': vat8.id})]})
+ic_b.action_post()
+SI_O = env['lfood.sale.invoice'].with_user(users['ketoanvien']).with_company(office)
+sold_o = SI_O.create({'partner_id': customer.id, 'date': date(2029, 12, 20), 'invoice_template': '1', 'invoice_symbol': 'C29TVP',
+                      'invoice_number': '00000077', 'warehouse_id': wh_icv.id, 'company_id': office.id,
+                      'line_ids': [(0, 0, {'name': 'Nước yến lon', 'product_id': ic2.id, 'quantity': 10, 'price_unit': 20_000,
+                                           'vat_rate_id': vat8.id})]})
+sold_o.action_post()
+CR = env['lfood.consolidation.report'].with_user(users['giamdoc'])
+cr = CR.create({'company_a_id': office.id, 'company_b_id': factory.id, 'date_from': date(2029, 12, 1),
+                'date_to': date(2029, 12, 31)})
+cd = cr._compute_data()
+check('Hợp nhất: doanh thu nội bộ 450.000; lãi chưa thực hiện cuối kỳ 140.000 (20 lon x 5.000 và 20 hũ năm 2026 x 2.000), tăng trong kỳ 100.000',
+      (cd['sales'], cd['up'], cd['up_change']) == (450_000, 140_000, 100_000), (cd['sales'], cd['up'], cd['up_change']))
+pa, pb, pc = cd['pl']['a'], cd['pl']['b'], cd['pl']['c']
+check('B02 hợp nhất: trừ doanh thu nội bộ; giá vốn trừ 450.000 cộng 100.000; lợi nhuận gộp giảm đúng lãi chưa thực hiện',
+      pc['01'] == pa['01'] + pb['01'] - 450_000 and pc['11'] == pa['11'] + pb['11'] - 350_000
+      and pc['20'] == pa['20'] + pb['20'] - 100_000, (pc['01'], pc['11'], pc['20']))
+ba, bb, bc = cd['bs']['a'], cd['bs']['b'], cd['bs']['c']
+f_rec_o = gl(factory, '131', partner_id=office.partner_id.id)
+check('B01 hợp nhất: loại công nợ nội bộ khỏi phải thu, phải trả; tồn kho giảm lãi chưa thực hiện; lệch công nợ thì cảnh báo',
+      cd['recv'] > 0 and bc['131'] == ba['131'] + bb['131'] - cd['recv'] and bc['311'] == ba['311'] + bb['311'] - cd['recv']
+      and bc['141'] == ba['141'] + bb['141'] - 140_000 and (not cd['warn']) == (f_rec_o == -gl(office, '331', partner_id=factory.partner_id.id)),
+      (cd['recv'], cd['warn'], f_rec_o))
+cr.action_compute()
+check('Báo cáo có bảng đối chiếu mua bán nội bộ khớp hóa đơn và phiếu nhập',
+      'BNB' in cr.report_html and 'Khớp' in cr.report_html and 'Hợp nhất' in cr.report_html)
+try:
+    env['lfood.consolidation.report'].with_user(users['ketoanvien']).create(
+        {'company_a_id': office.id, 'company_b_id': factory.id, 'date_from': date(2029, 12, 1), 'date_to': date(2029, 12, 31)})
+    check('Kế toán viên không xem báo cáo hợp nhất', False)
+except AccessError:
+    check('Kế toán viên không xem báo cáo hợp nhất', True)
+
+# ---- sàn thương mại điện tử
+sea_cust = env['res.partner'].create({'name': 'Khách mua trên Shopee'})
+SHOP = env['lfood.ecom.shop'].with_user(users['ketoanvien']).with_company(factory)
+shop = SHOP.create({'name': 'LiFeOOD Official Shopee', 'platform': 'shopee', 'warehouse_id': wh_mg.id,
+                    'customer_id': sea_cust.id, 'vat_rate_id': vat8.id, 'company_id': factory.id})
+orders_csv = """ma_don;ngay;trang_thai;sku;so_luong;don_gia
+SP001;25/12/2029;Hoàn thành;8930000000017;2;30000
+SP001;25/12/2029;Hoàn thành;LG02;1;15000
+SP002;26/12/2029;Chờ lấy hàng;LG02;5;15000
+SP003;26/12/2029;Đã hủy;LG02;1;15000
+"""
+bad_csv = orders_csv + "SP004;26/12/2029;Hoàn thành;KHONGCO;1;1000\n"
+shop.write({'import_file': _b64.b64encode(bad_csv.encode('utf-8-sig'))})
+try:
+    shop.action_import_orders(); check('SKU không có trong danh mục thì không nhập', False)
+except UserError:
+    check('SKU không có trong danh mục thì không nhập', True)
+shop.write({'import_file': _b64.b64encode(orders_csv.encode('utf-8-sig'))})
+shop.action_import_orders()
+by_ref = {o.name: o for o in shop.order_ids}
+check('Nhập đơn sàn: 3 đơn, gộp dòng theo mã đơn, nhận trạng thái',
+      set(by_ref) == {'SP001', 'SP002', 'SP003'} and by_ref['SP001'].amount == 75_000 and len(by_ref['SP001'].line_ids) == 2
+      and (by_ref['SP001'].status, by_ref['SP002'].status, by_ref['SP003'].status) == ('done', 'new', 'cancel'))
+avail = shop._available()
+check('Tồn khả dụng trừ đơn chờ giao: cháo yến 90, súp cua 85 - 5 = 80', (avail[mg_p1], avail[mg_p2]) == (90, 80),
+      (avail.get(mg_p1), avail.get(mg_p2)))
+shop.action_export_stock()
+check('Xuất tệp tồn khả dụng theo SKU', '8930000000017;Cháo yến;90' in _b64.b64decode(shop.stock_file).decode('utf-8-sig'))
+shop.action_invoice_orders()
+inv_sp = by_ref['SP001'].invoice_id
+check('Lập hóa đơn nháp cho đơn hoàn thành, không lập cho đơn chờ giao, đơn hủy',
+      inv_sp.state == 'draft' and inv_sp.amount_total == 81_000 and not by_ref['SP002'].invoice_id and not by_ref['SP003'].invoice_id)
+settle_bad = "ma_don;tien_hang;phi_san;thuc_nhan\nSP001;81000;8100;72900\nSP999;10000;1000;9000\n"
+SET = env['lfood.ecom.settlement'].with_user(users['ketoanvien'])
+st_e = SET.create({'shop_id': shop.id, 'name': 'PAY-2912', 'date': date(2029, 12, 31),
+                   'import_file': _b64.b64encode(settle_bad.encode())})
+st_e.action_load()
+check('Đối soát báo đơn chưa ghi sổ hóa đơn và đơn không có trong app',
+      'SP001 chưa ghi sổ hóa đơn' in st_e.issues and 'SP999 không có trong app' in st_e.issues, st_e.issues)
+try:
+    st_e.action_post(); check('Còn chênh lệch thì không ghi sổ đối soát', False)
+except UserError:
+    check('Còn chênh lệch thì không ghi sổ đối soát', True)
+inv_sp.write({'invoice_template': '1', 'invoice_symbol': 'C29TSP', 'invoice_number': '00000001'})
+inv_sp.action_post()
+st_e.write({'import_file': _b64.b64encode("ma_don;tien_hang;phi_san;thuc_nhan\nSP001;81.000;8.100;72.900\n".encode())})
+st_e.action_load()
+st_e.action_post()
+mst = Move._active_for(st_e)
+inv_sp.invalidate_recordset()
+check('Ghi sổ đối soát: Nợ 112 72.900, Nợ 6417 8.100 / Có 1311 81.000; đơn ghi nhận tiền về, hóa đơn hết phải thu',
+      {(l.account_code, l.debit, l.credit) for l in mst.line_ids} == {('112', 72_900, 0), ('6417', 8_100, 0), ('1311', 0, 81_000)}
+      and by_ref['SP001'].settled_amount == 72_900 and by_ref['SP001'].fee == 8_100 and inv_sp.amount_residual == 0,
+      [(l.account_code, l.debit, l.credit) for l in mst.line_ids])
+shop.write({'import_file': _b64.b64encode(orders_csv.replace('Chờ lấy hàng', 'Hoàn thành').encode('utf-8-sig'))})
+shop.action_import_orders()
+check('Nhập lại cập nhật trạng thái đơn chờ giao thành hoàn thành', by_ref['SP002'].status == 'done')
+
+# ---- đơn vị quy đổi, điều khoản thanh toán, xây dựng cơ bản, tìm kiếm nhanh
+CONV = env['lfood.uom.conversion'].with_user(users['ketoanvien'])
+thung = CONV.create({'product_id': mg_p1.id, 'name': 'thùng', 'factor': 24, 'barcode': '8930000000024'})
+check('Đơn vị quy đổi: 1 thùng = 24 hũ', thung.display_name == 'thùng (= 24 hũ)' and mg_p1.to_base_qty(3, 'thùng') == 72
+      and mg_p1.to_base_qty(5, 'hũ') == 5, thung.display_name)
+try:
+    mg_p1.to_base_qty(1, 'kiện'); check('Đơn vị chưa khai báo thì báo lỗi', False)
+except ValidationError:
+    check('Đơn vị chưa khai báo thì báo lỗi', True)
+scan_uom = PK.create({'kind': 'out', 'purpose': 'internal', 'date': date(2029, 12, 28), 'warehouse_id': wh_mg.id,
+                      'company_id': factory.id})
+scan_uom.scan('8930000000024')
+scan_uom.scan('8930000000017')
+check('Quét mã vạch thùng cộng 24 hũ, quét mã hũ cộng 1', scan_uom.line_ids.quantity == 25, scan_uom.line_ids.mapped('quantity'))
+TERM = env['lfood.payment.term'].with_user(users['ketoantruong'])
+env.flush_all()
+env.cr.execute('SAVEPOINT term_bad')
+try:
+    TERM.create({'name': 'Sai tỷ lệ', 'line_ids': [(0, 0, {'name': 'Đợt 1', 'percent': 40, 'days': 0})]})
+    env.flush_all()
+    check('Tổng tỷ lệ các đợt phải đủ 100%', False)
+except ValidationError:
+    check('Tổng tỷ lệ các đợt phải đủ 100%', True)
+env.cr.execute('ROLLBACK TO SAVEPOINT term_bad')
+env.clear()
+term = TERM.create({'name': '30% ngay, 70% sau 30 ngày',
+                    'line_ids': [(0, 0, {'name': 'Đợt 1', 'percent': 30, 'days': 0}),
+                                 (0, 0, {'name': 'Đợt 2', 'percent': 70, 'days': 30})]})
+check('Lịch thanh toán chia đúng tới đồng',
+      term.schedule(date(2030, 1, 10), 10_000_001) == [(date(2030, 1, 10), 3_000_000), (date(2030, 2, 9), 7_000_001)]
+      and term.max_days == 30, term.schedule(date(2030, 1, 10), 10_000_001))
+cust_mt.lfood_payment_term_id = term
+inv_term = SI.new({'partner_id': cust_mt.id, 'date': date(2030, 1, 10), 'company_id': factory.id})
+inv_term._onchange_partner_term()
+inv_term._onchange_term()
+check('Hóa đơn lấy điều khoản của khách, hạn thanh toán theo đợt cuối',
+      inv_term.payment_term_id == term and inv_term.due_date == date(2030, 2, 9))
+CIP = env['lfood.cip'].with_user(users['ketoanvien']).with_company(factory)
+cip = CIP.create({'name': 'Nhà kho lạnh số 2', 'date_start': date(2030, 1, 5), 'company_id': factory.id,
+                  'category_id': env['lfood.asset.category'].search([], limit=1).id, 'life_months': 120,
+                  'line_ids': [(0, 0, {'date': date(2030, 1, 10), 'name': 'Thanh toán nhà thầu đợt 1',
+                                       'partner_id': supplier.id, 'amount': 500_000_000}),
+                               (0, 0, {'date': date(2030, 2, 10), 'name': 'Thiết bị lạnh', 'partner_id': supplier.id,
+                                       'amount': 300_000_000})]})
+try:
+    cip.action_accept(); check('Chưa ghi sổ chi phí thì chưa nghiệm thu được', False)
+except UserError:
+    check('Chưa ghi sổ chi phí thì chưa nghiệm thu được', True)
+cip.line_ids.action_post()
+check('Chi phí xây dựng cơ bản ghi Nợ 2412 / Có 3311, tổng 800 triệu',
+      cip.total == 800_000_000 and gl(factory, '2412') == 800_000_000, (cip.total, gl(factory, '2412')))
+try:
+    cip.line_ids[0].write({'amount': 1}); check('Chi phí đã ghi sổ không sửa được', False)
+except UserError:
+    check('Chi phí đã ghi sổ không sửa được', True)
+cip.action_accept()
+check('Nghiệm thu: kết chuyển 2412 về 0, tạo thẻ tài sản nháp nguyên giá 800 triệu',
+      gl(factory, '2412') == 0 and cip.asset_id.original_value == 800_000_000 and cip.asset_id.state == 'draft'
+      and cip.state == 'done', (gl(factory, '2412'), cip.asset_id.state))
+QS = env['lfood.quick.search'].with_user(users['ketoanvien']).with_company(factory)
+qs = QS.create({'query': 'Nhà kho lạnh số 2'})
+check('Tìm kiếm nhanh thấy tài sản vừa tạo', 'Nhà kho lạnh số 2' in (qs.result_html or ''), qs.result_html)
+qs2 = QS.create({'query': '8930000000017'})
+check('Tìm theo mã vạch ra mặt hàng', 'Cháo yến' in (qs2.result_html or ''))
+qs3 = QS.create({'query': 'khong-co-gi-trung-khop-xyz'})
+check('Không tìm thấy thì báo rõ', 'Không tìm thấy' in (qs3.result_html or ''))
+
+# ---- chứng thư số, chứng từ đã ký
+CERT = env['lfood.digital.cert'].with_user(users['ketoantruong']).with_company(factory)
+cert = CERT.create({'name': 'CÔNG TY CP LIFES FOOD', 'serial': '540101ABCD', 'provider': 'Viettel-CA',
+                    'valid_from': date(2029, 1, 1), 'valid_to': date(2030, 1, 1), 'holder': 'Kế toán trưởng',
+                    'purpose': 'invoice', 'company_id': factory.id})
+check('Chứng thư số hiển thị theo nhà cung cấp và sê-ri', cert.display_name == 'Viettel-CA - 540101ABCD')
+env.flush_all()
+env.cr.execute('SAVEPOINT cert_bad')
+try:
+    CERT.create({'name': 'x', 'serial': 'x1', 'provider': 'y', 'valid_from': date(2030, 1, 1),
+                 'valid_to': date(2029, 1, 1), 'company_id': factory.id})
+    env.flush_all()
+    check('Hiệu lực ngược thì chặn', False)
+except ValidationError:
+    check('Hiệu lực ngược thì chặn', True)
+env.cr.execute('ROLLBACK TO SAVEPOINT cert_bad')
+env.clear()
+POL = env['lfood.archive.policy'].sudo().search([], limit=1)
+DOC = env['lfood.document'].with_user(users['ketoanvien']).with_company(factory)
+doc = DOC.create({'name': 'Hóa đơn bán ra ký số', 'doc_type': 'invoice', 'doc_date': date(2029, 10, 10),
+                  'policy_id': POL.id, 'company_id': factory.id, 'file': _b64.b64encode(b'<xml>hoa don da ky</xml>'),
+                  'file_name': 'hd.xml'})
+env.flush_all()
+env.cr.execute('SAVEPOINT sign_bad')
+try:
+    doc.write({'signed': True})
+    env.flush_all()
+    check('Đánh dấu đã ký mà thiếu chứng thư, người ký thì chặn', False)
+except ValidationError:
+    check('Đánh dấu đã ký mà thiếu chứng thư, người ký thì chặn', True)
+env.cr.execute('ROLLBACK TO SAVEPOINT sign_bad')
+env.clear()
+env.cr.execute('SAVEPOINT sign_out')
+try:
+    doc.write({'signed': True, 'cert_id': cert.id, 'signer': 'Trần Yên Hưng', 'signature_format': 'xml',
+               'signed_at': '2030-06-01 09:00:00'})
+    env.flush_all()
+    check('Ký ngoài thời hạn chứng thư thì chặn', False)
+except ValidationError:
+    check('Ký ngoài thời hạn chứng thư thì chặn', True)
+env.cr.execute('ROLLBACK TO SAVEPOINT sign_out')
+env.clear()
+doc.write({'signed': True, 'cert_id': cert.id, 'signer': 'Trần Yên Hưng', 'signature_format': 'xml',
+           'signed_at': '2029-10-10 09:00:00'})
+check('Ghi nhận chứng từ đã ký số, tệp còn nguyên vẹn', doc.signed and doc.intact and doc.checksum)
+env['lfood.reminder']._cron_refresh(date(2029, 12, 15))
+check('Nhắc gia hạn chứng thư số sắp hết hạn',
+      env['lfood.reminder'].search_count([('key', '=', 'cert-%s-2030-01-01' % cert.id), ('state', '=', 'open')]) == 1)
+
+# ---- nhập dữ liệu ban đầu
+JOB = env['lfood.import.job'].with_user(users['ketoantruong']).with_company(factory)
+csv_partner = """Ma so thue;Ten nha cung cap;Dia chi;Dien thoai
+0312345000;Công ty Nhập Thử A;12 Lê Lợi, TP.HCM;0909111222
+;Công ty Nhập Thử B;3 Trần Phú;0909333444
+"""
+job1 = JOB.create({'name': 'Đối tác từ phần mềm cũ', 'kind': 'partner', 'company_id': factory.id,
+                   'file': _b64.b64encode(csv_partner.encode('utf-8-sig')), 'file_name': 'doitac.csv'})
+job1.action_read()
+m = {x.field_key: x.column_index for x in job1.mapping_ids}
+check('Đọc tệp và tự đoán cột: mã số thuế cột 0, tên cột 1, địa chỉ cột 2, điện thoại cột 3',
+      (m['vat'], m['name'], m['street'], m['phone']) == (0, 1, 2, 3), m)
+job1.action_check()
+check('Kiểm tra trước khi nhập: đọc được 2 dòng, không lỗi',
+      '2 dòng' in job1.preview_html and 'Không thấy lỗi' in job1.preview_html)
+job1.action_import()
+p_new = env['res.partner'].search([('vat', '=', '0312345000')])
+check('Nhập đối tác: tạo mới theo mã số thuế, ghi kết quả',
+      p_new.name == 'Công ty Nhập Thử A' and p_new.phone == '0909111222' and job1.result == 'Đã nhập 2 dòng'
+      and job1.state == 'done', job1.result)
+job1b = JOB.create({'name': 'Nhập lại lần hai', 'kind': 'partner', 'company_id': factory.id,
+                    'file': _b64.b64encode(csv_partner.encode('utf-8-sig')), 'file_name': 'doitac.csv'})
+job1b.action_read()
+job1b.action_import()
+check('Nhập lại không tạo trùng đối tác', env['res.partner'].search_count([('vat', '=', '0312345000')]) == 1
+      and job1b.result == 'Đã nhập 0 dòng', job1b.result)
+csv_bal = """Tai khoan;Du No;Du Co
+111;100.000.000;
+41111;;100.000.000
+"""
+job2 = JOB.create({'name': 'Số dư đầu kỳ 2030', 'kind': 'balance', 'company_id': factory.id,
+                   'opening_date': date(2030, 1, 1), 'file': _b64.b64encode(csv_bal.encode('utf-8-sig')),
+                   'file_name': 'sodu.csv'})
+job2.action_read()
+job2.action_import()
+mbal = Move._active_for(job2)
+check('Số dư đầu kỳ tạo bút toán cân Nợ 111 / Có 41111 100 triệu',
+      {(l.account_code, l.debit, l.credit) for l in mbal.line_ids} == {('111', 100_000_000, 0), ('41111', 0, 100_000_000)},
+      [(l.account_code, l.debit, l.credit) for l in mbal.line_ids])
+job3 = JOB.create({'name': 'Số dư lệch', 'kind': 'balance', 'company_id': factory.id, 'opening_date': date(2030, 1, 1),
+                   'file': _b64.b64encode("Tai khoan;Du No;Du Co\n111;5.000.000;\n4111;;4.000.000\n".encode('utf-8-sig')),
+                   'file_name': 'lech.csv'})
+job3.action_read()
+job3.action_check()
+check('Số dư đầu kỳ lệch Nợ Có thì báo và không cho nhập', 'lệch' in job3.preview_html)
+try:
+    job3.action_import(); check('Chặn nhập khi còn lỗi', False)
+except UserError:
+    check('Chặn nhập khi còn lỗi', True)
+csv_stock = """Ma kho;Ma hang;So lo;Han dung;So luong;Don gia
+KDB;SO01;TD-01;31/12/2031;10;20000
+"""
+job4 = JOB.create({'name': 'Tồn kho đầu kỳ 2030', 'kind': 'stock', 'company_id': factory.id,
+                   'opening_date': date(2030, 1, 1), 'file': _b64.b64encode(csv_stock.encode('utf-8-sig')),
+                   'file_name': 'ton.csv'})
+job4.action_read()
+job4.action_import()
+lot_td = env['lfood.stock.lot'].search([('name', '=', 'TD-01')])
+check('Tồn đầu kỳ tạo phiếu nhập, có lô và hạn dùng, không ghi sổ lại',
+      lot_td.expiry_date == date(2031, 12, 31) and so_prod._position(wh_so, lot_td)[0] == 10
+      and not Move.sudo().search_count([('source_model', '=', 'lfood.stock.picking'), ('memo', 'ilike', 'Tồn đầu kỳ theo')]),
+      (lot_td.expiry_date, so_prod._position(wh_so, lot_td)))
+try:
+    env['lfood.import.job'].with_user(users['ketoanvien']).with_company(factory).create(
+        {'name': 'x', 'kind': 'partner', 'company_id': factory.id, 'file': _b64.b64encode(b'a;b')})
+    check('Kế toán viên không tạo đợt nhập dữ liệu', False)
+except AccessError:
+    check('Kế toán viên không tạo đợt nhập dữ liệu', True)
+
 # khóa sổ
 factory.sudo().with_context(lfood_audit_skip=True).write({'lfood_lock_date': date(2026, 8, 31)})
 late = KV_Move.create({'journal': 'general', 'date': date(2026, 8, 20), 'memo': 'ghi vào kỳ đã khóa',

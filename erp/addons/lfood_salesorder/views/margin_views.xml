@@ -36,4 +36,67 @@
         </field>
     </record>
     <menuitem id="menu_margin_report" name="Lãi gộp theo nhãn hàng, kênh, vùng" parent="lfood_base.menu_reports" action="action_margin_report" sequence="60"/>
+    <record id="rule_alloc_company" model="ir.rule">
+        <field name="name">Phân bổ chi phí chung theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_cost_allocation"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_cost_allocation_list" model="ir.ui.view">
+        <field name="name">lfood.cost.allocation.list</field>
+        <field name="model">lfood.cost.allocation</field>
+        <field name="arch" type="xml">
+            <list string="Phân bổ chi phí chung">
+                <field name="name"/><field name="date_from"/><field name="date_to"/><field name="source_cost_item_id"/>
+                <field name="basis"/><field name="amount"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_cost_allocation_form" model="ir.ui.view">
+        <field name="name">lfood.cost.allocation.form</field>
+        <field name="model">lfood.cost.allocation</field>
+        <field name="arch" type="xml">
+            <form string="Phân bổ chi phí chung">
+                <header>
+                    <button name="action_compute" type="object" string="Tính" invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Ghi sổ" class="btn-primary" invisible="state != 'draft'"
+                            groups="lfood_base.group_chief_accountant"/>
+                    <button name="action_reset" type="object" string="Hủy ghi sổ" invisible="state != 'posted'"
+                            groups="lfood_base.group_chief_accountant"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name" readonly="state != 'draft'"/>
+                            <field name="date_from" readonly="state != 'draft'"/>
+                            <field name="date_to" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/>
+                        </group>
+                        <group>
+                            <field name="account_prefix" readonly="state != 'draft'"/>
+                            <field name="source_cost_item_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="basis" readonly="state != 'draft'"/>
+                            <field name="amount"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="cost_item_id" options="{'no_create': True}"/>
+                            <field name="key" column_invisible="parent.basis == 'manual'"/>
+                            <field name="weight" readonly="parent.basis != 'manual'"/>
+                            <field name="amount" sum="Tổng"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">Kết chuyển giữa khoản mục trên cùng tài khoản chi phí: Nợ TK (khoản mục nhận) / Có TK (khoản mục chung).
+                        Tiêu thức doanh thu lấy doanh thu thuần theo nhãn hàng hoặc kênh; cột Nhãn hàng / kênh ghi đúng tên.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_cost_allocation" model="ir.actions.act_window">
+        <field name="name">Phân bổ chi phí chung</field>
+        <field name="res_model">lfood.cost.allocation</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_cost_allocation" name="Phân bổ chi phí chung" parent="lfood_base.menu_documents" action="action_cost_allocation" sequence="46"/>
 </odoo>

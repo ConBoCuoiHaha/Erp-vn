@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_ccp_company" model="ir.rule">
+        <field name="name">CCP theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_ccp"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="rule_ccp_reading_company" model="ir.rule">
+        <field name="name">Giám sát CCP theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_ccp_reading"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_ccp_list" model="ir.ui.view">
+        <field name="name">lfood.ccp.list</field>
+        <field name="model">lfood.ccp</field>
+        <field name="arch" type="xml">
+            <list string="Điểm kiểm soát tới hạn">
+                <field name="code"/><field name="name"/><field name="hazard"/><field name="parameter"/>
+                <field name="limit_min"/><field name="limit_max"/><field name="unit"/><field name="frequency_hours"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_ccp_form" model="ir.ui.view">
+        <field name="name">lfood.ccp.form</field>
+        <field name="model">lfood.ccp</field>
+        <field name="arch" type="xml">
+            <form string="Điểm kiểm soát tới hạn">
+                <sheet>
+                    <group>
+                        <group><field name="code"/><field name="name"/><field name="hazard"/><field name="parameter"/><field name="unit"/>
+                            <field name="company_id" groups="base.group_multi_company"/></group>
+                        <group><field name="has_min"/><field name="limit_min" invisible="not has_min"/>
+                            <field name="has_max"/><field name="limit_max" invisible="not has_max"/>
+                            <field name="frequency_hours"/><field name="product_ids" widget="many2many_tags"/></group>
+                    </group>
+                    <field name="corrective_action" placeholder="Hành động khắc phục định sẵn khi vượt giới hạn"/>
+                    <field name="reading_ids" readonly="1">
+                        <list decoration-danger="not in_limit" limit="20">
+                            <field name="measured_at"/><field name="value"/><field name="lot_id"/><field name="operator"/>
+                            <field name="in_limit"/><field name="verified_by"/>
+                        </list>
+                    </field>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_ccp" model="ir.actions.act_window">
+        <field name="name">Điểm kiểm soát tới hạn (HACCP)</field>
+        <field name="res_model">lfood.ccp</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_ccp_reading_list" model="ir.ui.view">
+        <field name="name">lfood.ccp.reading.list</field>
+        <field name="model">lfood.ccp.reading</field>
+        <field name="arch" type="xml">
+            <list string="Giám sát CCP" editable="top" decoration-danger="not in_limit">
+                <header>
+                    <button name="action_verify" type="object" string="Xác nhận hồ sơ"/>
+                </header>
+                <field name="measured_at"/>
+                <field name="ccp_id" options="{'no_create': True}"/>
+                <field name="value"/>
+                <field name="unit"/>
+                <field name="lot_id" options="{'no_create': True}"/>
+                <field name="operator"/>
+                <field name="deviation_note"/>
+                <field name="in_limit"/>
+                <field name="action_id"/>
+                <field name="verified_by"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_ccp_reading_search" model="ir.ui.view">
+        <field name="name">lfood.ccp.reading.search</field>
+        <field name="model">lfood.ccp.reading</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="ccp_id"/><field name="lot_id"/>
+                <filter name="out" string="Ngoài giới hạn" domain="[('in_limit', '=', False)]"/>
+                <filter name="unverified" string="Chưa xác nhận" domain="[('verified_by', '=', False)]"/>
+                <group><filter name="g_ccp" string="CCP" context="{'group_by': 'ccp_id'}"/></group>
+            </search>
+        </field>
+    </record>
+    <record id="action_ccp_reading" model="ir.actions.act_window">
+        <field name="name">Giám sát CCP</field>
+        <field name="res_model">lfood.ccp.reading</field>
+        <field name="view_mode">list</field>
+        <field name="context">{'search_default_unverified': 1}</field>
+    </record>
+    <menuitem id="menu_ccp_reading" name="Giám sát CCP (HACCP)" parent="menu_quality_root" action="action_ccp_reading" sequence="5"/>
+    <menuitem id="menu_ccp" name="Điểm kiểm soát tới hạn" parent="lfood_base.menu_config" action="action_ccp" sequence="70"/>
+</odoo>

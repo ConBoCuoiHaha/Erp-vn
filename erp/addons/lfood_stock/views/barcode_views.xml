@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_picking_form_scan" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.form.scan</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="inherit_id" ref="view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']" position="before">
+                <group invisible="state != 'draft'">
+                    <field name="scan_code" placeholder="Đặt con trỏ vào đây rồi quét mã vạch mặt hàng hoặc tem lô"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_count_form_scan" model="ir.ui.view">
+        <field name="name">lfood.stock.count.form.scan</field>
+        <field name="model">lfood.stock.count</field>
+        <field name="inherit_id" ref="view_stock_count_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="before">
+                <group invisible="state != 'draft'">
+                    <field name="scan_code" placeholder="Quét mã vạch mặt hàng hoặc tem lô, mỗi lần quét cộng 1"/>
+                    <button name="action_scan_mode" type="object" string="Đếm bằng máy quét (đưa số thực tế về 0)"
+                            confirm="Đưa toàn bộ số thực tế về 0 để đếm lại bằng máy quét?" colspan="2"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_product_form_barcode" model="ir.ui.view">
+        <field name="name">lfood.product.form.barcode</field>
+        <field name="model">lfood.product</field>
+        <field name="inherit_id" ref="view_product_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='code']" position="after">
+                <field name="barcode"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="action_report_lot_label" model="ir.actions.report">
+        <field name="name">Tem lô hàng</field>
+        <field name="model">lfood.stock.lot</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lfood_stock.report_lot_label</field>
+        <field name="report_file">lfood_stock.report_lot_label</field>
+        <field name="binding_model_id" ref="model_lfood_stock_lot"/>
+        <field name="binding_type">report</field>
+    </record>
+    <template id="report_lot_label">
+        <t t-call="web.basic_layout">
+            <div class="page">
+                <t t-foreach="docs" t-as="lot">
+                    <div style="border: 1px solid #999; padding: 6px; margin-bottom: 8px; width: 90mm; page-break-inside: avoid;">
+                        <div style="font-weight: bold;" t-out="lot.product_id.display_name"/>
+                        <div>Lô: <span t-out="lot.name"/>
+                            <t t-if="lot.production_date"> - NSX: <span t-out="lot.production_date.strftime('%d/%m/%Y')"/></t>
+                            <t t-if="lot.expiry_date"> - HSD: <span t-out="lot.expiry_date.strftime('%d/%m/%Y')"/></t>
+                        </div>
+                        <img t-att-src="'/report/barcode/?barcode_type=Code128&amp;value=%s&amp;width=600&amp;height=100' % lot.label_code"
+                             style="width: 80mm; height: 14mm;"/>
+                        <div style="font-family: monospace;" t-out="lot.label_code"/>
+                    </div>
+                </t>
+            </div>
+        </t>
+    </template>
+</odoo>

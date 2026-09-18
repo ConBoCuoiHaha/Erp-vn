@@ -13,6 +13,7 @@
         'data/sequences.xml',
         'data/categories.xml',
         'views/asset_views.xml',
+        'views/cip_views.xml',
         'views/depreciation_views.xml',
         'views/voucher_views.xml',
         'views/menus.xml',

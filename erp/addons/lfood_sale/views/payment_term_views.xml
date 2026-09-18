@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_payment_term_list" model="ir.ui.view">
+        <field name="name">lfood.payment.term.list</field>
+        <field name="model">lfood.payment.term</field>
+        <field name="arch" type="xml">
+            <list string="Điều khoản thanh toán"><field name="name"/><field name="max_days"/><field name="note"/></list>
+        </field>
+    </record>
+    <record id="view_payment_term_form" model="ir.ui.view">
+        <field name="name">lfood.payment.term.form</field>
+        <field name="model">lfood.payment.term</field>
+        <field name="arch" type="xml">
+            <form string="Điều khoản thanh toán">
+                <sheet>
+                    <group><group><field name="name"/><field name="note"/></group><group><field name="max_days"/></group></group>
+                    <field name="line_ids">
+                        <list editable="bottom"><field name="name"/><field name="percent" sum="Tổng"/><field name="days"/></list>
+                    </field>
+                    <div class="text-muted">Ví dụ: đợt 1 30% sau 0 ngày, đợt 2 70% sau 30 ngày. Tổng tỷ lệ phải bằng 100%.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_payment_term" model="ir.actions.act_window">
+        <field name="name">Điều khoản thanh toán</field>
+        <field name="res_model">lfood.payment.term</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <record id="view_sale_invoice_form_term" model="ir.ui.view">
+        <field name="name">lfood.sale.invoice.form.term</field>
+        <field name="model">lfood.sale.invoice</field>
+        <field name="inherit_id" ref="view_sale_invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='due_date']" position="before">
+                <field name="payment_term_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+            </xpath>
+            <xpath expr="//field[@name='due_date']" position="after">
+                <field name="payment_schedule" invisible="not payment_schedule"/>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_partner_form_term" model="ir.ui.view">
+        <field name="name">res.partner.lfood.form.term</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="lfood_admin.view_partner_lfood_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='comment']/.." position="before">
+                <group string="Bán hàng"><field name="lfood_payment_term_id"/></group>
+            </xpath>
+        </field>
+    </record>
+    <menuitem id="menu_payment_term" name="Điều khoản thanh toán" parent="lfood_base.menu_config" action="action_payment_term" sequence="63"/>
+</odoo>

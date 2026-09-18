@@ -14,6 +14,8 @@
         'data/companies.xml',
         'views/stock_views.xml',
         'views/count_views.xml',
+        'views/barcode_views.xml',
+        'views/uom_views.xml',
     ],
     'installable': True,
 }

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_cip_company" model="ir.rule">
+        <field name="name">Xây dựng cơ bản theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_cip"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_cip_list" model="ir.ui.view">
+        <field name="name">lfood.cip.list</field>
+        <field name="model">lfood.cip</field>
+        <field name="arch" type="xml">
+            <list string="Xây dựng cơ bản dở dang">
+                <field name="name"/><field name="date_start"/><field name="total" sum="Tổng"/>
+                <field name="asset_id"/><field name="accept_date"/><field name="state"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_cip_form" model="ir.ui.view">
+        <field name="name">lfood.cip.form</field>
+        <field name="model">lfood.cip</field>
+        <field name="arch" type="xml">
+            <form string="Xây dựng cơ bản dở dang">
+                <header>
+                    <button name="action_accept" type="object" string="Nghiệm thu, ghi tăng tài sản" class="btn-primary"
+                            invisible="state != 'draft'" confirm="Kết chuyển chi phí sang nguyên giá và tạo thẻ tài sản?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="name" readonly="state != 'draft'"/><field name="date_start" readonly="state != 'draft'"/>
+                            <field name="account" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state != 'draft'"/></group>
+                        <group><field name="total"/><field name="category_id" readonly="state != 'draft'" options="{'no_create': True}"/>
+                            <field name="life_months" readonly="state != 'draft'"/><field name="usage" readonly="state != 'draft'"/>
+                            <field name="asset_id"/><field name="accept_date"/></group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="date"/><field name="name"/><field name="partner_id"/><field name="invoice_ref"/>
+                            <field name="amount" sum="Tổng"/><field name="counterpart_account"/><field name="state"/>
+                            <button name="action_post" type="object" string="Ghi sổ" invisible="state == 'posted'"/>
+                        </list>
+                    </field>
+                    <div class="text-muted">Chi phí ghi Nợ 241 / Có tài khoản đối ứng. Nghiệm thu: Nợ nguyên giá 211 / Có 241 và tạo thẻ tài sản nháp,
+                        kế toán kiểm tra rồi bấm Ghi tăng để lập lịch khấu hao.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_cip" model="ir.actions.act_window">
+        <field name="name">Xây dựng cơ bản dở dang</field>
+        <field name="res_model">lfood.cip</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_cip" name="Xây dựng cơ bản dở dang" parent="lfood_base.menu_documents" action="action_cip" sequence="48"/>
+</odoo>

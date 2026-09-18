@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_product_form_uom" model="ir.ui.view">
+        <field name="name">lfood.product.form.uom</field>
+        <field name="model">lfood.product</field>
+        <field name="inherit_id" ref="view_product_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//sheet" position="inside">
+                <separator string="Đơn vị quy đổi"/>
+                <field name="conversion_ids">
+                    <list editable="bottom">
+                        <field name="name"/>
+                        <field name="factor"/>
+                        <field name="base_uom"/>
+                        <field name="barcode"/>
+                    </list>
+                </field>
+                <div class="text-muted">Sổ kho và giá vốn luôn theo đơn vị gốc. Quét mã vạch của thùng, lốc thì app cộng đủ số đơn vị gốc.</div>
+            </xpath>
+        </field>
+    </record>
+    <record id="view_picking_form_uom" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.form.uom</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="inherit_id" ref="view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='line_ids']/list/field[@name='quantity']" position="before">
+                <field name="pack_uom_id" optional="hide" options="{'no_create': True}"/>
+                <field name="pack_qty" optional="hide"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

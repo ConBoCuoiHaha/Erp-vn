@@ -10,6 +10,7 @@
         'security/ir.model.access.csv',
         'views/menus.xml',
         'views/users_views.xml',
+        'views/quick_search_views.xml',
         'views/role_matrix_views.xml',
         'views/backup_views.xml',
         'views/partner_views.xml',

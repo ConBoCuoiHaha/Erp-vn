@@ -1,10 +1,10 @@
 """Chuyển hàng giữa hai pháp nhân (KHO04).
 
 Văn phòng và Nhà máy có mã số thuế riêng nên hàng chuyển giữa hai bên là mua bán: bên xuất lập hóa đơn GTGT
-(Nghị định 123/2020/NĐ-CP sửa bởi Nghị định 70/2025/NĐ-CP), ghi doanh thu, giá vốn; bên nhận ghi nhập kho mua hàng,
+(Nghị định 254/2026/NĐ-CP), ghi doanh thu, giá vốn; bên nhận ghi nhập kho mua hàng,
 thuế GTGT đầu vào, phải trả. Phiếu xuất kho kiêm vận chuyển nội bộ chỉ dùng khi chuyển trong cùng một pháp nhân.
 Hai bên là bên có quan hệ liên kết nên giá chuyển phải theo giá thị trường và kê khai giao dịch liên kết
-(Nghị định 132/2020/NĐ-CP) khi quyết toán thuế TNDN. Lô, hạn dùng giữ nguyên từ bên xuất sang bên nhận.
+(Nghị định 255/2026/NĐ-CP) khi quyết toán thuế TNDN. Lô, hạn dùng giữ nguyên từ bên xuất sang bên nhận.
 """
 from odoo import api, fields, models, _
 from odoo.exceptions import UserError, ValidationError

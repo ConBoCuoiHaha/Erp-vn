@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="rule_import_job_company" model="ir.rule">
+        <field name="name">Đợt nhập dữ liệu theo công ty được phép</field>
+        <field name="model_id" ref="model_lfood_import_job"/>
+        <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+    </record>
+    <record id="view_import_job_list" model="ir.ui.view">
+        <field name="name">lfood.import.job.list</field>
+        <field name="model">lfood.import.job</field>
+        <field name="arch" type="xml">
+            <list string="Nhập dữ liệu ban đầu">
+                <field name="name"/><field name="kind"/><field name="file_name"/><field name="state"/><field name="result"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_import_job_form" model="ir.ui.view">
+        <field name="name">lfood.import.job.form</field>
+        <field name="model">lfood.import.job</field>
+        <field name="arch" type="xml">
+            <form string="Nhập dữ liệu ban đầu">
+                <header>
+                    <button name="action_read" type="object" string="Đọc tệp, đoán cột" class="btn-primary" invisible="state == 'done'"/>
+                    <button name="action_check" type="object" string="Kiểm tra" invisible="state != 'mapped'"/>
+                    <button name="action_import" type="object" string="Nhập dữ liệu" invisible="state != 'mapped'"
+                            groups="lfood_base.group_chief_accountant" confirm="Nhập dữ liệu vào hệ thống?"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group><field name="name" readonly="state == 'done'"/><field name="kind" readonly="state == 'done'"/>
+                            <field name="file" filename="file_name" readonly="state == 'done'"/><field name="file_name" invisible="1"/></group>
+                        <group><field name="opening_date" invisible="kind not in ('balance', 'stock')" readonly="state == 'done'"/>
+                            <field name="result"/>
+                            <field name="company_id" groups="base.group_multi_company" readonly="state == 'done'"/></group>
+                    </group>
+                    <field name="columns" invisible="not columns"/>
+                    <field name="mapping_ids" readonly="state == 'done'">
+                        <list editable="bottom" create="false" delete="false">
+                            <field name="label" readonly="1"/>
+                            <field name="required" readonly="1"/>
+                            <field name="column_index"/>
+                        </list>
+                    </field>
+                    <field name="preview_html"/>
+                    <div class="text-muted">Xuất dữ liệu từ phần mềm cũ ra Excel hoặc CSV, tải lên đây. App tự đoán cột theo tên; sửa lại số cột nếu đoán sai
+                        (đếm từ 0 theo dòng "Các cột trong tệp"). Số dư đầu kỳ phải cân Nợ, Có. Tồn kho đầu kỳ tạo phiếu "Tồn đầu kỳ" không ghi sổ lại.</div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record id="action_import_job" model="ir.actions.act_window">
+        <field name="name">Nhập dữ liệu ban đầu</field>
+        <field name="res_model">lfood.import.job</field>
+        <field name="view_mode">list,form</field>
+    </record>
+    <menuitem id="menu_import_job" name="Nhập dữ liệu ban đầu" parent="lfood_base.menu_config" action="action_import_job" sequence="80"/>
+</odoo>
