@@ -11,6 +11,7 @@ ref = env.ref
 V = env['lfood.service.voucher']
 Log = env['lfood.audit.log']
 factory = ref('lfood_base.company_factory')
+log_start = env['lfood.audit.log'].sudo().search([], limit=1).id  # dòng nhật ký cuối trước khi kiểm thử
 users = {u.login: u for u in env['res.users'].search([('login', 'in', ['giamdoc', 'ketoantruong', 'ketoanvien', 'nhanvien'])])}
 check('Có đủ 4 người dùng mẫu', len(users) == 4, list(users))
 
@@ -118,8 +119,13 @@ try:
     check('Không sửa được nhật ký bằng SQL', False)
 except Exception:
     check('Không sửa được nhật ký bằng SQL', True)
+brk, _n = Log.sudo()._chain_breaks()
+check('Chuỗi mã băm nhật ký: không có sai lệch mới trong lúc kiểm thử', not [b for b in brk if b > log_start], brk)
+env.cr.execute("SELECT hash FROM lfood_audit_head")
+check('Đầu chuỗi mã băm khớp dòng nhật ký cuối', env.cr.fetchone()[0] == Log.sudo().search([], limit=1).hash)
 verify = Log.sudo().action_verify_chain()
-check('Chuỗi mã băm nhật ký toàn vẹn', verify['params']['type'] == 'success', verify['params']['message'])
+check('Kiểm tra toàn vẹn chỉ báo đúng các dòng sai lệch cũ', verify['params']['type'] == ('danger' if brk else 'success')
+      and all(str(b) in verify['params']['message'] for b in brk[:20]), verify['params']['message'])
 
 # ---- Quản trị: người dùng, vai trò, CRUD
 admin = ref('base.user_admin')
@@ -4314,6 +4320,12 @@ try:
     check('Kế toán viên không tạo đợt nhập dữ liệu', False)
 except AccessError:
     check('Kế toán viên không tạo đợt nhập dữ liệu', True)
+
+# ---- menu quản trị Odoo không lộ cho người dùng thường
+_apps = env.ref('base.menu_management')
+check('Menu Ứng dụng chỉ quản trị thấy, không có module tự lộ menu hay gửi dữ liệu ra ngoài',
+      all(_apps.id not in env['ir.ui.menu'].with_user(users[l]).load_menus(False) for l in ('giamdoc', 'ketoantruong', 'ketoanvien', 'nhanvien'))
+      and not env['ir.module.module'].search_count([('name', 'in', ['base_install_request', 'partner_autocomplete']), ('state', '=', 'installed')]))
 
 # khóa sổ
 factory.sudo().with_context(lfood_audit_skip=True).write({'lfood_lock_date': date(2026, 8, 31)})

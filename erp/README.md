@@ -29,11 +29,22 @@ Kiểm thử HTTP lấy tài khoản quản trị từ biến môi trường `LF
 
 ## Kiểm thử
 
+Hai cơ sở dữ liệu: `lfood` là bản làm việc (có dữ liệu mẫu từ `tools/seed_demo.py`, máy chủ web chỉ phục vụ bản này),
+`lfood_test` là bản sạch dành cho bộ kiểm thử nghiệp vụ. Nâng cấp module thì chạy `-u` trên cả hai.
+
 ```
-docker compose run --rm -T odoo odoo shell -c /etc/odoo/odoo.conf -d lfood --no-http < tests/smoke_test.py
+docker compose run --rm -T odoo odoo shell -c /etc/odoo/odoo.conf -d lfood_test --no-http < tests/smoke_test.py
+docker compose run --rm -T odoo odoo shell -c /etc/odoo/odoo.conf -d lfood --no-http < tests/ui_crawl.py
+docker compose run --rm -T odoo odoo shell -c /etc/odoo/odoo.conf -d lfood --no-http < tests/data_consistency.py
 ```
 
-800 kiểm tra: số liệu MDV00433, chặn quyền từng vai trò, Sửa sau khi Cất, phân bổ tổng khớp tới đồng,
+- `ui_crawl.py`: mở mọi menu dưới 5 vai trò như trình duyệt (tải giao diện, danh sách, bản ghi, biểu mẫu mới,
+  từng bộ lọc, nhóm theo, pivot, biểu đồ, mẫu in). Nối sau phần thân `smoke_test.py` để duyệt trên dữ liệu kiểm thử.
+- `data_consistency.py`: đối chiếu chéo trên dữ liệu thật: sổ cân, thẻ kho = sổ cái 152/155/156, công nợ 131 từng
+  khách = hóa đơn chưa thu, tuổi nợ = 131, 334 = lương chưa chi, 3335 = thuế TNCN, tờ khai GTGT = hóa đơn,
+  B01 cân, B02 = 4212, B03 = số dư tiền, không lập hóa đơn vượt đơn, không lô nào tồn âm.
+
+803 kiểm tra: số liệu MDV00433, chặn quyền từng vai trò, Sửa sau khi Cất, phân bổ tổng khớp tới đồng,
 báo cáo không đổi sau Sửa và sau điều chỉnh hàng loạt, hoàn tác lô, khôi phục số gốc, nhật ký
 ghi đích danh, không sửa được nhật ký kể cả bằng SQL, chuỗi mã băm toàn vẹn; quản trị: tạo, đổi vai trò,
 ngừng, xóa người dùng, R&D bị chặn chứng từ, CRUD nhà cung cấp và pháp nhân, xóa chứng từ đã hủy,
