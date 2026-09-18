@@ -6,7 +6,9 @@
     'category': 'LiFeOOD',
     'author': 'LiFeOOD',
     'license': 'LGPL-3',
-    'depends': ['base', 'web', 'auth_totp', 'auth_password_policy', 'auth_signup', 'lfood_base', 'lfood_audit', 'lfood_admin'],
+    'depends': ['base', 'web', 'auth_totp', 'auth_password_policy', 'auth_signup', 'lfood_base', 'lfood_audit', 'lfood_admin',
+                # tự cài theo mail; khai phụ thuộc để module này nạp sau và vô hiệu hóa chúng
+                'base_install_request', 'partner_autocomplete'],
     'data': [
         'security/ir.model.access.csv',
         'data/params.xml',

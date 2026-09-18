@@ -61,10 +61,11 @@ for comp in env['res.company'].search([]):
     check('%s: mọi tờ khai GTGT khớp thuế hóa đơn bán ra' % tag, True)
     # B01 cân, B02 lợi nhuận = 4212 sau kết chuyển
     Rep = env['lfood.ledger.report'].sudo()
-    closed = env['lfood.closing'].sudo().search([('company_id', '=', comp.id), ('state', '=', 'done')], order='date_to desc', limit=1) \
-        if 'state' in env['lfood.closing']._fields else env['lfood.closing'].sudo().search([('company_id', '=', comp.id)], order='date_to desc', limit=1)
+    # kỳ kết chuyển gần nhất lấy từ bút toán kết chuyển (bảng lfood.closing là thao tác tạm, Odoo tự dọn)
+    closed = env['lfood.move'].sudo().search([('company_id', '=', comp.id), ('journal', '=', 'closing'), ('state', '=', 'posted')],
+                                             order='date desc', limit=1)
     if closed:
-        upto = closed.date_to
+        upto = closed.date
         b01 = Rep.create({'report': 'b01', 'company_id': comp.id, 'date_from': date(upto.year, 1, 1), 'date_to': upto})
         end, pl_left = b01._b01_values(upto.replace(day=1) if False else date.fromordinal(upto.toordinal() + 1))
         check('%s: B01 tới %s cân (tài sản = nguồn vốn)' % (tag, upto), end['280'] == end['440'] and pl_left == 0, (end['280'], end['440'], pl_left))
