@@ -12,7 +12,10 @@ services:
       POSTGRES_DB: postgres
     volumes:
       - db-data:/var/lib/postgresql/data
-    # không mở cổng 5432 ra ngoài: máy đã có PostgreSQL 17 dùng cổng này
+    # xem dữ liệu bằng DBeaver: localhost:5433 (cổng 5432 của máy đã có PostgreSQL 17 dùng);
+    # chỉ nghe trên 127.0.0.1 nên máy khác trong mạng không kết nối được
+    ports:
+      - "127.0.0.1:5433:5432"
 
   odoo:
     image: odoo:19.0
