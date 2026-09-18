@@ -1,0 +1,36 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_department_emp,department employee,model_lfood_department,lfood_base.group_employee,1,0,0,0
+access_department_acc,department accountant,model_lfood_department,lfood_base.group_accountant,1,1,1,0
+access_position_emp,position employee,model_lfood_job_position,lfood_base.group_employee,1,0,0,0
+access_position_acc,position accountant,model_lfood_job_position,lfood_base.group_accountant,1,1,1,0
+access_transfer_acc,transfer accountant,model_lfood_hr_transfer,lfood_base.group_accountant,1,1,1,0
+access_transfer_dir,transfer director,model_lfood_hr_transfer,lfood_base.group_director,1,1,1,0
+access_discipline_acc,discipline accountant,model_lfood_hr_discipline,lfood_base.group_accountant,1,1,1,0
+access_discipline_dir,discipline director,model_lfood_hr_discipline,lfood_base.group_director,1,1,1,0
+access_reward_acc,reward accountant,model_lfood_hr_reward,lfood_base.group_accountant,1,1,1,0
+access_labor_report_acc,labor report accountant,model_lfood_labor_report,lfood_base.group_accountant,1,1,1,1
+access_labor_report_dir,labor report director,model_lfood_labor_report,lfood_base.group_director,1,0,0,0
+access_dependent_acc,dependent accountant,model_lfood_dependent,lfood_base.group_accountant,1,1,1,1
+access_dependent_dir,dependent director,model_lfood_dependent,lfood_base.group_director,1,0,0,0
+access_reward_dir,reward director,model_lfood_hr_reward,lfood_base.group_director,1,1,1,0
+access_accident_acc,accident accountant,model_lfood_hr_accident,lfood_base.group_accountant,1,1,1,0
+access_accident_chief,accident chief,model_lfood_hr_accident,lfood_base.group_chief_accountant,1,1,1,1
+access_accident_dir,accident director,model_lfood_hr_accident,lfood_base.group_director,1,0,0,0
+access_accident_rep_acc,accident report accountant,model_lfood_hr_accident_report,lfood_base.group_accountant,1,1,1,1
+access_accident_rep_dir,accident report director,model_lfood_hr_accident_report,lfood_base.group_director,1,0,0,0
+access_safety_tr_acc,safety training accountant,model_lfood_hr_safety_training,lfood_base.group_accountant,1,1,1,1
+access_safety_tr_dir,safety training director,model_lfood_hr_safety_training,lfood_base.group_director,1,0,0,0
+access_job_request_acc,job request accountant,model_lfood_hr_job_request,lfood_base.group_accountant,1,1,1,0
+access_job_request_dir,job request director,model_lfood_hr_job_request,lfood_base.group_director,1,1,1,0
+access_applicant_acc,applicant accountant,model_lfood_hr_applicant,lfood_base.group_accountant,1,1,1,1
+access_applicant_dir,applicant director,model_lfood_hr_applicant,lfood_base.group_director,1,1,0,0
+access_kpi_period_acc,kpi_period accountant,model_lfood_kpi_period,lfood_base.group_accountant,1,1,1,1
+access_kpi_period_dir,kpi_period director,model_lfood_kpi_period,lfood_base.group_director,1,1,0,0
+access_kpi_review_acc,kpi_review accountant,model_lfood_kpi_review,lfood_base.group_accountant,1,1,1,1
+access_kpi_review_dir,kpi_review director,model_lfood_kpi_review,lfood_base.group_director,1,0,0,0
+access_kpi_line_acc,kpi_line accountant,model_lfood_kpi_line,lfood_base.group_accountant,1,1,1,1
+access_kpi_line_dir,kpi_line director,model_lfood_kpi_line,lfood_base.group_director,1,0,0,0
+access_training_course_acc,training_course accountant,model_lfood_training_course,lfood_base.group_accountant,1,1,1,1
+access_training_course_dir,training_course director,model_lfood_training_course,lfood_base.group_director,1,0,0,0
+access_training_attendee_acc,training_attendee accountant,model_lfood_training_attendee,lfood_base.group_accountant,1,1,1,1
+access_training_attendee_dir,training_attendee director,model_lfood_training_attendee,lfood_base.group_director,1,0,0,0

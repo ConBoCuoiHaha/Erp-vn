@@ -1,0 +1,26 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_qc_tpl_acc,qc template accountant,model_lfood_qc_template,lfood_base.group_accountant,1,1,1,0
+access_qc_tpl_line_acc,qc template line accountant,model_lfood_qc_template_line,lfood_base.group_accountant,1,1,1,1
+access_qc_check_acc,qc check accountant,model_lfood_qc_check,lfood_base.group_accountant,1,1,1,0
+access_qc_check_dir,qc check director,model_lfood_qc_check,lfood_base.group_director,1,1,0,0
+access_qc_check_line_acc,qc check line accountant,model_lfood_qc_check_line,lfood_base.group_accountant,1,1,1,1
+access_qc_check_line_dir,qc check line director,model_lfood_qc_check_line,lfood_base.group_director,1,1,0,0
+access_qc_action_acc,qc action accountant,model_lfood_qc_action,lfood_base.group_accountant,1,1,1,0
+access_qc_action_dir,qc action director,model_lfood_qc_action,lfood_base.group_director,1,1,1,0
+access_declaration_acc,declaration accountant,model_lfood_product_declaration,lfood_base.group_accountant,1,1,1,0
+access_declaration_dir,declaration director,model_lfood_product_declaration,lfood_base.group_director,1,1,1,0
+access_lab_test_acc,lab test accountant,model_lfood_lab_test,lfood_base.group_accountant,1,1,1,0
+access_lab_test_dir,lab test director,model_lfood_lab_test,lfood_base.group_director,1,1,1,0
+access_worker_check_acc,worker check accountant,model_lfood_worker_check,lfood_base.group_accountant,1,1,1,0
+access_worker_check_dir,worker check director,model_lfood_worker_check,lfood_base.group_director,1,1,1,0
+access_trace_acc,trace accountant,model_lfood_trace,lfood_base.group_accountant,1,1,1,1
+access_trace_dir,trace director,model_lfood_trace,lfood_base.group_director,1,1,1,1
+access_recall_acc,recall accountant,model_lfood_recall,lfood_base.group_accountant,1,1,1,0
+access_recall_dir,recall director,model_lfood_recall,lfood_base.group_director,1,1,1,0
+access_recall_line_acc,recall line accountant,model_lfood_recall_line,lfood_base.group_accountant,1,1,1,1
+access_recall_line_dir,recall line director,model_lfood_recall_line,lfood_base.group_director,1,1,1,0
+access_ccp_acc,ccp accountant,model_lfood_ccp,lfood_base.group_accountant,1,1,1,0
+access_ccp_chief,ccp chief,model_lfood_ccp,lfood_base.group_chief_accountant,1,1,1,1
+access_ccp_dir,ccp director,model_lfood_ccp,lfood_base.group_director,1,0,0,0
+access_ccp_reading_acc,ccp reading accountant,model_lfood_ccp_reading,lfood_base.group_accountant,1,1,1,0
+access_ccp_reading_dir,ccp reading director,model_lfood_ccp_reading,lfood_base.group_director,1,1,0,0

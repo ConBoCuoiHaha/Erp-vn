@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_vat_return_acc,vat return accountant,model_lfood_vat_return,lfood_base.group_accountant,1,1,1,1
+access_vat_return_dir,vat return director,model_lfood_vat_return,lfood_base.group_director,1,0,0,0
+access_vat_line_acc,vat line accountant,model_lfood_vat_return_line,lfood_base.group_accountant,1,1,1,1
+access_vat_line_dir,vat line director,model_lfood_vat_return_line,lfood_base.group_director,1,0,0,0
+access_einvoice_check_acc,einvoice check accountant,model_lfood_einvoice_check,lfood_base.group_accountant,1,1,1,1
+access_einvoice_check_dir,einvoice check director,model_lfood_einvoice_check,lfood_base.group_director,1,0,0,0
+access_einvoice_line_acc,einvoice line accountant,model_lfood_einvoice_check_line,lfood_base.group_accountant,1,1,1,1
+access_einvoice_line_dir,einvoice line director,model_lfood_einvoice_check_line,lfood_base.group_director,1,0,0,0

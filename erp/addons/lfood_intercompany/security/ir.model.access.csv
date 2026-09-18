@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ic_acc,ic accountant,model_lfood_intercompany_transfer,lfood_base.group_accountant,1,1,1,0
+access_ic_chief,ic chief,model_lfood_intercompany_transfer,lfood_base.group_chief_accountant,1,1,1,1
+access_ic_dir,ic director,model_lfood_intercompany_transfer,lfood_base.group_director,1,0,0,0
+access_ic_line_acc,ic line accountant,model_lfood_intercompany_transfer_line,lfood_base.group_accountant,1,1,1,1
+access_ic_line_dir,ic line director,model_lfood_intercompany_transfer_line,lfood_base.group_director,1,0,0,0

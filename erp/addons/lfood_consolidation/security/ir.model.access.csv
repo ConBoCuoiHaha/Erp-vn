@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_conso_chief,consolidation chief,model_lfood_consolidation_report,lfood_base.group_chief_accountant,1,1,1,1
+access_conso_dir,consolidation director,model_lfood_consolidation_report,lfood_base.group_director,1,1,1,1

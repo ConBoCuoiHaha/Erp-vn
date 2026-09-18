@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_provision_acc,provision accountant,model_lfood_provision,lfood_base.group_accountant,1,1,1,0
+access_provision_chief,provision chief,model_lfood_provision,lfood_base.group_chief_accountant,1,1,1,1
+access_provision_dir,provision director,model_lfood_provision,lfood_base.group_director,1,0,0,0
+access_provision_line_acc,provision line accountant,model_lfood_provision_line,lfood_base.group_accountant,1,1,1,1
+access_provision_line_dir,provision line director,model_lfood_provision_line,lfood_base.group_director,1,0,0,0

@@ -1,0 +1,22 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_channel_acc,channel accountant,model_lfood_sale_channel,lfood_base.group_accountant,1,1,1,0
+access_channel_chief,channel chief,model_lfood_sale_channel,lfood_base.group_chief_accountant,1,1,1,1
+access_channel_dir,channel director,model_lfood_sale_channel,lfood_base.group_director,1,0,0,0
+access_pricelist_acc,pricelist accountant,model_lfood_pricelist,lfood_base.group_accountant,1,1,1,1
+access_pricelist_dir,pricelist director,model_lfood_pricelist,lfood_base.group_director,1,0,0,0
+access_pricelist_line_acc,pricelist line accountant,model_lfood_pricelist_line,lfood_base.group_accountant,1,1,1,1
+access_pricelist_line_dir,pricelist line director,model_lfood_pricelist_line,lfood_base.group_director,1,0,0,0
+access_sale_order_acc,sale order accountant,model_lfood_sale_order,lfood_base.group_accountant,1,1,1,0
+access_sale_order_chief,sale order chief,model_lfood_sale_order,lfood_base.group_chief_accountant,1,1,1,1
+access_sale_order_dir,sale order director,model_lfood_sale_order,lfood_base.group_director,1,1,0,0
+access_sale_order_line_acc,sale order line accountant,model_lfood_sale_order_line,lfood_base.group_accountant,1,1,1,1
+access_sale_order_line_dir,sale order line director,model_lfood_sale_order_line,lfood_base.group_director,1,0,0,0
+access_margin_acc,margin report accountant,model_lfood_margin_report,lfood_base.group_accountant,1,1,1,1
+access_margin_dir,margin report director,model_lfood_margin_report,lfood_base.group_director,1,1,1,1
+access_alloc_acc,cost allocation accountant,model_lfood_cost_allocation,lfood_base.group_accountant,1,1,1,0
+access_alloc_chief,cost allocation chief,model_lfood_cost_allocation,lfood_base.group_chief_accountant,1,1,1,1
+access_alloc_dir,cost allocation director,model_lfood_cost_allocation,lfood_base.group_director,1,0,0,0
+access_alloc_line_acc,cost allocation line accountant,model_lfood_cost_allocation_line,lfood_base.group_accountant,1,1,1,1
+access_alloc_line_dir,cost allocation line director,model_lfood_cost_allocation_line,lfood_base.group_director,1,0,0,0
+access_lead_acc,sale lead accountant,model_lfood_sale_lead,lfood_base.group_accountant,1,1,1,1
+access_lead_dir,sale lead director,model_lfood_sale_lead,lfood_base.group_director,1,1,1,0

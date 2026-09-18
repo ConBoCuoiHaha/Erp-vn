@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_disposal_acc,disposal accountant,model_lfood_stock_disposal,lfood_base.group_accountant,1,1,1,0
+access_disposal_chief,disposal chief,model_lfood_stock_disposal,lfood_base.group_chief_accountant,1,1,1,1
+access_disposal_dir,disposal director,model_lfood_stock_disposal,lfood_base.group_director,1,1,0,0
+access_disposal_line_acc,disposal line accountant,model_lfood_stock_disposal_line,lfood_base.group_accountant,1,1,1,1
+access_disposal_line_dir,disposal line director,model_lfood_stock_disposal_line,lfood_base.group_director,1,0,0,0
+access_hold_wizard_acc,hold wizard accountant,model_lfood_stock_hold_wizard,lfood_base.group_accountant,1,1,1,1
+access_reorder_acc,reorder accountant,model_lfood_stock_reorder,lfood_base.group_accountant,1,1,1,1
+access_reorder_line_acc,reorder line accountant,model_lfood_stock_reorder_line,lfood_base.group_accountant,1,1,1,1

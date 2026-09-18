@@ -1,0 +1,13 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_equipment_acc,equipment accountant,model_lfood_equipment,lfood_base.group_accountant,1,1,1,1
+access_equipment_dir,equipment director,model_lfood_equipment,lfood_base.group_director,1,0,0,0
+access_maintenance_acc,maintenance accountant,model_lfood_maintenance,lfood_base.group_accountant,1,1,1,1
+access_maintenance_dir,maintenance director,model_lfood_maintenance,lfood_base.group_director,1,0,0,0
+access_vehicle_acc,vehicle accountant,model_lfood_vehicle,lfood_base.group_accountant,1,1,1,1
+access_vehicle_dir,vehicle director,model_lfood_vehicle,lfood_base.group_director,1,0,0,0
+access_fuel_log_acc,fuel_log accountant,model_lfood_fuel_log,lfood_base.group_accountant,1,1,1,1
+access_fuel_log_dir,fuel_log director,model_lfood_fuel_log,lfood_base.group_director,1,0,0,0
+access_carrier_acc,carrier accountant,model_lfood_carrier,lfood_base.group_accountant,1,1,1,1
+access_carrier_dir,carrier director,model_lfood_carrier,lfood_base.group_director,1,0,0,0
+access_freight_log_acc,freight_log accountant,model_lfood_freight_log,lfood_base.group_accountant,1,1,1,1
+access_freight_log_dir,freight_log director,model_lfood_freight_log,lfood_base.group_director,1,0,0,0

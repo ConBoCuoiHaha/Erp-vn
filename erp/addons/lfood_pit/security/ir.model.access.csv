@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_salary_advance_acc,salary_advance accountant,model_lfood_salary_advance,lfood_base.group_accountant,1,1,1,1
+access_salary_advance_dir,salary_advance director,model_lfood_salary_advance,lfood_base.group_director,1,0,0,0
+access_pit_freelance_acc,pit_freelance accountant,model_lfood_pit_freelance,lfood_base.group_accountant,1,1,1,1
+access_pit_freelance_dir,pit_freelance director,model_lfood_pit_freelance,lfood_base.group_director,1,0,0,0
+access_pit_settlement_acc,pit_settlement accountant,model_lfood_pit_settlement,lfood_base.group_accountant,1,1,1,1
+access_pit_settlement_dir,pit_settlement director,model_lfood_pit_settlement,lfood_base.group_director,1,0,0,0
+access_pit_settlement_line_acc,pit_settlement_line accountant,model_lfood_pit_settlement_line,lfood_base.group_accountant,1,1,1,1
+access_pit_settlement_line_dir,pit_settlement_line director,model_lfood_pit_settlement_line,lfood_base.group_director,1,0,0,0
+access_labor_cost_acc,labor cost report accountant,model_lfood_labor_cost_report,lfood_base.group_accountant,1,1,1,1
+access_labor_cost_dir,labor cost report director,model_lfood_labor_cost_report,lfood_base.group_director,1,1,1,1

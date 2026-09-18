@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bank_account_acc,bank account accountant,model_lfood_bank_account,lfood_base.group_accountant,1,0,0,0
+access_bank_account_chief,bank account chief,model_lfood_bank_account,lfood_base.group_chief_accountant,1,1,1,0
+access_bank_account_dir,bank account director,model_lfood_bank_account,lfood_base.group_director,1,0,0,0
+access_statement_acc,statement accountant,model_lfood_bank_statement,lfood_base.group_accountant,1,1,1,0
+access_statement_chief,statement chief,model_lfood_bank_statement,lfood_base.group_chief_accountant,1,1,1,1
+access_statement_dir,statement director,model_lfood_bank_statement,lfood_base.group_director,1,0,0,0
+access_statement_line_acc,statement line accountant,model_lfood_bank_statement_line,lfood_base.group_accountant,1,1,1,1
+access_statement_line_dir,statement line director,model_lfood_bank_statement_line,lfood_base.group_director,1,0,0,0

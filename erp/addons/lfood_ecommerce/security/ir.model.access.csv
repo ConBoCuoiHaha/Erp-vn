@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_ecom_shop_acc,ecom_shop accountant,model_lfood_ecom_shop,lfood_base.group_accountant,1,1,1,1
+access_ecom_shop_dir,ecom_shop director,model_lfood_ecom_shop,lfood_base.group_director,1,0,0,0
+access_ecom_order_acc,ecom_order accountant,model_lfood_ecom_order,lfood_base.group_accountant,1,1,1,1
+access_ecom_order_dir,ecom_order director,model_lfood_ecom_order,lfood_base.group_director,1,0,0,0
+access_ecom_order_line_acc,ecom_order_line accountant,model_lfood_ecom_order_line,lfood_base.group_accountant,1,1,1,1
+access_ecom_order_line_dir,ecom_order_line director,model_lfood_ecom_order_line,lfood_base.group_director,1,0,0,0
+access_ecom_settlement_acc,ecom_settlement accountant,model_lfood_ecom_settlement,lfood_base.group_accountant,1,1,1,1
+access_ecom_settlement_dir,ecom_settlement director,model_lfood_ecom_settlement,lfood_base.group_director,1,0,0,0
+access_ecom_settlement_line_acc,ecom_settlement_line accountant,model_lfood_ecom_settlement_line,lfood_base.group_accountant,1,1,1,1
+access_ecom_settlement_line_dir,ecom_settlement_line director,model_lfood_ecom_settlement_line,lfood_base.group_director,1,0,0,0

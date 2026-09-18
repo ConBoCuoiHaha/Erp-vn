@@ -1,0 +1,12 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_sale_invoice_acc,sale invoice accountant,model_lfood_sale_invoice,lfood_base.group_accountant,1,1,1,1
+access_sale_invoice_dir,sale invoice director,model_lfood_sale_invoice,lfood_base.group_director,1,0,0,0
+access_sale_line_acc,sale line accountant,model_lfood_sale_invoice_line,lfood_base.group_accountant,1,1,1,1
+access_sale_line_dir,sale line director,model_lfood_sale_invoice_line,lfood_base.group_director,1,0,0,0
+access_aging_acc,aging accountant,model_lfood_aging,lfood_base.group_accountant,1,1,1,1
+access_aging_dir,aging director,model_lfood_aging,lfood_base.group_director,1,1,1,1
+access_pay_term_acc,payment term accountant,model_lfood_payment_term,lfood_base.group_accountant,1,1,1,0
+access_pay_term_chief,payment term chief,model_lfood_payment_term,lfood_base.group_chief_accountant,1,1,1,1
+access_pay_term_emp,payment term employee,model_lfood_payment_term,lfood_base.group_employee,1,0,0,0
+access_pay_term_line_acc,payment term line accountant,model_lfood_payment_term_line,lfood_base.group_accountant,1,1,1,1
+access_pay_term_line_emp,payment term line employee,model_lfood_payment_term_line,lfood_base.group_employee,1,0,0,0

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_fx_acc,fx revaluation accountant,model_lfood_fx_revaluation,lfood_base.group_accountant,1,1,1,0
+access_fx_chief,fx revaluation chief,model_lfood_fx_revaluation,lfood_base.group_chief_accountant,1,1,1,1
+access_fx_dir,fx revaluation director,model_lfood_fx_revaluation,lfood_base.group_director,1,0,0,0
+access_fx_rate_acc,fx rate accountant,model_lfood_fx_revaluation_rate,lfood_base.group_accountant,1,1,1,1
+access_fx_rate_dir,fx rate director,model_lfood_fx_revaluation_rate,lfood_base.group_director,1,0,0,0
+access_fx_line_acc,fx line accountant,model_lfood_fx_revaluation_line,lfood_base.group_accountant,1,1,1,1
+access_fx_line_dir,fx line director,model_lfood_fx_revaluation_line,lfood_base.group_director,1,0,0,0

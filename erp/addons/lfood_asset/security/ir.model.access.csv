@@ -1,0 +1,19 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_category_acc,category accountant,model_lfood_asset_category,lfood_base.group_accountant,1,0,0,0
+access_category_dir,category director,model_lfood_asset_category,lfood_base.group_director,1,0,0,0
+access_category_chief,category chief,model_lfood_asset_category,lfood_base.group_chief_accountant,1,1,1,1
+access_asset_acc,asset accountant,model_lfood_asset,lfood_base.group_accountant,1,1,1,1
+access_asset_dir,asset director,model_lfood_asset,lfood_base.group_director,1,0,0,0
+access_schedule_acc,schedule accountant,model_lfood_asset_schedule,lfood_base.group_accountant,1,0,0,0
+access_schedule_dir,schedule director,model_lfood_asset_schedule,lfood_base.group_director,1,0,0,0
+access_depr_acc,depreciation accountant,model_lfood_asset_depreciation,lfood_base.group_accountant,1,1,1,1
+access_depr_dir,depreciation director,model_lfood_asset_depreciation,lfood_base.group_director,1,0,0,0
+access_depr_line_acc,depreciation line accountant,model_lfood_asset_depreciation_line,lfood_base.group_accountant,1,0,1,1
+access_depr_line_dir,depreciation line director,model_lfood_asset_depreciation_line,lfood_base.group_director,1,0,0,0
+access_transfer_chief,transfer wizard,model_lfood_asset_transfer,lfood_base.group_chief_accountant,1,1,1,1
+access_dispose_chief,dispose wizard,model_lfood_asset_dispose,lfood_base.group_chief_accountant,1,1,1,1
+access_cip_acc,cip accountant,model_lfood_cip,lfood_base.group_accountant,1,1,1,0
+access_cip_chief,cip chief,model_lfood_cip,lfood_base.group_chief_accountant,1,1,1,1
+access_cip_dir,cip director,model_lfood_cip,lfood_base.group_director,1,0,0,0
+access_cip_line_acc,cip line accountant,model_lfood_cip_line,lfood_base.group_accountant,1,1,1,1
+access_cip_line_dir,cip line director,model_lfood_cip_line,lfood_base.group_director,1,0,0,0

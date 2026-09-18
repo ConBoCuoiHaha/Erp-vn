@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_contract_acc,contract accountant,model_lfood_hr_contract,lfood_base.group_accountant,1,1,1,0
+access_contract_chief,contract chief,model_lfood_hr_contract,lfood_base.group_chief_accountant,1,1,1,1
+access_contract_dir,contract director,model_lfood_hr_contract,lfood_base.group_director,1,0,0,0
+access_leave_acc,leave accountant,model_lfood_hr_leave,lfood_base.group_accountant,1,1,1,1
+access_leave_dir,leave director,model_lfood_hr_leave,lfood_base.group_director,1,1,0,0
+access_att_acc,attendance accountant,model_lfood_hr_attendance,lfood_base.group_accountant,1,1,1,1
+access_att_dir,attendance director,model_lfood_hr_attendance,lfood_base.group_director,1,0,0,0
+access_term_acc,termination accountant,model_lfood_hr_termination,lfood_base.group_accountant,1,1,1,0
+access_term_chief,termination chief,model_lfood_hr_termination,lfood_base.group_chief_accountant,1,1,1,1
+access_term_dir,termination director,model_lfood_hr_termination,lfood_base.group_director,1,0,0,0
+access_shift_acc,shift accountant,model_lfood_hr_shift,lfood_base.group_accountant,1,1,1,1
+access_shift_dir,shift director,model_lfood_hr_shift,lfood_base.group_director,1,0,0,0
+access_roster_acc,roster accountant,model_lfood_hr_roster,lfood_base.group_accountant,1,1,1,1
+access_roster_dir,roster director,model_lfood_hr_roster,lfood_base.group_director,1,0,0,0

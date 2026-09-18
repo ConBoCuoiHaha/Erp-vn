@@ -1,0 +1,16 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_employee_acc,employee accountant,model_lfood_employee,lfood_base.group_accountant,1,1,1,0
+access_employee_chief,employee chief,model_lfood_employee,lfood_base.group_chief_accountant,1,1,1,1
+access_employee_dir,employee director,model_lfood_employee,lfood_base.group_director,1,0,0,0
+access_component_acc,component accountant,model_lfood_payroll_component,lfood_base.group_accountant,1,0,0,0
+access_component_chief,component chief,model_lfood_payroll_component,lfood_base.group_chief_accountant,1,1,1,1
+access_component_dir,component director,model_lfood_payroll_component,lfood_base.group_director,1,0,0,0
+access_emp_comp_acc,employee component accountant,model_lfood_employee_component,lfood_base.group_accountant,1,1,1,1
+access_emp_comp_dir,employee component director,model_lfood_employee_component,lfood_base.group_director,1,0,0,0
+access_run_acc,payroll run accountant,model_lfood_payroll_run,lfood_base.group_accountant,1,1,1,1
+access_run_dir,payroll run director,model_lfood_payroll_run,lfood_base.group_director,1,0,0,0
+access_slip_acc,slip accountant,model_lfood_payroll_slip,lfood_base.group_accountant,1,1,1,1
+access_slip_dir,slip director,model_lfood_payroll_slip,lfood_base.group_director,1,0,0,0
+access_slip_line_acc,slip line accountant,model_lfood_payroll_slip_line,lfood_base.group_accountant,1,1,1,1
+access_slip_line_dir,slip line director,model_lfood_payroll_slip_line,lfood_base.group_director,1,0,0,0
+access_payroll_sim_acc,payroll simulation,model_lfood_payroll_simulation,lfood_base.group_accountant,1,1,1,1

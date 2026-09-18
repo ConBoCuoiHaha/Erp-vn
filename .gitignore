@@ -37,6 +37,8 @@ erp-lfood-data.json
 *.xls
 *.docx
 *.csv
+# phân quyền của module là mã nguồn, phải có trong repo
+!erp/addons/*/security/*.csv
 
 # --- Bản thử nghiệm cũ ---
 app-v1/

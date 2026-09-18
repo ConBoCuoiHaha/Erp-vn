@@ -1,0 +1,17 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_prepaid_acc,prepaid accountant,model_lfood_prepaid,lfood_base.group_accountant,1,1,1,0
+access_prepaid_chief,prepaid chief,model_lfood_prepaid,lfood_base.group_chief_accountant,1,1,1,1
+access_prepaid_dir,prepaid director,model_lfood_prepaid,lfood_base.group_director,1,0,0,0
+access_prepaid_line_acc,prepaid line accountant,model_lfood_prepaid_line,lfood_base.group_accountant,1,1,1,1
+access_prepaid_line_dir,prepaid line director,model_lfood_prepaid_line,lfood_base.group_director,1,0,0,0
+access_accrued_acc,accrued accountant,model_lfood_accrued,lfood_base.group_accountant,1,1,1,0
+access_accrued_chief,accrued chief,model_lfood_accrued,lfood_base.group_chief_accountant,1,1,1,1
+access_accrued_dir,accrued director,model_lfood_accrued,lfood_base.group_director,1,0,0,0
+access_accrued_line_acc,accrued line accountant,model_lfood_accrued_line,lfood_base.group_accountant,1,1,1,1
+access_accrued_line_dir,accrued line director,model_lfood_accrued_line,lfood_base.group_director,1,0,0,0
+access_accrual_run_acc,accrual run accountant,model_lfood_accrual_run,lfood_base.group_accountant,1,1,1,1
+access_lease_acc,lease accountant,model_lfood_lease,lfood_base.group_accountant,1,1,1,0
+access_lease_chief,lease chief,model_lfood_lease,lfood_base.group_chief_accountant,1,1,1,1
+access_lease_dir,lease director,model_lfood_lease,lfood_base.group_director,1,0,0,0
+access_lease_period_acc,lease period accountant,model_lfood_lease_period,lfood_base.group_accountant,1,1,1,1
+access_lease_period_dir,lease period director,model_lfood_lease_period,lfood_base.group_director,1,0,0,0

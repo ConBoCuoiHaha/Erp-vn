@@ -67,9 +67,11 @@ class LfoodProduct(models.Model):
 
     def _position(self, warehouse=None, lot=None, upto=None):
         self.ensure_one()
+        if not self._origin.id:  # biểu mẫu mới, chưa lưu
+            return 0, 0
         self.env['lfood.stock.valuation'].flush_model()
         sql = 'SELECT COALESCE(SUM(qty), 0), COALESCE(SUM(value), 0) FROM lfood_stock_valuation WHERE product_id = %s'
-        args = [self.id]
+        args = [self._origin.id]
         if warehouse:
             sql += ' AND warehouse_id = %s'
             args.append(warehouse.id)

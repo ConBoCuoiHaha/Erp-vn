@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_promotion_acc,promotion accountant,model_lfood_promotion,lfood_base.group_accountant,1,1,1,0
+access_promotion_chief,promotion chief,model_lfood_promotion,lfood_base.group_chief_accountant,1,1,1,1
+access_promotion_dir,promotion director,model_lfood_promotion,lfood_base.group_director,1,0,0,0
+access_promotion_line_acc,promotion line accountant,model_lfood_promotion_line,lfood_base.group_accountant,1,1,1,1
+access_promotion_line_dir,promotion line director,model_lfood_promotion_line,lfood_base.group_director,1,0,0,0

@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_declaration_acc,import_declaration accountant,model_lfood_import_declaration,lfood_base.group_accountant,1,1,1,1
+access_import_declaration_dir,import_declaration director,model_lfood_import_declaration,lfood_base.group_director,1,0,0,0
+access_import_line_acc,import_line accountant,model_lfood_import_line,lfood_base.group_accountant,1,1,1,1
+access_import_line_dir,import_line director,model_lfood_import_line,lfood_base.group_director,1,0,0,0
+access_import_cost_acc,import_cost accountant,model_lfood_import_cost,lfood_base.group_accountant,1,1,1,1
+access_import_cost_dir,import_cost director,model_lfood_import_cost,lfood_base.group_director,1,0,0,0
+access_export_declaration_acc,export_declaration accountant,model_lfood_export_declaration,lfood_base.group_accountant,1,1,1,1
+access_export_declaration_dir,export_declaration director,model_lfood_export_declaration,lfood_base.group_director,1,0,0,0
+access_fct_payment_acc,fct_payment accountant,model_lfood_fct_payment,lfood_base.group_accountant,1,1,1,1
+access_fct_payment_dir,fct_payment director,model_lfood_fct_payment,lfood_base.group_director,1,0,0,0

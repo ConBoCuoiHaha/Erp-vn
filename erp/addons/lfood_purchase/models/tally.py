@@ -101,6 +101,7 @@ class LfoodPurchaseTally(models.Model):
     @api.depends('line_ids', 'date', 'place', 'buyer_name', 'company_id')
     def _compute_form_html(self):
         """Dựng đúng thứ tự cột của mẫu 02/TNDN để in ra bằng Ctrl+P."""
+        see_id = self.env.user.has_group('lfood_base.group_accountant')  # số định danh chỉ kế toán xem
         for rec in self:
             rows = []
             for i, line in enumerate(rec.line_ids, start=1):
@@ -109,7 +110,7 @@ class LfoodPurchaseTally(models.Model):
                     '<td>%s</td><td>%s</td><td>%s</td><td style="text-align:right">%s</td>'
                     '<td style="text-align:right">%s</td><td style="text-align:right">%s</td><td>%s</td></tr>' % (
                         i, line.date and line.date.strftime('%d/%m/%Y') or '', line.seller_name or '',
-                        line.seller_id_number or '', line.seller_address or '', line.name or '',
+                        (line.seller_id_number or '') if see_id else '***', line.seller_address or '', line.name or '',
                         ('%g' % line.quantity), vnd(line.price_unit), vnd(line.amount),
                         line.note or ('Trả tiền mặt, không được trừ' if not line.deductible else '')))
             rec.form_html = """

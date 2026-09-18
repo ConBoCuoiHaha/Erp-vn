@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cert_acc,digital cert accountant,model_lfood_digital_cert,lfood_base.group_accountant,1,0,0,0
+access_cert_chief,digital cert chief,model_lfood_digital_cert,lfood_base.group_chief_accountant,1,1,1,1
+access_cert_dir,digital cert director,model_lfood_digital_cert,lfood_base.group_director,1,0,0,0

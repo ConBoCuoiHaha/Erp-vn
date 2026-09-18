@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_audit_chief,audit chief accountant,model_lfood_audit_log,lfood_base.group_chief_accountant,1,0,0,0
+access_audit_director,audit director,model_lfood_audit_log,lfood_base.group_director,1,0,0,0
+access_audit_sysadmin,audit sysadmin,model_lfood_audit_log,lfood_base.group_sysadmin,1,0,0,0

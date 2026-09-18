@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Sinh tự động bằng gen_accounts.py từ Phụ lục II Thông tư 99/2025/TT-BTC. Không sửa tay. -->
-<odoo noupdate="1">
+<odoo>
+<data noupdate="1">
     <record id="acc_111" model="lfood.account">
         <field name="code">111</field><field name="name">Tiền mặt</field>
         <field name="nature">debit</field><field name="is_official" eval="True"/>
@@ -145,7 +146,7 @@
     </record>
     <record id="acc_171" model="lfood.account">
         <field name="code">171</field><field name="name">Giao dịch mua, bán lại trái phiếu chính phủ</field>
-        <field name="nature">debit</field><field name="is_official" eval="True"/>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
     </record>
     <record id="acc_211" model="lfood.account">
         <field name="code">211</field><field name="name">Tài sản cố định hữu hình</field>
@@ -407,7 +408,7 @@
     </record>
     <record id="acc_334" model="lfood.account">
         <field name="code">334</field><field name="name">Phải trả người lao động</field>
-        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
     </record>
     <record id="acc_335" model="lfood.account">
         <field name="code">335</field><field name="name">Chi phí phải trả</field>
@@ -439,7 +440,7 @@
     </record>
     <record id="acc_337" model="lfood.account">
         <field name="code">337</field><field name="name">Thanh toán theo tiến độ hợp đồng xây dựng</field>
-        <field name="nature">credit</field><field name="is_official" eval="True"/>
+        <field name="nature">both</field><field name="is_official" eval="True"/>
     </record>
     <record id="acc_338" model="lfood.account">
         <field name="code">338</field><field name="name">Phải trả, phải nộp khác</field>
@@ -870,4 +871,6 @@
         <field name="code">911</field><field name="name">Xác định kết quả kinh doanh</field>
         <field name="nature">both</field><field name="is_official" eval="True"/>
     </record>
+</data>
+<function model="lfood.account" name="write" eval="[[ref('acc_131'), ref('acc_1311'), ref('acc_136'), ref('acc_1361'), ref('acc_1362'), ref('acc_1363'), ref('acc_1368'), ref('acc_138'), ref('acc_1381'), ref('acc_1383'), ref('acc_1388'), ref('acc_171'), ref('acc_331'), ref('acc_3311'), ref('acc_333'), ref('acc_3331'), ref('acc_33311'), ref('acc_33312'), ref('acc_3332'), ref('acc_3333'), ref('acc_3334'), ref('acc_3335'), ref('acc_3336'), ref('acc_3337'), ref('acc_3338'), ref('acc_33381'), ref('acc_33382'), ref('acc_3339'), ref('acc_334'), ref('acc_336'), ref('acc_3361'), ref('acc_3362'), ref('acc_3363'), ref('acc_3368'), ref('acc_337'), ref('acc_338'), ref('acc_3381'), ref('acc_3382'), ref('acc_3383'), ref('acc_3384'), ref('acc_3386'), ref('acc_3387'), ref('acc_3388'), ref('acc_413'), ref('acc_421'), ref('acc_4211'), ref('acc_4212'), ref('acc_911')], {'nature': 'both'}]"/>
 </odoo>

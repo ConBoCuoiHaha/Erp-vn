@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_consent_acc,consent accountant,model_lfood_privacy_consent,lfood_base.group_accountant,1,1,1,0
+access_consent_chief,consent chief,model_lfood_privacy_consent,lfood_base.group_chief_accountant,1,1,1,1
+access_consent_dir,consent director,model_lfood_privacy_consent,lfood_base.group_director,1,1,1,0
+access_request_acc,request accountant,model_lfood_privacy_request,lfood_base.group_accountant,1,1,1,0
+access_request_dir,request director,model_lfood_privacy_request,lfood_base.group_director,1,1,1,0
+access_breach_chief,breach chief,model_lfood_privacy_breach,lfood_base.group_chief_accountant,1,1,1,1
+access_breach_dir,breach director,model_lfood_privacy_breach,lfood_base.group_director,1,1,1,1

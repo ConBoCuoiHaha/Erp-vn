@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_rnd_project_rnd,rnd project,model_lfood_rnd_project,lfood_base.group_rnd,1,1,1,1
+access_rnd_project_dir,rnd project director,model_lfood_rnd_project,lfood_base.group_director,1,0,0,0
+access_rnd_formula_rnd,rnd formula,model_lfood_rnd_formula,lfood_base.group_rnd,1,1,1,1
+access_rnd_formula_dir,rnd formula director,model_lfood_rnd_formula,lfood_base.group_director,1,1,0,0
+access_rnd_formula_line_rnd,rnd formula_line,model_lfood_rnd_formula_line,lfood_base.group_rnd,1,1,1,1
+access_rnd_formula_line_dir,rnd formula_line director,model_lfood_rnd_formula_line,lfood_base.group_director,1,0,0,0
+access_rnd_sample_rnd,rnd sample,model_lfood_rnd_sample,lfood_base.group_rnd,1,1,1,1
+access_rnd_sample_dir,rnd sample director,model_lfood_rnd_sample,lfood_base.group_director,1,0,0,0
+access_rnd_sample_test_rnd,rnd sample_test,model_lfood_rnd_sample_test,lfood_base.group_rnd,1,1,1,1
+access_rnd_sample_test_dir,rnd sample_test director,model_lfood_rnd_sample_test,lfood_base.group_director,1,0,0,0

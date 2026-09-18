@@ -10,9 +10,6 @@ from odoo.http import request
 
 _logger = logging.getLogger(__name__)
 
-# khóa dùng để xếp hàng khi ghi nhật ký, giữ chuỗi mã băm đúng thứ tự
-_CHAIN_LOCK = 842617
-
 ACTIONS = [
     ('login', 'Đăng nhập'),
     ('login_failed', 'Đăng nhập thất bại'),
@@ -70,6 +67,10 @@ class LfoodAuditLog(models.Model):
             DROP TRIGGER IF EXISTS lfood_audit_block_truncate ON lfood_audit_log;
             CREATE TRIGGER lfood_audit_block_truncate BEFORE TRUNCATE ON lfood_audit_log
                 FOR EACH STATEMENT EXECUTE FUNCTION lfood_audit_block();
+            CREATE TABLE IF NOT EXISTS lfood_audit_head (id int PRIMARY KEY, hash varchar);
+            INSERT INTO lfood_audit_head (id, hash)
+                SELECT 1, (SELECT hash FROM lfood_audit_log ORDER BY id DESC LIMIT 1)
+                ON CONFLICT (id) DO NOTHING;
         """)
 
     def write(self, vals):
@@ -146,33 +147,42 @@ class LfoodAuditLog(models.Model):
         }
         vals.update(self._request_info())
         cr = env.cr
-        cr.execute('SELECT pg_advisory_xact_lock(%s)', (_CHAIN_LOCK,))
-        cr.execute('SELECT hash FROM lfood_audit_log ORDER BY id DESC LIMIT 1')
-        row = cr.fetchone()
-        vals['prev_hash'] = row[0] if row else False
+        # Đầu chuỗi giữ ở 1 dòng riêng, khóa FOR UPDATE: giao dịch nào đọc đầu chuỗi cũ (REPEATABLE READ) mà
+        # dòng này vừa bị giao dịch khác đổi thì PostgreSQL báo lỗi tuần tự hóa và Odoo tự chạy lại yêu cầu,
+        # nên không bao giờ có hai dòng cùng nối vào một mã băm.
+        cr.execute('SELECT hash FROM lfood_audit_head WHERE id = 1 FOR UPDATE')
+        vals['prev_hash'] = cr.fetchone()[0] or False
         vals['hash'] = self._hash_payload(vals['prev_hash'], vals)
-        return super(LfoodAuditLog, self.sudo().with_context(lfood_audit_skip=True)).create(vals)
+        rec = super(LfoodAuditLog, self.sudo().with_context(lfood_audit_skip=True)).create(vals)
+        cr.execute('UPDATE lfood_audit_head SET hash = %s WHERE id = 1', (vals['hash'],))
+        return rec
 
     @api.model_create_multi
     def create(self, vals_list):
         raise UserError(_('Nhật ký chỉ do hệ thống ghi.'))
 
     # ------------------------------------------------------------------ kiểm tra toàn vẹn
-    def action_verify_chain(self):
+    def _chain_breaks(self):
+        """Mọi dòng sai lệch (kiểm tiếp sau chỗ gãy để không che sai lệch về sau), và số dòng đã kiểm."""
         cr = self.env.cr
         cr.execute("""SELECT id, event_time, user_id, login, action, model, res_id, summary, changes, ip, prev_hash, hash
                       FROM lfood_audit_log ORDER BY id""")
-        prev = False
-        checked = 0
+        prev, breaks, checked = False, [], 0
         for (rid, t, u, l, a, m, r, s, c, ip, ph, h) in cr.fetchall():
             vals = {'event_time': fields.Datetime.to_string(t) if t else '', 'user_id': u, 'login': l,
                     'action': a, 'model': m, 'res_id': r, 'summary': s, 'changes': c or [], 'ip': ip}
-            expect = self._hash_payload(prev, vals)
-            if (ph or False) != (prev or False) or h != expect:
-                self._record_event('other', summary=_('Kiểm tra toàn vẹn nhật ký: PHÁT HIỆN SAI LỆCH tại dòng %s') % rid)
-                return _notify(_('Phát hiện nhật ký bị can thiệp tại dòng %s. Báo ngay Giám đốc.') % rid, 'danger')
+            if (ph or False) != (prev or False) or h != self._hash_payload(ph, vals):
+                breaks.append(rid)
             prev = h
             checked += 1
+        return breaks, checked
+
+    def action_verify_chain(self):
+        breaks, checked = self._chain_breaks()
+        if breaks:
+            ids = ', '.join(str(b) for b in breaks[:20])
+            self._record_event('other', summary=_('Kiểm tra toàn vẹn nhật ký: PHÁT HIỆN SAI LỆCH tại dòng %s') % ids)
+            return _notify(_('Phát hiện nhật ký bị can thiệp tại dòng %s. Báo ngay Giám đốc.') % ids, 'danger')
         self._record_event('other', summary=_('Kiểm tra toàn vẹn nhật ký: %s dòng, không sai lệch') % checked)
         return _notify(_('Đã kiểm tra %s dòng nhật ký: không có dòng nào bị sửa hoặc xóa.') % checked, 'success')
 

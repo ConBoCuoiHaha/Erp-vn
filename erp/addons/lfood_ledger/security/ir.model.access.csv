@@ -1,0 +1,15 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_account_acc,account accountant,model_lfood_account,lfood_base.group_accountant,1,0,0,0
+access_account_dir,account director,model_lfood_account,lfood_base.group_director,1,0,0,0
+access_account_chief,account chief,model_lfood_account,lfood_base.group_chief_accountant,1,1,1,1
+access_move_acc,move accountant,model_lfood_move,lfood_base.group_accountant,1,1,1,1
+access_move_dir,move director,model_lfood_move,lfood_base.group_director,1,0,0,0
+access_move_line_acc,move line accountant,model_lfood_move_line,lfood_base.group_accountant,1,1,1,1
+access_move_line_dir,move line director,model_lfood_move_line,lfood_base.group_director,1,0,0,0
+access_payment_acc,payment accountant,model_lfood_payment,lfood_base.group_accountant,1,1,1,1
+access_payment_dir,payment director,model_lfood_payment,lfood_base.group_director,1,0,0,0
+access_closing_chief,closing chief,model_lfood_closing,lfood_base.group_chief_accountant,1,1,1,1
+access_lock_chief,lock chief,model_lfood_lock,lfood_base.group_chief_accountant,1,1,1,1
+access_report_acc,report accountant,model_lfood_ledger_report,lfood_base.group_accountant,1,1,1,1
+access_report_dir,report director,model_lfood_ledger_report,lfood_base.group_director,1,1,1,1
+access_offset_acc,offset accountant,model_lfood_offset,lfood_base.group_accountant,1,1,1,1

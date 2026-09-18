@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_archive_policy_emp,archive policy employee,model_lfood_archive_policy,lfood_base.group_employee,1,0,0,0
+access_archive_policy_chief,archive policy chief,model_lfood_archive_policy,lfood_base.group_chief_accountant,1,1,1,1
+access_document_acc,document accountant,model_lfood_document,lfood_base.group_accountant,1,1,1,1
+access_document_dir,document director,model_lfood_document,lfood_base.group_director,1,1,1,0

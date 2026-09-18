@@ -1,0 +1,23 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_acc,product accountant,model_lfood_product,lfood_base.group_accountant,1,1,1,1
+access_product_dir,product director,model_lfood_product,lfood_base.group_director,1,0,0,0
+access_warehouse_acc,warehouse accountant,model_lfood_warehouse,lfood_base.group_accountant,1,0,0,0
+access_warehouse_chief,warehouse chief,model_lfood_warehouse,lfood_base.group_chief_accountant,1,1,1,1
+access_warehouse_dir,warehouse director,model_lfood_warehouse,lfood_base.group_director,1,0,0,0
+access_lot_acc,lot accountant,model_lfood_stock_lot,lfood_base.group_accountant,1,1,1,0
+access_lot_dir,lot director,model_lfood_stock_lot,lfood_base.group_director,1,0,0,0
+access_valuation_acc,valuation accountant,model_lfood_stock_valuation,lfood_base.group_accountant,1,0,0,0
+access_valuation_dir,valuation director,model_lfood_stock_valuation,lfood_base.group_director,1,0,0,0
+access_picking_acc,picking accountant,model_lfood_stock_picking,lfood_base.group_accountant,1,1,1,1
+access_picking_dir,picking director,model_lfood_stock_picking,lfood_base.group_director,1,0,0,0
+access_picking_line_acc,picking line accountant,model_lfood_stock_picking_line,lfood_base.group_accountant,1,1,1,1
+access_picking_line_dir,picking line director,model_lfood_stock_picking_line,lfood_base.group_director,1,0,0,0
+access_stock_report_acc,stock report accountant,model_lfood_stock_report,lfood_base.group_accountant,1,1,1,1
+access_stock_report_dir,stock report director,model_lfood_stock_report,lfood_base.group_director,1,1,1,1
+access_count_acc,stock count accountant,model_lfood_stock_count,lfood_base.group_accountant,1,1,1,0
+access_count_chief,stock count chief,model_lfood_stock_count,lfood_base.group_chief_accountant,1,1,1,1
+access_count_dir,stock count director,model_lfood_stock_count,lfood_base.group_director,1,0,0,0
+access_count_line_acc,stock count line accountant,model_lfood_stock_count_line,lfood_base.group_accountant,1,1,1,1
+access_count_line_dir,stock count line director,model_lfood_stock_count_line,lfood_base.group_director,1,0,0,0
+access_uom_conv_acc,uom conversion accountant,model_lfood_uom_conversion,lfood_base.group_accountant,1,1,1,1
+access_uom_conv_emp,uom conversion employee,model_lfood_uom_conversion,lfood_base.group_employee,1,0,0,0

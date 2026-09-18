@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_backup_admin,backup sysadmin,model_lfood_backup,lfood_base.group_sysadmin,1,1,1,1
+access_backup_status_admin,backup status sysadmin,model_lfood_backup_status,lfood_base.group_sysadmin,1,1,1,1
+access_role_matrix_emp,role matrix,model_lfood_role_matrix,lfood_base.group_employee,1,1,1,1
+access_vat_admin,vat sysadmin,lfood_voucher.model_lfood_vat_rate,lfood_base.group_sysadmin,1,1,1,1
+access_param_admin,param sysadmin,lfood_voucher.model_lfood_legal_param,lfood_base.group_sysadmin,1,1,1,1
+access_batch_admin,batch sysadmin,lfood_voucher.model_lfood_voucher_bulk_batch,lfood_base.group_sysadmin,1,1,1,0
+access_company_chief,company chief accountant,base.model_res_company,lfood_base.group_chief_accountant,1,1,0,0
+access_quick_search_emp,quick search employee,model_lfood_quick_search,lfood_base.group_employee,1,1,1,1

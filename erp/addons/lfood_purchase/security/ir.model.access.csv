@@ -1,0 +1,26 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_req_emp,purchase request employee,model_lfood_purchase_request,lfood_base.group_employee,1,1,1,0
+access_req_acc,purchase request accountant,model_lfood_purchase_request,lfood_base.group_accountant,1,1,1,1
+access_req_dir,purchase request director,model_lfood_purchase_request,lfood_base.group_director,1,0,0,0
+access_req_line_emp,purchase request line employee,model_lfood_purchase_request_line,lfood_base.group_employee,1,1,1,1
+access_req_line_dir,purchase request line director,model_lfood_purchase_request_line,lfood_base.group_director,1,0,0,0
+access_order_acc,purchase order accountant,model_lfood_purchase_order,lfood_base.group_accountant,1,1,1,1
+access_order_dir,purchase order director,model_lfood_purchase_order,lfood_base.group_director,1,0,0,0
+access_order_line_acc,purchase order line accountant,model_lfood_purchase_order_line,lfood_base.group_accountant,1,1,1,1
+access_order_line_dir,purchase order line director,model_lfood_purchase_order_line,lfood_base.group_director,1,0,0,0
+access_quote_acc,purchase quote accountant,model_lfood_purchase_quote,lfood_base.group_accountant,1,1,1,1
+access_quote_emp,purchase quote employee,model_lfood_purchase_quote,lfood_base.group_employee,1,1,1,0
+access_quote_dir,purchase quote director,model_lfood_purchase_quote,lfood_base.group_director,1,0,0,0
+access_quote_line_acc,purchase quote line accountant,model_lfood_purchase_quote_line,lfood_base.group_accountant,1,1,1,1
+access_quote_line_emp,purchase quote line employee,model_lfood_purchase_quote_line,lfood_base.group_employee,1,1,1,1
+access_quote_line_dir,purchase quote line director,model_lfood_purchase_quote_line,lfood_base.group_director,1,0,0,0
+access_adjust_acc,purchase adjust accountant,model_lfood_purchase_adjust,lfood_base.group_accountant,1,1,1,0
+access_adjust_chief,purchase adjust chief,model_lfood_purchase_adjust,lfood_base.group_chief_accountant,1,1,1,1
+access_adjust_dir,purchase adjust director,model_lfood_purchase_adjust,lfood_base.group_director,1,0,0,0
+access_adjust_line_acc,purchase adjust line accountant,model_lfood_purchase_adjust_line,lfood_base.group_accountant,1,1,1,1
+access_adjust_line_dir,purchase adjust line director,model_lfood_purchase_adjust_line,lfood_base.group_director,1,0,0,0
+access_tally_acc,purchase tally accountant,model_lfood_purchase_tally,lfood_base.group_accountant,1,1,1,0
+access_tally_chief,purchase tally chief,model_lfood_purchase_tally,lfood_base.group_chief_accountant,1,1,1,1
+access_tally_dir,purchase tally director,model_lfood_purchase_tally,lfood_base.group_director,1,0,0,0
+access_tally_line_acc,purchase tally line accountant,model_lfood_purchase_tally_line,lfood_base.group_accountant,1,1,1,1
+access_tally_line_dir,purchase tally line director,model_lfood_purchase_tally_line,lfood_base.group_director,1,0,0,0

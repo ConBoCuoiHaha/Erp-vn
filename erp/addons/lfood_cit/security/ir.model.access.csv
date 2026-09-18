@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_prov_acc,cit provisional accountant,model_lfood_cit_provisional,lfood_base.group_accountant,1,1,1,0
+access_prov_chief,cit provisional chief,model_lfood_cit_provisional,lfood_base.group_chief_accountant,1,1,1,1
+access_prov_dir,cit provisional director,model_lfood_cit_provisional,lfood_base.group_director,1,0,0,0
+access_final_acc,cit finalization accountant,model_lfood_cit_finalization,lfood_base.group_accountant,1,1,1,0
+access_final_chief,cit finalization chief,model_lfood_cit_finalization,lfood_base.group_chief_accountant,1,1,1,1
+access_final_dir,cit finalization director,model_lfood_cit_finalization,lfood_base.group_director,1,0,0,0
+access_cit_adjust_acc,cit adjust accountant,model_lfood_cit_adjust,lfood_base.group_accountant,1,1,1,1
+access_cit_adjust_dir,cit adjust director,model_lfood_cit_adjust,lfood_base.group_director,1,0,0,0
+access_cit_loss_acc,cit loss accountant,model_lfood_cit_loss,lfood_base.group_accountant,1,1,1,1
+access_cit_loss_dir,cit loss director,model_lfood_cit_loss,lfood_base.group_director,1,0,0,0

@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_budget_acc,budget accountant,model_lfood_budget,lfood_base.group_accountant,1,1,1,0
+access_budget_chief,budget chief,model_lfood_budget,lfood_base.group_chief_accountant,1,1,1,1
+access_budget_dir,budget director,model_lfood_budget,lfood_base.group_director,1,0,0,0
+access_budget_line_acc,budget line accountant,model_lfood_budget_line,lfood_base.group_accountant,1,1,1,1
+access_budget_line_dir,budget line director,model_lfood_budget_line,lfood_base.group_director,1,0,0,0
+access_budget_spread_acc,budget spread accountant,model_lfood_budget_spread,lfood_base.group_accountant,1,1,1,1
+access_budget_report_acc,budget report accountant,model_lfood_budget_report,lfood_base.group_accountant,1,0,0,0
+access_budget_report_dir,budget report director,model_lfood_budget_report,lfood_base.group_director,1,0,0,0

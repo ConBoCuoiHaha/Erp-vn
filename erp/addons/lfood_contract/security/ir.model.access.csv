@@ -1,0 +1,19 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_purchase_contract_acc,purchase contract accountant,model_lfood_purchase_contract,lfood_base.group_accountant,1,1,1,0
+access_purchase_contract_chief,purchase contract chief,model_lfood_purchase_contract,lfood_base.group_chief_accountant,1,1,1,1
+access_purchase_contract_dir,purchase contract director,model_lfood_purchase_contract,lfood_base.group_director,1,1,0,0
+access_purchase_contract_line_acc,purchase contract line accountant,model_lfood_purchase_contract_line,lfood_base.group_accountant,1,1,1,1
+access_purchase_contract_line_chief,purchase contract line chief,model_lfood_purchase_contract_line,lfood_base.group_chief_accountant,1,1,1,1
+access_purchase_contract_line_dir,purchase contract line director,model_lfood_purchase_contract_line,lfood_base.group_director,1,1,0,0
+access_supplier_evaluation_acc,supplier evaluation accountant,model_lfood_supplier_evaluation,lfood_base.group_accountant,1,1,1,0
+access_supplier_evaluation_chief,supplier evaluation chief,model_lfood_supplier_evaluation,lfood_base.group_chief_accountant,1,1,1,1
+access_supplier_evaluation_dir,supplier evaluation director,model_lfood_supplier_evaluation,lfood_base.group_director,1,1,0,0
+access_distributor_contract_acc,distributor contract accountant,model_lfood_distributor_contract,lfood_base.group_accountant,1,1,1,0
+access_distributor_contract_chief,distributor contract chief,model_lfood_distributor_contract,lfood_base.group_chief_accountant,1,1,1,1
+access_distributor_contract_dir,distributor contract director,model_lfood_distributor_contract,lfood_base.group_director,1,1,0,0
+access_distributor_tier_acc,distributor tier accountant,model_lfood_distributor_tier,lfood_base.group_accountant,1,1,1,1
+access_distributor_tier_chief,distributor tier chief,model_lfood_distributor_tier,lfood_base.group_chief_accountant,1,1,1,1
+access_distributor_tier_dir,distributor tier director,model_lfood_distributor_tier,lfood_base.group_director,1,1,0,0
+access_trade_program_acc,trade program accountant,model_lfood_trade_program,lfood_base.group_accountant,1,1,1,0
+access_trade_program_chief,trade program chief,model_lfood_trade_program,lfood_base.group_chief_accountant,1,1,1,1
+access_trade_program_dir,trade program director,model_lfood_trade_program,lfood_base.group_director,1,1,0,0

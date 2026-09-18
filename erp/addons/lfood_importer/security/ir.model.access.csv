@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_import_job_chief,import job chief,model_lfood_import_job,lfood_base.group_chief_accountant,1,1,1,1
+access_import_map_chief,import map chief,model_lfood_import_mapping,lfood_base.group_chief_accountant,1,1,1,1
+access_import_job_acc,import job accountant,model_lfood_import_job,lfood_base.group_accountant,1,0,0,0
+access_import_map_acc,import map accountant,model_lfood_import_mapping,lfood_base.group_accountant,1,0,0,0

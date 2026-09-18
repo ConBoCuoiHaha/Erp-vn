@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_obligation_acc,obligation accountant,model_lfood_tax_obligation,lfood_base.group_accountant,1,1,1,0
+access_obligation_chief,obligation chief,model_lfood_tax_obligation,lfood_base.group_chief_accountant,1,1,1,1
+access_obligation_dir,obligation director,model_lfood_tax_obligation,lfood_base.group_director,1,0,0,0

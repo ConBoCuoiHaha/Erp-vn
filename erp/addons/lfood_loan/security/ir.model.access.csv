@@ -1,0 +1,9 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_loan_acc,loan accountant,model_lfood_loan,lfood_base.group_accountant,1,1,1,0
+access_loan_chief,loan chief,model_lfood_loan,lfood_base.group_chief_accountant,1,1,1,1
+access_loan_dir,loan director,model_lfood_loan,lfood_base.group_director,1,0,0,0
+access_loan_accrual_acc,loan accrual accountant,model_lfood_loan_accrual,lfood_base.group_accountant,1,0,1,0
+access_loan_accrual_dir,loan accrual director,model_lfood_loan_accrual,lfood_base.group_director,1,0,0,0
+access_loan_schedule_acc,loan schedule accountant,model_lfood_loan_schedule,lfood_base.group_accountant,1,1,1,1
+access_loan_schedule_dir,loan schedule director,model_lfood_loan_schedule,lfood_base.group_director,1,0,0,0
+access_loan_accrue_acc,loan accrue wizard,model_lfood_loan_accrue,lfood_base.group_accountant,1,1,1,1

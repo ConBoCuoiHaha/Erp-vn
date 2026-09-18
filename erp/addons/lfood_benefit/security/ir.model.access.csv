@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_benefit_acc,benefit accountant,model_lfood_hr_benefit,lfood_base.group_accountant,1,1,1,0
+access_benefit_chief,benefit chief,model_lfood_hr_benefit,lfood_base.group_chief_accountant,1,1,1,1
+access_benefit_dir,benefit director,model_lfood_hr_benefit,lfood_base.group_director,1,0,0,0
+access_ins_change_acc,insurance change accountant,model_lfood_insurance_change,lfood_base.group_accountant,1,1,1,1
+access_ins_change_dir,insurance change director,model_lfood_insurance_change,lfood_base.group_director,1,0,0,0
+access_ins_change_line_acc,insurance change line accountant,model_lfood_insurance_change_line,lfood_base.group_accountant,1,1,1,1
+access_ins_change_line_dir,insurance change line director,model_lfood_insurance_change_line,lfood_base.group_director,1,0,0,0

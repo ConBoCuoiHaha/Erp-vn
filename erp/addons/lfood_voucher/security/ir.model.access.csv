@@ -1,0 +1,28 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cost_item_emp,cost item employee,model_lfood_cost_item,lfood_base.group_employee,1,0,0,0
+access_cost_item_chief,cost item chief,model_lfood_cost_item,lfood_base.group_chief_accountant,1,1,1,1
+access_vat_emp,vat employee,model_lfood_vat_rate,lfood_base.group_employee,1,0,0,0
+access_vat_chief,vat chief,model_lfood_vat_rate,lfood_base.group_chief_accountant,1,1,1,0
+access_param_emp,param employee,model_lfood_legal_param,lfood_base.group_employee,1,0,0,0
+access_param_acc,param accountant,model_lfood_legal_param,lfood_base.group_accountant,1,1,1,0
+access_param_value_emp,param value employee,model_lfood_legal_param_value,lfood_base.group_employee,1,0,0,0
+access_param_value_acc,param value accountant,model_lfood_legal_param_value,lfood_base.group_accountant,1,1,1,1
+access_voucher_acc,voucher accountant,model_lfood_service_voucher,lfood_base.group_accountant,1,1,1,1
+access_voucher_dir,voucher director,model_lfood_service_voucher,lfood_base.group_director,1,0,0,0
+access_version_acc,version accountant,model_lfood_service_voucher_version,lfood_base.group_accountant,1,1,1,1
+access_version_dir,version director,model_lfood_service_voucher_version,lfood_base.group_director,1,0,0,0
+access_line_acc,line accountant,model_lfood_service_voucher_line,lfood_base.group_accountant,1,1,1,1
+access_line_dir,line director,model_lfood_service_voucher_line,lfood_base.group_director,1,0,0,0
+access_diff_acc,diff accountant,model_lfood_voucher_version_diff,lfood_base.group_accountant,1,0,1,0
+access_diff_dir,diff director,model_lfood_voucher_version_diff,lfood_base.group_director,1,0,0,0
+access_batch_acc,batch accountant,model_lfood_voucher_bulk_batch,lfood_base.group_accountant,1,0,0,0
+access_batch_chief,batch chief,model_lfood_voucher_bulk_batch,lfood_base.group_chief_accountant,1,1,1,0
+access_batch_dir,batch director,model_lfood_voucher_bulk_batch,lfood_base.group_director,1,0,0,0
+access_analysis_acc,analysis accountant,model_lfood_cost_analysis,lfood_base.group_accountant,1,0,0,0
+access_analysis_dir,analysis director,model_lfood_cost_analysis,lfood_base.group_director,1,0,0,0
+access_param_tools_acc,param tools,model_lfood_param_tools,lfood_base.group_accountant,1,1,1,1
+access_reason_acc,reason wizard,model_lfood_voucher_reason,lfood_base.group_accountant,1,1,1,1
+access_bulk_chief,bulk wizard,model_lfood_voucher_bulk,lfood_base.group_chief_accountant,1,1,1,1
+access_bulk_preview_chief,bulk preview,model_lfood_voucher_bulk_preview,lfood_base.group_chief_accountant,1,1,1,1
+access_holiday_emp,holiday employee,model_lfood_holiday,lfood_base.group_employee,1,0,0,0
+access_holiday_acc,holiday accountant,model_lfood_holiday,lfood_base.group_accountant,1,1,1,1

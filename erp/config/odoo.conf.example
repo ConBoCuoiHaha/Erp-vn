@@ -12,3 +12,6 @@ list_db = False
 proxy_mode = True
 without_demo = True
 workers = 0
+; chỉ phục vụ cơ sở dữ liệu làm việc; lfood_test dành cho bộ kiểm thử
+db_name = lfood
+dbfilter = ^lfood$

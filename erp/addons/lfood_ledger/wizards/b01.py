@@ -166,3 +166,6 @@ if __name__ == '__main__':
     v = compute(rows + [('112', 'short', 'debit', -50), ('3311', 'short', 'both', 50)])
     assert v['111'] == 450 and v['280'] == v['440'], (v['111'], v['280'], v['440'])
     print('ok')
+    # lương tháng chưa chi: 334 dư Có chỉ lên 315, không làm âm 135
+    v = compute(rows + [('334', 'short', 'both', -70), ('112', 'short', 'debit', 70)])
+    assert v['315'] == 70 and v['135'] == 0 and v['280'] == v['440'], (v['315'], v['135'], v['280'], v['440'])
