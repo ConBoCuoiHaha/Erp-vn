@@ -62,7 +62,7 @@ Step "Đặt địa chỉ hệ thống = $url (đường dẫn trong thư đặt
 
 # giữ máy không ngủ khi cửa sổ này còn mở (không đổi cài đặt nguồn của Windows; gập máy vẫn theo cài đặt nắp máy)
 Add-Type -Namespace LFood -Name Power -MemberDefinition '[DllImport("kernel32.dll")] public static extern uint SetThreadExecutionState(uint f);'
-[LFood.Power]::SetThreadExecutionState(0x80000001) | Out-Null
+[LFood.Power]::SetThreadExecutionState([uint32]2147483649) | Out-Null  # ES_CONTINUOUS | ES_SYSTEM_REQUIRED
 
 Set-Clipboard $url
 Write-Host "`n==============================================================" -ForegroundColor Green
