@@ -53,19 +53,13 @@ và `docker compose restart odoo`. Kiểm thử, xem [erp/README.md](erp/README.
 
 ## Mở cho người ở nơi khác truy cập
 
-Không cần sửa mã: `proxy_mode = True` đã bật, Odoo tự nhận địa chỉ công khai khi quản trị đăng nhập qua link đó.
-Ví dụ với Microsoft Dev Tunnels:
+Bấm đúp `erp/start-tunnel.bat` (Windows). Script tự bật Docker và app, mở trình duyệt để bạn đăng nhập
+Microsoft Dev Tunnels ở lần đầu, tạo link HTTPS cố định (ví dụ `https://lifeood-erp-8069.asse.devtunnels.ms`), chép link
+vào clipboard, đặt địa chỉ hệ thống theo link đó (đường dẫn trong thư đặt lại mật khẩu), giữ máy không ngủ và tự nối lại
+khi rớt mạng. Đóng cửa sổ là tắt link. Không cần sửa mã: `proxy_mode = True` đã bật.
 
-```powershell
-winget install Microsoft.devtunnel
-devtunnel user login
-devtunnel create lfood-erp --allow-anonymous   # tạo một lần, giữ link cố định
-devtunnel port create lfood-erp -p 8069
-devtunnel host lfood-erp                       # để cửa sổ này chạy; laptop phải bật và không ngủ
-```
-
-Trước khi mở link: đổi mật khẩu mọi tài khoản mẫu và `admin_passwd`, bỏ `--dev=xml` trong `erp/docker-compose.yml`,
-bật mã 2 lớp cho quản trị viên.
+Cổng 8069 chỉ mở cho chính máy chạy app (`127.0.0.1`); người khác vào qua link tunnel. Trước khi gửi link: đổi mật khẩu
+mọi tài khoản mẫu và `admin_passwd`, bật mã 2 lớp cho quản trị viên.
 
 ## Cấu trúc
 
@@ -75,7 +69,8 @@ erp/
   config/             odoo.conf (không đưa lên git), odoo.conf.example
   backup/             kịch bản sao lưu tự động
   tests/              smoke_test.py, ui_crawl.py, data_consistency.py, http_test.ps1
-  tools/              seed_demo.py (dữ liệu mẫu), set-mail-password.ps1 (mật khẩu Gmail gửi thư)
+  tools/              seed_demo.py (dữ liệu mẫu), set-mail-password.ps1 (mật khẩu Gmail gửi thư), start-tunnel.ps1
+  start-erp.bat       bật app trên máy;  start-tunnel.bat  mở link cho người ở xa
 docs/                 tài liệu nghiệp vụ, cấu hình, sơ đồ dữ liệu (HTML)
 ```
 

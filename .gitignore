@@ -61,3 +61,6 @@ venv/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# tên tunnel riêng của máy này (start-tunnel.bat tự tạo)
+erp/.tunnel-id

@@ -24,7 +24,8 @@ services:
     restart: unless-stopped
     depends_on: [db]
     ports:
-      - "8069:8069"
+      # chỉ máy này truy cập trực tiếp; người ngoài vào qua start-tunnel.bat (link HTTPS)
+      - "127.0.0.1:8069:8069"
     environment:
       HOST: db
       USER: odoo
@@ -35,7 +36,6 @@ services:
       - ./addons:/mnt/extra-addons
       - ./config:/etc/odoo
       - ${BACKUP_DIR:-./backups}:/mnt/backups
-    command: ["odoo", "--dev=xml"]
 
   backup:
     image: postgres:16
