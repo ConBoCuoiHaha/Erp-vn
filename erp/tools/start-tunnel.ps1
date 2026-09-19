@@ -51,8 +51,10 @@ if ($LASTEXITCODE) {
     Set-Content $idFile $id
 }
 
-$url = ((devtunnel show $id | Out-String) | Select-String 'https://[^\s/]+devtunnels\.ms').Matches.Value | Select-Object -First 1
-if (-not $url) { throw "Không đọc được link của tunnel $id (devtunnel show $id)." }
+# link có dạng https://<tên>-8069.<vùng>.devtunnels.ms, dựng từ mã tunnel đầy đủ "<tên>.<vùng>"
+$info = devtunnel show $id 2>&1 | Out-String
+if ($info -notmatch 'Tunnel ID\s*:\s*([a-z0-9-]+)\.([a-z0-9]+)') { throw "Không đọc được mã tunnel $id`n$info" }
+$url = "https://$($Matches[1])-8069.$($Matches[2]).devtunnels.ms"
 
 Step "Đặt địa chỉ hệ thống = $url (đường dẫn trong thư đặt lại mật khẩu)"
 "env['ir.config_parameter'].sudo().set_param('web.base.url', '$url'); env['ir.config_parameter'].sudo().set_param('web.base.url.freeze', 'True'); env.cr.commit()" |
