@@ -217,6 +217,10 @@ class LfoodPayrollRun(models.Model):
                 slip._compute_values(params)
         return True
 
+    def _cost_extra(self, emp):
+        """Giá trị bổ sung cho dòng chi phí lương, ví dụ đối tượng tính giá thành; phân hệ giá thành ghi đè."""
+        return None
+
     def action_post(self):
         self._require('lfood_base.group_chief_accountant', _('Chỉ Kế toán trưởng được ghi sổ bảng lương.'))
         Move = self.env['lfood.move']
@@ -229,14 +233,15 @@ class LfoodPayrollRun(models.Model):
             for s in rec.slip_ids:
                 emp, partner = s.employee_id, s.employee_id.partner_id
                 ci = emp.cost_item_id
-                lines += [(emp.cost_account, s.gross, 0, None, _('%s: %s') % (label, emp.name), ci),
+                extra = rec._cost_extra(emp)
+                lines += [(emp.cost_account, s.gross, 0, None, _('%s: %s') % (label, emp.name), ci, extra),
                           ('334', 0, s.gross, partner, _('Phải trả lương %s') % emp.name, None)]
                 for acc, amount, what in (('3383', s.emp_si, 'BHXH'), ('3384', s.emp_hi, 'BHYT'), ('3386', s.emp_ui, 'BHTN')):
                     lines += [('334', amount, 0, partner, _('Trừ %s người lao động %s') % (what, emp.name), None),
                               (acc, 0, amount, None, _('%s người lao động %s') % (what, emp.name), None)]
                 for acc, amount, what in (('3383', s.co_si, 'BHXH'), ('3384', s.co_hi, 'BHYT'), ('3386', s.co_ui, 'BHTN'),
                                           ('3382', s.co_union, 'KPCĐ')):
-                    lines += [(emp.cost_account, amount, 0, None, _('%s doanh nghiệp đóng %s') % (what, emp.name), ci),
+                    lines += [(emp.cost_account, amount, 0, None, _('%s doanh nghiệp đóng %s') % (what, emp.name), ci, extra),
                               (acc, 0, amount, None, _('%s doanh nghiệp đóng %s') % (what, emp.name), None)]
                 lines += [('334', s.pit, 0, partner, _('Khấu trừ thuế TNCN %s') % emp.name, None),
                           ('3335', 0, s.pit, None, _('Thuế TNCN %s') % emp.name, None)]

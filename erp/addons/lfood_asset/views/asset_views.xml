@@ -130,6 +130,8 @@
                                     <field name="depreciable_value"/>
                                     <field name="life_months" readonly="state != 'draft'"/>
                                     <field name="date_start" readonly="state != 'draft'"/>
+                            <field name="opening_date" readonly="state != 'draft'"/>
+                            <field name="opening_accumulated" readonly="state != 'draft'" invisible="not opening_date"/>
                                 </group>
                                 <group>
                                     <field name="monthly_depreciation" class="o_lfood_big_total"/>

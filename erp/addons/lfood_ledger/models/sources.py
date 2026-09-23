@@ -118,6 +118,9 @@ class LfoodAsset(models.Model):
                                       help='Dùng khi ghi tăng không kèm chứng từ mua: ví dụ 3311 mua chịu, 111 trả tiền mặt, 411 nhận góp vốn')
     dispose_counterpart = fields.Char('TK nhận tiền thanh lý', default='1311', copy=False)
     dispose_partner_id = fields.Many2one('res.partner', 'Người mua thanh lý', copy=False)
+    dispose_vat_rate_id = fields.Many2one('lfood.vat.rate', 'Thuế suất GTGT khi bán', copy=False,
+                                          help='Bán, thanh lý tài sản có xuất hóa đơn thì chọn thuế suất để ghi '
+                                               'thuế đầu ra và lên bảng kê bán ra của tờ khai.')
 
     def _voucher_reclass_lines(self):
         """Chứng từ mua đã hạch toán vào TK chi phí (ví dụ 6277): chuyển sang TK nguyên giá và chuyển thuế 1331 sang 1332."""
@@ -151,7 +154,8 @@ class LfoodAsset(models.Model):
         drafts = self._split_quantity().filtered(lambda a: a.state == 'draft')
         res = super(LfoodAsset, drafts).action_confirm()
         Move = self.env['lfood.move']
-        for rec in drafts.filtered(lambda a: a.state == 'running'):
+        # tài sản đang dùng dở khai khi bắt đầu chạy phần mềm: nguyên giá đã nằm trong số dư đầu kỳ, không ghi tăng lại
+        for rec in drafts.filtered(lambda a: a.state == 'running' and not a.opening_date):
             if rec.voucher_id:
                 lines = rec._voucher_reclass_lines()
             else:
@@ -181,8 +185,11 @@ class LfoodAsset(models.Model):
                  (self.account_asset, 0, self.original_value, None, label, None)]
         if proceeds:
             partner = self.dispose_partner_id if self.env['lfood.account'].by_code(self.dispose_counterpart).track_partner else None
-            lines += [(self.dispose_counterpart, proceeds, 0, partner, _('Thu thanh lý %s') % self.code, None),
+            vat = round(proceeds * (self.dispose_vat_rate_id.rate or 0) / 100)
+            lines += [(self.dispose_counterpart, proceeds + vat, 0, partner, _('Thu thanh lý %s') % self.code, None),
                       ('711', 0, proceeds, None, _('Thu thanh lý %s') % self.code, None)]
+            if vat:
+                lines += [('33311', 0, vat, None, _('Thuế GTGT bán thanh lý %s') % self.code, None)]
         self.env['lfood.move']._create_from_source(self, 'asset', dispose_date, lines,
                                                    memo=_('Thanh lý TSCĐ %s: %s') % (self.code, reason),
                                                    key='dispose', ref=self.code)
@@ -194,8 +201,10 @@ class LfoodAssetDispose(models.TransientModel):
 
     counterpart_account = fields.Char('TK nhận tiền', default='1311', help='1311 bán chịu, 111 thu tiền mặt, 112 chuyển khoản')
     partner_id = fields.Many2one('res.partner', 'Người mua')
+    vat_rate_id = fields.Many2one('lfood.vat.rate', 'Thuế suất GTGT khi bán')
 
     def action_apply(self):
         self.asset_id.with_context(lfood_asset_system=True).write({
-            'dispose_counterpart': self.counterpart_account, 'dispose_partner_id': self.partner_id.id})
+            'dispose_counterpart': self.counterpart_account, 'dispose_partner_id': self.partner_id.id,
+            'dispose_vat_rate_id': self.vat_rate_id.id})
         return super().action_apply()

@@ -68,6 +68,11 @@ class LfoodAsset(models.Model):
     residual_value = fields.Float('Giá trị còn lại', digits=(16, 0), compute='_compute_progress')
     posted_months = fields.Integer('Số kỳ đã khấu hao', compute='_compute_progress')
 
+    opening_date = fields.Date('Theo dõi trên phần mềm từ',
+                               help='Tài sản đã dùng trước khi chạy phần mềm: ghi ngày bắt đầu theo dõi. '
+                                    'Các kỳ khấu hao trước ngày này đã nằm trong số dư đầu kỳ TK 214 nên app không lập lại.')
+    opening_accumulated = fields.Float('Hao mòn lũy kế đầu kỳ', digits=(16, 0),
+                                       help='Số đã khấu hao trước ngày bắt đầu theo dõi, khớp số dư đầu kỳ TK 214.')
     dispose_date = fields.Date('Ngày thanh lý', readonly=True, copy=False)
     dispose_reason = fields.Char('Lý do thanh lý', readonly=True, copy=False)
     dispose_proceeds = fields.Float('Tiền thu thanh lý (chưa thuế)', digits=(16, 0), readonly=True, copy=False)
@@ -97,7 +102,7 @@ class LfoodAsset(models.Model):
     def _compute_progress(self):
         for rec in self:
             posted = rec.schedule_ids.filtered('posted')
-            rec.accumulated_value = sum(posted.mapped('amount'))
+            rec.accumulated_value = (rec.opening_accumulated or 0) + sum(posted.mapped('amount'))
             rec.residual_value = (rec.original_value or 0) - rec.accumulated_value
             rec.posted_months = len(posted)
 
@@ -141,6 +146,15 @@ class LfoodAsset(models.Model):
                                                       res_name='%s %s' % (rec.code, rec.name),
                                                       company_id=rec.company_id.id, summary=summary)
 
+    @api.constrains('opening_date', 'opening_accumulated', 'original_value')
+    def _check_opening(self):
+        for rec in self:
+            if rec.opening_date and rec.opening_accumulated > rec.original_value:
+                raise ValidationError(_('Hao mòn lũy kế đầu kỳ %s lớn hơn nguyên giá %s.')
+                                      % (vnd(rec.opening_accumulated), vnd(rec.original_value)))
+            if rec.opening_accumulated and not rec.opening_date:
+                raise ValidationError(_('Có hao mòn lũy kế đầu kỳ thì phải ghi ngày bắt đầu theo dõi trên phần mềm.'))
+
     def _require_accountant(self):
         if not self.env.user.has_group('lfood_base.group_accountant'):
             raise UserError(_('Chỉ kế toán được thao tác với tài sản cố định.'))
@@ -152,8 +166,10 @@ class LfoodAsset(models.Model):
             acc, lines = 0, []
             for period, amount in build_schedule(rec.depreciable_value, rec.life_months, rec.date_start):
                 acc += amount
-                lines.append({'asset_id': rec.id, 'date': period, 'amount': amount, 'accumulated': acc,
-                              'residual': rec.original_value - acc})
+                if rec.opening_date and period < rec.opening_date:
+                    continue  # kỳ này đã khấu hao trước khi dùng phần mềm, nằm trong số dư đầu kỳ
+                lines.append({'asset_id': rec.id, 'date': period, 'amount': amount,
+                              'accumulated': acc, 'residual': rec.original_value - acc})
             self.env['lfood.asset.schedule'].sudo().create(lines)
 
     def _split_quantity(self):

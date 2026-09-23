@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- gắn đối tượng tính giá thành vào phiếu kho và hồ sơ nhân viên -->
+    <record id="view_picking_form_costing" model="ir.ui.view">
+        <field name="name">lfood.stock.picking.form.costing</field>
+        <field name="model">lfood.stock.picking</field>
+        <field name="inherit_id" ref="lfood_stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <field name="cost_item_id" position="after">
+                <field name="cost_product_id" invisible="purpose != 'production'"
+                       required="purpose == 'production'" readonly="state != 'draft'"/>
+                <field name="costing_run_id" invisible="not costing_run_id" readonly="1"/>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_employee_form_costing" model="ir.ui.view">
+        <field name="name">lfood.employee.form.costing</field>
+        <field name="model">lfood.employee</field>
+        <field name="inherit_id" ref="lfood_payroll.view_employee_form"/>
+        <field name="arch" type="xml">
+            <field name="cost_account" position="after">
+                <field name="cost_product_id" invisible="cost_account != '622'"/>
+            </field>
+        </field>
+    </record>
+
+    <!-- kỳ tính giá thành -->
+    <record id="view_costing_run_list" model="ir.ui.view">
+        <field name="name">lfood.costing.run.list</field>
+        <field name="model">lfood.costing.run</field>
+        <field name="arch" type="xml">
+            <list decoration-muted="state == 'done'">
+                <field name="year"/>
+                <field name="month"/>
+                <field name="warehouse_id"/>
+                <field name="basis"/>
+                <field name="total_cost" sum="Tổng giá thành"/>
+                <field name="state"/>
+                <field name="company_id" optional="hide" groups="base.group_multi_company"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_costing_run_form" model="ir.ui.view">
+        <field name="name">lfood.costing.run.form</field>
+        <field name="model">lfood.costing.run</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="action_collect" type="object" string="Tập hợp chi phí" class="btn-primary"
+                            invisible="state != 'draft'"/>
+                    <button name="action_post" type="object" string="Tính giá thành và nhập kho"
+                            invisible="state != 'draft'" groups="lfood_base.group_chief_accountant"
+                            confirm="Ghi sổ kết chuyển chi phí và nhập kho thành phẩm theo giá thành vừa tính?"/>
+                    <button name="action_open_moves" type="object" string="Xem bút toán" invisible="state != 'done'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="year"/>
+                            <field name="month"/>
+                            <field name="warehouse_id" readonly="state != 'draft'"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                        <group>
+                            <field name="basis" readonly="state != 'draft'"/>
+                            <field name="complete_pct"/>
+                            <field name="create_picking" readonly="state != 'draft'"/>
+                            <field name="overhead_pool"/>
+                            <field name="total_cost"/>
+                        </group>
+                    </group>
+                    <field name="line_ids" readonly="state != 'draft'">
+                        <list editable="bottom">
+                            <field name="product_id"/>
+                            <field name="open_dm" sum="Cộng"/>
+                            <field name="open_conv" sum="Cộng"/>
+                            <field name="cost_dm" sum="Cộng"/>
+                            <field name="cost_labor" sum="Cộng"/>
+                            <field name="cost_overhead_direct" sum="Cộng" optional="hide"/>
+                            <field name="cost_overhead_alloc" sum="Cộng"/>
+                            <field name="qty_done"/>
+                            <field name="qty_wip"/>
+                            <field name="pct"/>
+                            <field name="wip_dm_end" sum="Cộng"/>
+                            <field name="wip_conv_end" sum="Cộng"/>
+                            <field name="total_cost" sum="Cộng"/>
+                            <field name="unit_cost"/>
+                        </list>
+                    </field>
+                    <group string="Phiếu nhập kho thành phẩm" invisible="state != 'done'">
+                        <field name="picking_ids" nolabel="1" readonly="1">
+                            <list>
+                                <field name="name"/>
+                                <field name="date"/>
+                                <field name="warehouse_id"/>
+                                <field name="amount"/>
+                            </list>
+                        </field>
+                    </group>
+                    <field name="note" placeholder="Diễn giải"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_costing_run" model="ir.actions.act_window">
+        <field name="name">Tính giá thành sản phẩm</field>
+        <field name="res_model">lfood.costing.run</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Tính giá thành theo phương pháp giản đơn.</p>
+            <p>Khai sản phẩm cần tính, bấm Tập hợp chi phí để lấy 621, 622, 627 từ sổ kế toán,
+               nhập sản lượng hoàn thành và dở dang, rồi ghi sổ để nhập kho thành phẩm.</p>
+        </field>
+    </record>
+
+    <menuitem id="menu_costing_run" name="Tính giá thành" parent="lfood_base.menu_documents"
+              action="action_costing_run" sequence="47" groups="lfood_base.group_accountant"/>
+</odoo>

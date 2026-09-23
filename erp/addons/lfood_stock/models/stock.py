@@ -294,6 +294,10 @@ class LfoodStockPicking(models.Model):
                                                                                               name, dict(rec._fields['purpose'].selection)[rec.purpose], vnd(rec.amount)))
         return True
 
+    def _cost_extra(self):
+        """Giá trị bổ sung cho dòng chi phí, ví dụ đối tượng tính giá thành; phân hệ giá thành ghi đè."""
+        return None
+
     def _post_move(self, by_account):
         # chuyển kho không đổi tài khoản; tồn đầu kỳ đã có số dư trên sổ qua Số dư đầu kỳ nên không ghi sổ lại
         if self.kind == 'transfer' or self.purpose == 'opening':
@@ -307,7 +311,8 @@ class LfoodStockPicking(models.Model):
             if self.kind == 'in':
                 lines += [(account, value, 0, None, label, None), (counter, 0, value, partner, label, None)]
             else:
-                lines += [(counter, value, 0, partner, label, self.cost_item_id), (account, 0, value, None, label, None)]
+                lines += [(counter, value, 0, partner, label, self.cost_item_id, self._cost_extra()),
+                          (account, 0, value, None, label, None)]
         if self.kind == 'in' and self.amount_tax:
             lines += [('1331', self.amount_tax, 0, None, _('Thuế GTGT %s') % label, None), (counter, 0, self.amount_tax, partner, label, None)]
         if self.kind == 'out' and self.purpose == 'return_out' and self.amount_tax:

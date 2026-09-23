@@ -177,7 +177,9 @@ class LfoodVatReturn(models.Model):
         """, (self.company_id.id, self.date_from, self.date_to))
         vals = []
         for move_id, ref, memo, d, base, tax, partner in self.env.cr.fetchall():
-            if not round(base) and not round(tax):
+            # không có doanh thu thì không phải nghiệp vụ bán ra: ví dụ phiếu nộp thuế GTGT kỳ trước (Nợ 33311),
+            # bút toán bù trừ 33311 với 133 khi xác nhận tờ khai
+            if not round(base):
                 continue
             ratio = (tax / base * 100) if base else 0
             if not round(tax):
