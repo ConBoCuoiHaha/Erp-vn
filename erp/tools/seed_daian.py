@@ -339,7 +339,7 @@ for name, cat, value, life, start, usage, accumulated in ASSETS:
 
 # ------------------------------------------------------------------ nghiệp vụ tháng 01/2026
 INV = {}
-COST = {'TN01': 814_000, 'TN02': 625_000}   # giá thành kế hoạch, kỳ tính giá thành cuối tháng kiểm lại
+COST = {'TN01': 884_813, 'TN02': 682_578}   # giá thành sách tự tính ra ở bảng nhập xuất tồn thành phẩm trang 153
 
 
 def split334(amount, accs):
@@ -418,10 +418,11 @@ do('18 xuất NVL sản xuất TN01', lambda: issue(15, 'PXK 04/XV xuất vật 
 do('19 xuất NVL sản xuất TN02', lambda: issue(16, 'PXK 05/XV xuất vật liệu sản xuất TN02', w_vt, [
     (MAT['NL01'], 3000), (MAT['NL02'], 3000), (MAT['NL03'], 60), (MAT['NL04'], 40)],
     purpose='production', product=FIN['TN02']))
-do('20 xuất công cụ cho phân xưởng', lambda: issue(16, 'PXK 01/XC máy đánh bóng dùng ở phân xưởng, phân bổ nhiều kỳ',
-                                                   w_vt, [(TOOL['CC02'], 4)], counter='242'))
-do('21 xuất xăng cho hành chính', lambda: issue(17, 'PXK 06/XV xăng A92 cho phòng hành chính', w_vt,
-                                                [(MAT['NL05'], 100)], counter='6427'))
+do('20 xuất công cụ cho phân xưởng, phân bổ 1 lần', lambda: issue(
+    16, 'PXK 01/XC máy đánh bóng dùng ở phân xưởng, phân bổ 1 lần', w_vt, [(TOOL['CC02'], 4)], counter='6277'))
+do('21 xuất xăng và công cụ cho hành chính', lambda: [
+    issue(17, 'PXK 06/XV xăng A92 cho phòng hành chính', w_vt, [(MAT['NL05'], 100)], counter='6427'),
+    issue(17, 'PXK 07/XC quạt máy dùng ở phân xưởng, phân bổ nhiều kỳ', w_vt, [(TOOL['CC01'], 4)], counter='242')])
 do('22 trả nợ Phát Tiến hóa đơn 0001076', lambda: pay(17, 'out', 'bank', 'supplier', PT['PHATTIEN'], 446_600_000,
                                                       'GBN 14755 trả nợ HĐ 0001076'))
 do('22b phí chuyển tiền', lambda: service(17, PT['NGANHANG'], 'Phí chuyển tiền',

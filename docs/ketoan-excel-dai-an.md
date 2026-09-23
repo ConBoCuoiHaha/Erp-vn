@@ -167,3 +167,46 @@ UNC ủy nhiệm chi. Dấu (?) là số đọc từ ảnh chưa chắc, phải 
 2. Nhập 51 nghiệp vụ tháng 01/2026 qua đúng màn hình nghiệp vụ của app.
 3. So kết quả app tính ra với đáp án trong sách: giá thành TN01 và TN02, sổ cái, bảng cân đối số phát sinh,
    báo cáo tài chính. Đây là phép thử từ nguồn bên ngoài, độc lập với bộ kiểm thử tự viết.
+
+## 7. Kết quả đối chiếu app với sách (23/09/2026)
+
+Nạp bằng `erp/tools/seed_daian.py` vào cơ sở dữ liệu `lfood_daian`: 57/57 nghiệp vụ vào sổ, không lỗi.
+
+### Khớp tuyệt đối
+
+| Chỉ tiêu | App | Sách (trang) |
+|---|---|---|
+| Chi phí NVL trực tiếp SP TN01 | 554.620.000 | 554.620.000 (sổ chi tiết TK 62101, tr.144) |
+| Chi phí nhân công trực tiếp SP TN01 | 93.057.250 | 93.057.250 (sổ chi tiết TK 62201, tr.145) |
+| Khấu hao tháng 01 toàn doanh nghiệp | 31.300.000 | 31.300.000 (bảng 01/KH, tr.105) |
+| Khấu hao phân bổ: phân xưởng / bán hàng / quản lý | 11.500.000 / 2.100.000 / 17.700.000 | như trên |
+| Tiền mặt phát sinh Nợ tháng 01 | 136.614.000 | 136.614.000 (bảng danh mục tài khoản, tr.157) |
+| Phải trả người bán: phát sinh Nợ / Có, dư cuối | 589.600.000 / 543.760.800 / 77.160.800 | như trên (tr.157) |
+| Thuế GTGT bán ra [35] | 101.960.000 | 101.960.000 (tờ khai, tr.106) |
+| Doanh thu chịu thuế 10% / 0% | 1.019.600.000 / 284.400.000 | như trên |
+| Tổng thuế GTGT đầu vào | 54.312.500 | 54.312.500 |
+
+### Lệch có lý do
+
+| Chỉ tiêu | App | Sách | Giải thích |
+|---|---|---|---|
+| Thuế GTGT được khấu trừ [25] | 52.402.000 | 54.312.500 | App loại 1.910.500 thuế của hai hóa đơn trên 5 triệu **trả bằng tiền mặt** (quảng cáo 16 triệu, điện thoại 6,3 triệu). Luật Thuế GTGT hiện hành yêu cầu thanh toán không dùng tiền mặt mới được khấu trừ; sách viết theo quy định cũ |
+| Giá thành đơn vị TN01 | 821.093 | 814.000 (đề bài) / 884.813 (bảng Excel tr.153) | Xem ghi chú bên dưới |
+| Giá thành đơn vị TN02 | 675.781 | 625.000 (đề bài) / 682.578 (bảng Excel tr.153) | Xem ghi chú bên dưới |
+
+### Ghi chú về giá thành: sách tự mâu thuẫn
+
+- Đề bài (tr.105) ghi giá thành thực tế nhập kho TN01 **814.000**, TN02 **625.000**.
+- Nhưng bảng tổng hợp nhập xuất tồn thành phẩm do chính sách lập bằng Excel (tr.153) cho giá trị nhập kho
+  TN01 752.091.018 cho 850 cái (800 sản xuất + 50 hàng bán trả lại) tức **884.813 đ/cái**, TN02 546.062.336 cho 800 cái
+  tức **682.578 đ/cái**. Hai con số này không khớp với đề bài.
+- App tính theo đúng chính sách mà sách công bố: chi phí nguyên vật liệu trực tiếp bỏ vào ngay từ đầu nên sản phẩm
+  dở dang chịu đủ theo số lượng; chi phí nhân công và sản xuất chung chịu theo mức độ hoàn thành 50%; chi phí sản xuất
+  chung phân bổ theo tiền lương công nhân trực tiếp. Mọi đầu vào của phép tính đều đã đối chiếu khớp với sổ chi tiết
+  của sách. Vì vậy chênh lệch nằm ở cách sách đánh giá sản phẩm dở dang trong tệp Excel, không tra ngược được.
+
+### Việc đã sửa trong app nhờ bộ dữ liệu này
+
+1. Khai được tài sản đang dùng dở khi bắt đầu chạy phần mềm (ngày bắt đầu theo dõi, hao mòn lũy kế đầu kỳ).
+2. Bán, thanh lý tài sản ghi được thuế GTGT đầu ra và lên đúng nhóm thuế suất trên tờ khai.
+3. Bút toán nộp thuế GTGT kỳ trước không còn bị tính nhầm thành doanh thu bán ra âm.
