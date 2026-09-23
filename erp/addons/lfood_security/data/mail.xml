@@ -5,7 +5,7 @@
 <odoo>
     <function model="ir.config_parameter" name="set_param"><value>auth_signup.reset_password</value><value>True</value></function>
     <function model="ir.config_parameter" name="set_param"><value>auth_signup.invitation_scope</value><value>b2b</value></function>
-    <!-- base_install_request (tự cài theo mail) mở menu Ứng dụng cho mọi người: trả lại chỉ quản trị -->
+    <!-- base_install_request (Odoo tự cài theo mail, đã gỡ) mở menu Ứng dụng cho mọi người: trả lại chỉ quản trị -->
     <record id="base.menu_management" model="ir.ui.menu">
         <field name="group_ids" eval="[(6, 0, [ref('base.group_system')])]"/>
     </record>

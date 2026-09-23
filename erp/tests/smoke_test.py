@@ -4323,9 +4323,12 @@ except AccessError:
 
 # ---- menu quản trị Odoo không lộ cho người dùng thường
 _apps = env.ref('base.menu_management')
-check('Menu Ứng dụng chỉ quản trị thấy, không có module tự lộ menu hay gửi dữ liệu ra ngoài',
+check('Menu Ứng dụng chỉ quản trị thấy; không còn module dịch vụ Odoo nào được cài',
       all(_apps.id not in env['ir.ui.menu'].with_user(users[l]).load_menus(False) for l in ('giamdoc', 'ketoantruong', 'ketoanvien', 'nhanvien'))
-      and env['iap.autocomplete.api']._request_partner_autocomplete('search_by_name', {'query': 'x'}) == (False, 'No account token'))
+      and not env['ir.module.module'].search_count([('state', '=', 'installed'), ('name', 'in', [
+          'base_install_request', 'partner_autocomplete', 'iap', 'iap_mail', 'sms', 'snailmail', 'web_unsplash', 'mail_bot'])]),
+      env['ir.module.module'].search([('state', '=', 'installed'), ('name', 'in', [
+          'base_install_request', 'partner_autocomplete', 'iap', 'iap_mail', 'sms', 'snailmail', 'web_unsplash', 'mail_bot'])]).mapped('name'))
 
 # khóa sổ
 factory.sudo().with_context(lfood_audit_skip=True).write({'lfood_lock_date': date(2026, 8, 31)})

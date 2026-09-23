@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="LiFeOOD">
+  <rect width="64" height="64" rx="12" fill="#123c6e"/>
+  <path d="M20 16v26h20" fill="none" stroke="#eaf2ff" stroke-width="7" stroke-linecap="square"/>
+  <circle cx="44" cy="22" r="6" fill="#8fd8ff"/>
+</svg>

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Gỡ nhận diện Odoo khỏi mọi trang người dùng nhìn thấy. Giữ nguyên dòng bản quyền và giấy phép LGPL trong
+     màn hình Cài đặt: đó là ghi nhận tác giả phần nền, không phải quảng cáo dịch vụ. -->
+<odoo>
+    <template id="layout_brand" inherit_id="web.layout">
+        <xpath expr="//title" position="replace">
+            <title t-esc="title or 'ERP LiFeOOD'"/>
+        </xpath>
+        <xpath expr="//link[@rel='shortcut icon']" position="replace">
+            <link type="image/svg+xml" rel="shortcut icon" t-att-href="x_icon or '/lfood_brand/static/src/favicon.svg'"/>
+        </xpath>
+    </template>
+
+    <!-- trang đăng nhập: bỏ "Powered by Odoo" và liên kết trang quản lý cơ sở dữ liệu -->
+    <template id="login_no_brand" inherit_id="web.login_layout">
+        <xpath expr="//div[@t-if='not disable_footer']" position="replace"/>
+    </template>
+
+    <!-- trang ngoài (cổng thông tin): bỏ huy hiệu quảng bá -->
+    <template id="promo_off" inherit_id="web.brand_promotion_message">
+        <xpath expr="//t[@t-out]" position="replace"/>
+    </template>
+
+    <!-- thư gửi đi: bỏ "Powered by Odoo", giữ liên kết bỏ theo dõi -->
+    <template id="mail_layout_no_brand" inherit_id="mail.mail_notification_layout">
+        <xpath expr="//div[@t-if='show_footer']" position="replace">
+            <div t-if="show_footer and show_unfollow" style="color: #555555; font-size:11px;">
+                <a href="/mail/unfollow" style="text-decoration:none; color:#555555;">Bỏ theo dõi</a>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="mail_light_no_brand" inherit_id="mail.mail_notification_light">
+        <xpath expr="//td[a[contains(@href, 'odoo.com')]]" position="replace">
+            <td align="center" style="min-width: 590px;">
+                <span t-if="show_unfollow" id="mail_unfollow">
+                    <a href="/mail/unfollow" style="text-decoration:none; color:#555555;">Bỏ theo dõi</a>
+                </span>
+            </td>
+        </xpath>
+    </template>
+</odoo>

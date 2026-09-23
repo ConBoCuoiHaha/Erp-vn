@@ -1,0 +1,519 @@
+<title>Bản vẽ ERP LiFeOOD</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Bản vẽ theo lối cyanotype: một thế giới hình ảnh duy nhất (nền xanh bản in), không đổi theo giao diện sáng/tối */
+:root {
+  color-scheme: dark;
+  --ground: #0f3461;
+  --ground-deep: #0b2a50;
+  --panel: #123c6e;
+  --ink: #eaf2ff;
+  --ink-soft: #a9c3e6;
+  --ink-faint: #6f93c2;
+  --line: #d7e6fb;
+  --cyan: #8fd8ff;
+  --amber: #ffc561;
+  --grid: rgba(215, 230, 251, .06);
+  --grid-major: rgba(215, 230, 251, .12);
+  --f-draft: "Barlow Condensed", "Arial Narrow", "Roboto Condensed", sans-serif;
+  --f-body: "IBM Plex Sans", "Segoe UI", Roboto, Arial, sans-serif;
+  --f-mono: "IBM Plex Mono", Consolas, "Courier New", monospace;
+}
+html { background: var(--ground); }
+body {
+  margin: 0;
+  background-color: var(--ground);
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  color: var(--ink);
+  font: 15px/1.6 var(--f-body);
+  padding-inline: 16px;
+  padding-block: 24px 48px;
+}
+.sheet { max-width: 1180px; margin: 0 auto; border: 2px solid var(--line); outline: 1px solid var(--line); outline-offset: 5px; }
+.sheet-in { padding: clamp(16px, 3vw, 36px); display: grid; gap: 48px; }
+h1, h2, h3 { font-family: var(--f-draft); font-weight: 700; letter-spacing: .02em; text-wrap: balance; margin: 0; }
+h1 { font-size: clamp(34px, 5.4vw, 58px); line-height: 1.02; text-transform: uppercase; }
+h2 { font-size: 28px; text-transform: uppercase; }
+h3 { font-size: 20px; font-weight: 600; }
+p { margin: 0; max-width: 68ch; }
+code, .mono { font-family: var(--f-mono); font-size: .88em; }
+.label { font-family: var(--f-draft); font-weight: 600; text-transform: uppercase; letter-spacing: .12em; font-size: 13px; color: var(--ink-soft); }
+
+/* đầu trang + khung tên */
+.head { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 430px); gap: 32px; align-items: end; }
+.head .lede { color: var(--ink-soft); margin-top: 14px; }
+.titleblock { border: 1.5px solid var(--line); display: grid; grid-template-columns: 1fr 1fr; font-size: 13px; }
+.titleblock div { border-right: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); padding: 7px 10px; min-width: 0; }
+.titleblock div:nth-child(2n) { border-right: 0; }
+.titleblock .wide { grid-column: 1 / -1; border-right: 0; }
+.titleblock .k { display: block; font-family: var(--f-draft); text-transform: uppercase; letter-spacing: .1em; font-size: 11px; color: var(--ink-faint); }
+.titleblock .v { font-weight: 500; overflow-wrap: anywhere; }
+.titleblock div:nth-last-child(-n+2) { border-bottom: 0; }
+
+/* bản vẽ con */
+.dwg { display: grid; gap: 18px; }
+.dwg-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; border-bottom: 1.5px solid var(--line); padding-bottom: 8px; }
+.dwg-no { font-family: var(--f-mono); font-size: 14px; color: var(--ground); background: var(--line); padding: 1px 8px; }
+.dwg-head .scale { margin-left: auto; }
+.dwg-note { color: var(--ink-soft); }
+.frame { overflow-x: auto; border: 1px dashed var(--ink-faint); background: rgba(11, 42, 80, .45); padding: 12px; }
+.frame svg { display: block; width: 100%; height: auto; min-width: 760px; }
+svg text { font-family: var(--f-body); }
+svg .t-draft { font-family: var(--f-draft); font-weight: 600; letter-spacing: .06em; }
+svg .t-mono { font-family: var(--f-mono); }
+
+/* danh mục bản vẽ */
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+.tbl { overflow-x: auto; }
+th, td { border: 1px solid var(--ink-faint); padding: 7px 10px; text-align: left; vertical-align: top; }
+th { font-family: var(--f-draft); font-weight: 600; text-transform: uppercase; letter-spacing: .08em; font-size: 13px; color: var(--ink-soft); background: rgba(11, 42, 80, .6); }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+.idx a { color: var(--ink); text-decoration: none; border-bottom: 1px dotted var(--ink-faint); }
+.idx a:hover, .idx a:focus-visible { color: var(--cyan); border-bottom-color: var(--cyan); outline: none; }
+
+/* phân khu chức năng */
+.zones { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
+.zone { border: 1.5px solid var(--line); display: grid; align-content: start; }
+.zone-h { display: flex; justify-content: space-between; gap: 10px; align-items: baseline; padding: 8px 12px; border-bottom: 1.5px solid var(--line); }
+.zone-h h3 { font-size: 19px; }
+.zone-h .label { font-size: 12px; white-space: nowrap; }
+.zone-desc { padding: 8px 12px 0; color: var(--ink-soft); font-size: 13.5px; }
+.rooms { display: grid; gap: 0; padding: 10px 12px 12px; }
+.room { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; padding: 7px 0; border-top: 1px dashed var(--ink-faint); }
+.room:first-child { border-top: 0; }
+.room .nm { font-weight: 500; font-size: 14px; }
+.room .cd { grid-column: 1; font-family: var(--f-mono); font-size: 12px; color: var(--ink-faint); }
+.room .qty { grid-row: 1 / span 2; grid-column: 2; font-family: var(--f-mono); font-size: 12px; color: var(--ink-soft); text-align: right; font-variant-numeric: tabular-nums; line-height: 1.5; }
+
+/* luồng nghiệp vụ */
+.flows { display: grid; gap: 22px; }
+.flow { display: grid; grid-template-columns: 170px minmax(0, 1fr); gap: 14px; align-items: start; }
+.flow > .label { padding-top: 10px; color: var(--ink); font-size: 16px; }
+.steps { display: flex; flex-wrap: wrap; gap: 10px 0; align-items: stretch; }
+.step { border: 1.5px solid var(--line); padding: 7px 10px; font-size: 13.5px; max-width: 210px; background: rgba(18, 60, 110, .7); }
+.step b { display: block; font-weight: 600; }
+.step span { color: var(--ink-soft); font-size: 12.5px; }
+.step.post { border-color: var(--amber); }
+.step.post b { color: var(--amber); }
+.arrow { align-self: center; width: 26px; height: 2px; background: var(--line); position: relative; flex: none; }
+.arrow::after { content: ""; position: absolute; right: -1px; top: -4px; border-left: 8px solid var(--line); border-top: 5px solid transparent; border-bottom: 5px solid transparent; }
+
+/* thống kê khối lượng */
+.qtys { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 0; border: 1.5px solid var(--line); }
+.q { padding: 14px 16px; border-right: 1px solid var(--ink-faint); border-bottom: 1px solid var(--ink-faint); }
+.q .n { font-family: var(--f-draft); font-size: 40px; font-weight: 700; line-height: 1; font-variant-numeric: tabular-nums; }
+.q .u { color: var(--ink-soft); font-size: 13.5px; margin-top: 6px; }
+
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; }
+ul.notes { margin: 0; padding-left: 20px; display: grid; gap: 6px; color: var(--ink-soft); }
+ul.notes b { color: var(--ink); font-weight: 500; }
+.ok { color: var(--cyan); font-weight: 600; }
+.redline { color: var(--amber); }
+.legend { display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 13px; color: var(--ink-soft); }
+.legend i { display: inline-block; width: 28px; height: 0; border-top: 2px solid var(--line); vertical-align: middle; margin-right: 6px; }
+.legend i.dash { border-top-style: dashed; }
+.legend i.post { border-top-color: var(--amber); }
+.foot { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; color: var(--ink-faint); font-size: 12.5px; border-top: 1.5px solid var(--line); padding-top: 10px; }
+
+@media (max-width: 860px) {
+  .head, .two { grid-template-columns: 1fr; }
+  .flow { grid-template-columns: 1fr; gap: 6px; }
+  .flow > .label { padding-top: 0; }
+  .dwg-head .scale { margin-left: 0; }
+}
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="sheet"><div class="sheet-in">
+
+<header class="head">
+  <div>
+    <div class="label">Hồ sơ thiết kế kiến trúc phần mềm</div>
+    <h1>ERP LiFeOOD<br>bản vẽ tổng thể</h1>
+    <p class="lede">Hệ thống quản trị nội bộ cho công ty thực phẩm hai pháp nhân, dựng trên Odoo 19 Community. Bộ bản vẽ này mô tả
+      hệ thống như một công trình: đặt ở đâu, xây theo mấy tầng, chia khu thế nào, kết cấu chịu lực là gì, các đường ống nghiệp vụ
+      chạy qua đâu và lớp an ninh bảo vệ ra sao.</p>
+  </div>
+  <div class="titleblock" aria-label="Khung tên bản vẽ">
+    <div class="wide"><span class="k">Công trình</span><span class="v">ERP LiFeOOD (Lifes Food)</span></div>
+    <div><span class="k">Chủ đầu tư</span><span class="v">Công ty LiFeOOD</span></div>
+    <div><span class="k">Giai đoạn</span><span class="v">Dùng thử nội bộ</span></div>
+    <div><span class="k">Nền tảng</span><span class="v">Odoo 19 CE · PostgreSQL 16</span></div>
+    <div><span class="k">Tỷ lệ</span><span class="v">Không theo tỷ lệ</span></div>
+    <div><span class="k">Phiên bản mã</span><span class="v mono">c9e0749</span></div>
+    <div><span class="k">Ngày lập</span><span class="v">23/09/2026</span></div>
+    <div class="wide"><span class="k">Kho mã</span><span class="v mono">github.com/ConBoCuoiHaha/Erp-vn</span></div>
+  </div>
+</header>
+
+<section class="dwg" aria-labelledby="idx">
+  <div class="dwg-head"><span class="dwg-no">00</span><h2 id="idx">Danh mục bản vẽ</h2></div>
+  <div class="tbl idx"><table>
+    <thead><tr><th>Ký hiệu</th><th>Tên bản vẽ</th><th>Trả lời câu hỏi</th></tr></thead>
+    <tbody>
+      <tr><td class="mono">TQ-01</td><td><a href="#tq01">Tổng mặt bằng triển khai</a></td><td>App chạy ở đâu, ai truy cập bằng đường nào</td></tr>
+      <tr><td class="mono">KT-01</td><td><a href="#kt01">Mặt cắt các tầng kiến trúc</a></td><td>Hệ thống xây theo những lớp nào, lớp nào đỡ lớp nào</td></tr>
+      <tr><td class="mono">KT-02</td><td><a href="#kt02">Mặt bằng phân khu chức năng</a></td><td>42 module chia vào khu nào, mỗi khu lớn cỡ nào</td></tr>
+      <tr><td class="mono">KC-01</td><td><a href="#kc01">Kết cấu chịu lực: từ chứng từ đến báo cáo</a></td><td>Số liệu đi qua đâu để thành báo cáo, vì sao sổ luôn cân</td></tr>
+      <tr><td class="mono">HT-01</td><td><a href="#ht01">Hệ thống đường ống nghiệp vụ</a></td><td>Mua, bán, lương, cuối kỳ chạy qua những bước nào</td></tr>
+      <tr><td class="mono">AN-01</td><td><a href="#an01">An ninh và phòng chống sự cố</a></td><td>Ai được làm gì, dấu vết ghi ở đâu, mất máy thì sao</td></tr>
+      <tr><td class="mono">TK-01</td><td><a href="#tk01">Bảng thống kê khối lượng</a></td><td>Công trình lớn cỡ nào</td></tr>
+      <tr><td class="mono">NT-01</td><td><a href="#nt01">Biên bản nghiệm thu</a></td><td>Đã kiểm tra những gì, kết quả ra sao</td></tr>
+    </tbody>
+  </table></div>
+  <div class="legend">
+    <span><i></i>Liên kết bắt buộc, trong máy</span>
+    <span><i class="dash"></i>Kết nối ra ngoài hoặc tùy chọn</span>
+    <span><i class="post"></i>Bước ghi sổ kế toán</span>
+  </div>
+</section>
+
+<!-- TQ-01 -->
+<section class="dwg" id="tq01" aria-labelledby="tq01h">
+  <div class="dwg-head"><span class="dwg-no">TQ-01</span><h2 id="tq01h">Tổng mặt bằng triển khai</h2><span class="label scale">Không theo tỷ lệ</span></div>
+  <p class="dwg-note">Toàn bộ công trình đặt trên một laptop. Người ở công ty vào qua link HTTPS của Microsoft Dev Tunnels; cổng của app và cơ sở dữ liệu
+    chỉ mở cho chính laptop (<code>127.0.0.1</code>), nên mạng Wi-Fi chung không vào thẳng được.</p>
+  <div class="frame"><svg viewBox="0 0 1100 540" role="img" aria-label="Sơ đồ triển khai: người dùng qua Dev Tunnels vào laptop chạy Docker với Odoo, PostgreSQL và sao lưu">
+    <defs>
+      <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" fill="#d7e6fb"/></marker>
+    </defs>
+    <g fill="none" stroke="#d7e6fb" stroke-width="1.5">
+      <rect x="20" y="70" width="210" height="116"/>
+      <rect x="300" y="70" width="240" height="116"/>
+      <rect x="600" y="16" width="484" height="508" stroke-dasharray="10 6"/>
+      <rect x="620" y="78" width="444" height="290" stroke="#8fd8ff"/>
+      <rect x="640" y="120" width="196" height="110"/>
+      <rect x="852" y="120" width="196" height="110"/>
+      <rect x="640" y="248" width="196" height="104"/>
+      <rect x="852" y="248" width="196" height="104"/>
+      <rect x="640" y="400" width="196" height="96"/>
+      <rect x="852" y="400" width="196" height="96"/>
+      <rect x="20" y="340" width="210" height="80" stroke-dasharray="6 5"/>
+      <rect x="300" y="340" width="240" height="80" stroke-dasharray="6 5"/>
+    </g>
+    <g fill="#eaf2ff" font-size="14">
+      <text x="34" y="98" class="t-draft" font-size="17">NGƯỜI DÙNG CÔNG TY</text>
+      <text x="34" y="124">Trình duyệt web</text>
+      <text x="34" y="146" fill="#a9c3e6">Kế toán, giám đốc, nhân viên</text>
+      <text x="34" y="168" fill="#a9c3e6">cách laptop 2,3 km</text>
+
+      <text x="314" y="98" class="t-draft" font-size="17">MICROSOFT DEV TUNNELS</text>
+      <text x="314" y="124">Máy chủ trung gian vùng asse</text>
+      <text x="314" y="146" class="t-mono" font-size="12.5" fill="#8fd8ff">lifeood-erp-8069.asse.devtunnels.ms</text>
+      <text x="314" y="168" fill="#a9c3e6">HTTPS, ping ~50 ms</text>
+
+      <text x="614" y="42" class="t-draft" font-size="17">LAPTOP LENOVO THINKBOOK 14 · i5-13420H · WINDOWS 11</text>
+      <text x="614" y="62" fill="#a9c3e6" font-size="13">Cắm sạc, gập nắp vẫn chạy, không ngủ khi cắm sạc</text>
+      <text x="634" y="104" class="t-draft" font-size="15" fill="#8fd8ff">DOCKER DESKTOP (WSL2) · docker compose</text>
+
+      <text x="654" y="146" class="t-draft" font-size="16">ODOO</text>
+      <text x="654" y="168" class="t-mono" font-size="12.5">odoo:19.0</text>
+      <text x="654" y="190" fill="#a9c3e6" font-size="13">42 module lfood_*</text>
+      <text x="654" y="212" class="t-mono" font-size="12.5" fill="#8fd8ff">127.0.0.1:8069</text>
+
+      <text x="866" y="146" class="t-draft" font-size="16">POSTGRESQL</text>
+      <text x="866" y="168" class="t-mono" font-size="12.5">postgres:16</text>
+      <text x="866" y="190" fill="#a9c3e6" font-size="13">lfood (làm việc)</text>
+      <text x="866" y="210" fill="#a9c3e6" font-size="13">lfood_test (kiểm thử)</text>
+
+      <text x="654" y="274" class="t-draft" font-size="16">SAO LƯU TỰ ĐỘNG</text>
+      <text x="654" y="296" fill="#a9c3e6" font-size="13">pg_dump + tệp đính kèm</text>
+      <text x="654" y="316" fill="#a9c3e6" font-size="13">12:00 và 17:30, bù khi quá 24 giờ</text>
+      <text x="654" y="336" fill="#a9c3e6" font-size="13">giữ 14 ngày · 8 tuần · 12 tháng</text>
+
+      <text x="866" y="274" class="t-draft" font-size="16">Ổ DỮ LIỆU DOCKER</text>
+      <text x="866" y="296" class="t-mono" font-size="12.5">db-data</text>
+      <text x="866" y="316" class="t-mono" font-size="12.5">odoo-data (tệp đính kèm)</text>
+      <text x="866" y="336" fill="#a9c3e6" font-size="13">DBeaver: 127.0.0.1:5433</text>
+
+      <text x="654" y="426" class="t-draft" font-size="16">DEVTUNNEL HOST</text>
+      <text x="654" y="448" class="t-mono" font-size="12.5">start-tunnel.bat</text>
+      <text x="654" y="470" fill="#a9c3e6" font-size="13">giữ máy thức, tự nối lại</text>
+
+      <text x="866" y="426" class="t-draft" font-size="16">THƯ MỤC SAO LƯU</text>
+      <text x="866" y="448" class="t-mono" font-size="12">C:\Users\ADMIN\ERP-Backup</text>
+      <text x="866" y="470" fill="#a9c3e6" font-size="13">ngoài thư mục mã nguồn</text>
+
+      <text x="34" y="368" class="t-draft" font-size="16">GMAIL SMTP · 587</text>
+      <text x="34" y="392" fill="#a9c3e6" font-size="13">Thư đặt lại mật khẩu</text>
+      <text x="34" y="410" fill="#a9c3e6" font-size="13">STARTTLS, kiểm tra chứng chỉ</text>
+
+      <text x="314" y="368" class="t-draft" font-size="16">GITHUB</text>
+      <text x="314" y="392" class="t-mono" font-size="12.5">ConBoCuoiHaha/Erp-vn</text>
+      <text x="314" y="410" fill="#a9c3e6" font-size="13">đẩy mã 21:00 hằng ngày</text>
+    </g>
+    <g fill="none" stroke="#d7e6fb" stroke-width="1.6">
+      <path d="M230 128 H300" marker-end="url(#ah)"/>
+      <path d="M540 128 H570 V448 H640" marker-end="url(#ah)" stroke-dasharray="7 5"/>
+      <path d="M738 400 V230" marker-end="url(#ah)"/>
+      <path d="M836 175 H852" marker-end="url(#ah)" marker-start="url(#ah)"/>
+      <path d="M836 300 C 846 300, 846 230, 900 230" marker-end="url(#ah)"/>
+      <path d="M950 352 V400" marker-end="url(#ah)"/>
+      <path d="M640 150 H590 V380 H125 V340" marker-end="url(#ah)" stroke-dasharray="7 5"/>
+      <path d="M600 500 H420 V420" marker-end="url(#ah)" stroke-dasharray="7 5"/>
+    </g>
+    <g fill="#a9c3e6" font-size="12.5">
+      <text x="236" y="120">HTTPS</text>
+      <text x="548" y="228" transform="rotate(90 548 228)">kết nối giữ sẵn từ laptop</text>
+      <text x="746" y="320" transform="rotate(-90 746 320)" text-anchor="middle">localhost:8069</text>
+      <text x="852" y="244" text-anchor="end">pg_dump</text>
+      <text x="438" y="492">git push</text>
+      <text x="250" y="374">gửi thư</text>
+    </g>
+  </svg></div>
+</section>
+
+<!-- KT-01 -->
+<section class="dwg" id="kt01" aria-labelledby="kt01h">
+  <div class="dwg-head"><span class="dwg-no">KT-01</span><h2 id="kt01h">Mặt cắt các tầng kiến trúc</h2><span class="label scale">Mặt cắt A-A</span></div>
+  <p class="dwg-note">Mỗi tầng chỉ dựa vào tầng bên dưới. Phần móng (Odoo Community) và nền đất (PostgreSQL) là sản phẩm có sẵn, không sửa;
+    toàn bộ phần xây mới là 42 module <code>lfood_*</code> từ tầng 1 trở lên. Cao độ ghi theo lối bản vẽ mặt cắt để dễ đọc thứ tự.</p>
+  <div class="frame"><svg viewBox="0 0 1000 600" role="img" aria-label="Mặt cắt: PostgreSQL, Odoo, nền tảng, lõi kế toán, nghiệp vụ, báo cáo, giao diện">
+    <defs>
+      <pattern id="hatch" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="10" stroke="#6f93c2" stroke-width="1.2"/></pattern>
+    </defs>
+    <g stroke="#6f93c2" stroke-dasharray="4 6" stroke-width="1">
+      <line x1="170" y1="30" x2="170" y2="560"/><line x1="340" y1="30" x2="340" y2="560"/><line x1="510" y1="30" x2="510" y2="560"/>
+    </g>
+    <g fill="#6f93c2" font-size="12" class="t-draft" text-anchor="middle">
+      <circle cx="170" cy="22" r="11" fill="none" stroke="#6f93c2"/><text x="170" y="26">A</text>
+      <circle cx="340" cy="22" r="11" fill="none" stroke="#6f93c2"/><text x="340" y="26">B</text>
+      <circle cx="510" cy="22" r="11" fill="none" stroke="#6f93c2"/><text x="510" y="26">C</text>
+    </g>
+    <!-- mái -->
+    <path d="M120 110 L340 50 L560 110 Z" fill="rgba(143,216,255,.10)" stroke="#8fd8ff" stroke-width="1.6"/>
+    <g fill="rgba(18,60,110,.85)" stroke="#d7e6fb" stroke-width="1.6">
+      <rect x="120" y="110" width="440" height="66"/>
+      <rect x="120" y="176" width="440" height="66"/>
+      <rect x="120" y="242" width="440" height="66"/>
+      <rect x="120" y="308" width="440" height="66"/>
+    </g>
+    <rect x="100" y="374" width="480" height="70" fill="rgba(11,42,80,.95)" stroke="#d7e6fb" stroke-width="2.2"/>
+    <rect x="60" y="444" width="560" height="96" fill="url(#hatch)" stroke="#6f93c2"/>
+    <g fill="#eaf2ff" class="t-draft" font-size="17">
+      <text x="340" y="96" text-anchor="middle">MÁI · GIAO DIỆN</text>
+      <text x="340" y="150" text-anchor="middle">TẦNG 4 · BÁO CÁO</text>
+      <text x="340" y="216" text-anchor="middle">TẦNG 3 · NGHIỆP VỤ</text>
+      <text x="340" y="282" text-anchor="middle">TẦNG 2 · LÕI KẾ TOÁN</text>
+      <text x="340" y="348" text-anchor="middle">TẦNG 1 · NỀN TẢNG LIFEOOD</text>
+      <text x="340" y="416" text-anchor="middle">MÓNG · ODOO 19 COMMUNITY</text>
+      <text x="340" y="498" text-anchor="middle" fill="#a9c3e6">NỀN ĐẤT · POSTGRESQL 16</text>
+    </g>
+    <g fill="#a9c3e6" font-size="12" class="t-mono" text-anchor="end">
+      <text x="112" y="114">+18.000</text><text x="112" y="180">+14.400</text><text x="112" y="246">+10.800</text>
+      <text x="112" y="312">+7.200</text><text x="112" y="378">+3.600</text><text x="92" y="448">±0.000</text>
+    </g>
+    <g stroke="#a9c3e6" stroke-width="1" fill="none">
+      <path d="M560 86 H600"/><path d="M560 143 H600"/><path d="M560 209 H600"/><path d="M560 275 H600"/>
+      <path d="M560 341 H600"/><path d="M580 409 H600"/><path d="M620 492 H600"/>
+    </g>
+    <g font-size="13.5" fill="#eaf2ff">
+      <text x="610" y="80">180 menu, 334 màn hình; lọc theo vai trò</text>
+      <text x="610" y="98" fill="#a9c3e6">Trình duyệt, không cài đặt trên máy người dùng</text>
+      <text x="610" y="138">B01, B02, B03 · sổ cái · bảng cân đối phát sinh</text>
+      <text x="610" y="156" fill="#a9c3e6">tờ khai 01/GTGT · hợp nhất · bảng điều hành</text>
+      <text x="610" y="204">Mua · bán · kho lô, hạn dùng · lương · nhân sự</text>
+      <text x="610" y="222" fill="#a9c3e6">tài sản · thuế · chất lượng · R&amp;D · TMĐT</text>
+      <text x="610" y="270">Chứng từ có phiên bản · bút toán bất biến</text>
+      <text x="610" y="288" fill="#a9c3e6">188 tài khoản TT99 · tham số pháp lý có hiệu lực</text>
+      <text x="610" y="336">2 pháp nhân · 6 vai trò · nhật ký chuỗi băm</text>
+      <text x="610" y="354" fill="#a9c3e6">đăng nhập an toàn · sao lưu · lưu trữ</text>
+      <text x="610" y="404">ORM, phân quyền, web client OWL, lịch chạy tự động</text>
+      <text x="610" y="422" fill="#a9c3e6">bản Community, giấy phép LGPL-3, không mã Enterprise</text>
+      <text x="630" y="488">Bảng dữ liệu, ràng buộc, trigger chặn sửa nhật ký</text>
+      <text x="630" y="506" fill="#a9c3e6">khóa FOR UPDATE giữ chuỗi mã băm đúng thứ tự</text>
+    </g>
+    <g font-size="12" fill="#ffc561" class="t-draft">
+      <text x="120" y="566">PHẦN XÂY MỚI: TẦNG 1 ĐẾN MÁI (42 MODULE)</text>
+      <text x="620" y="566" text-anchor="end" fill="#6f93c2">PHẦN CÓ SẴN: MÓNG, NỀN</text>
+    </g>
+    <path d="M120 552 H560" stroke="#ffc561" stroke-width="1.4"/>
+  </svg></div>
+</section>
+
+<!-- KT-02 -->
+<section class="dwg" id="kt02" aria-labelledby="kt02h">
+  <div class="dwg-head"><span class="dwg-no">KT-02</span><h2 id="kt02h">Mặt bằng phân khu chức năng</h2><span class="label scale">42 phòng · 9 khu</span></div>
+  <p class="dwg-note">Mỗi phòng là một module. Góc phải mỗi phòng ghi khối lượng: <b>m</b> = số bảng dữ liệu mới, <b>v</b> = số màn hình,
+    số cuối = dòng mã Python. Khu nền tảng và lõi kế toán là tường chịu lực: gần như mọi phòng khác đều tựa vào chúng.</p>
+  <div class="zones"><div class="zone"><div class="zone-h"><h3>Nền tảng</h3><span class="label">9 phòng</span></div><p class="zone-desc">Tường chịu lực: pháp nhân, vai trò, nhật ký, sao lưu, lưu trữ</p><div class="rooms"><div class="room"><span class="nm">Nền tảng</span><span class="qty">m 0 · v 2<br>56</span><span class="cd">lfood_base</span></div><div class="room"><span class="nm">Nhật ký hệ thống</span><span class="qty">m 1 · v 3<br>437</span><span class="cd">lfood_audit</span></div><div class="room"><span class="nm">Đăng nhập an toàn</span><span class="qty">m 1 · v 1<br>82</span><span class="cd">lfood_security</span></div><div class="room"><span class="nm">Quản trị</span><span class="qty">m 4 · v 12<br>452</span><span class="cd">lfood_admin</span></div><div class="room"><span class="nm">Lưu trữ chứng từ điện tử</span><span class="qty">m 2 · v 4<br>114</span><span class="cd">lfood_archive</span></div><div class="room"><span class="nm">Chữ ký số</span><span class="qty">m 1 · v 3<br>94</span><span class="cd">lfood_signature</span></div><div class="room"><span class="nm">Nhập dữ liệu ban đầu</span><span class="qty">m 2 · v 2<br>324</span><span class="cd">lfood_importer</span></div><div class="room"><span class="nm">Bảo vệ dữ liệu cá nhân</span><span class="qty">m 3 · v 7<br>281</span><span class="cd">lfood_privacy</span></div><div class="room"><span class="nm">Nhắc hạn</span><span class="qty">m 1 · v 3<br>172</span><span class="cd">lfood_reminder</span></div></div></div><div class="zone"><div class="zone-h"><h3>Lõi kế toán</h3><span class="label">9 phòng</span></div><p class="zone-desc">Chứng từ, sổ cái, tài khoản, tiền và công nợ</p><div class="rooms"><div class="room"><span class="nm">Chứng từ mua dịch vụ</span><span class="qty">m 15 · v 21<br>1.322</span><span class="cd">lfood_voucher</span></div><div class="room"><span class="nm">Sổ kế toán</span><span class="qty">m 8 · v 20<br>1.519</span><span class="cd">lfood_ledger</span></div><div class="room"><span class="nm">Ngân hàng</span><span class="qty">m 3 · v 4<br>264</span><span class="cd">lfood_bank</span></div><div class="room"><span class="nm">Tạm ứng</span><span class="qty">m 2 · v 4<br>242</span><span class="cd">lfood_advance</span></div><div class="room"><span class="nm">Ngoại tệ và đánh giá lại tỷ giá</span><span class="qty">m 3 · v 4<br>217</span><span class="cd">lfood_fx</span></div><div class="room"><span class="nm">Chi phí trả trước và trích trước</span><span class="qty">m 7 · v 7<br>418</span><span class="cd">lfood_accrual</span></div><div class="room"><span class="nm">Trích lập dự phòng</span><span class="qty">m 2 · v 3<br>272</span><span class="cd">lfood_provision</span></div><div class="room"><span class="nm">Vay và lãi vay</span><span class="qty">m 4 · v 4<br>328</span><span class="cd">lfood_loan</span></div><div class="room"><span class="nm">Ngân sách theo khoản mục chi phí</span><span class="qty">m 4 · v 6<br>336</span><span class="cd">lfood_budget</span></div></div></div><div class="zone"><div class="zone-h"><h3>Thuế</h3><span class="label">4 phòng</span></div><p class="zone-desc">Tờ khai, quyết toán, nghĩa vụ nộp</p><div class="rooms"><div class="room"><span class="nm">Thuế GTGT</span><span class="qty">m 4 · v 5<br>576</span><span class="cd">lfood_vat</span></div><div class="room"><span class="nm">Thuế thu nhập doanh nghiệp</span><span class="qty">m 5 · v 5<br>424</span><span class="cd">lfood_cit</span></div><div class="room"><span class="nm">Nghĩa vụ thuế và tiền chậm nộp</span><span class="qty">m 1 · v 4<br>257</span><span class="cd">lfood_taxdue</span></div><div class="room"><span class="nm">Giao dịch liên kết</span><span class="qty">m 0 · v 3<br>320</span><span class="cd">lfood_related</span></div></div></div><div class="zone"><div class="zone-h"><h3>Mua hàng và kho</h3><span class="label">5 phòng</span></div><p class="zone-desc">Từ yêu cầu mua tới thẻ kho theo lô</p><div class="rooms"><div class="room"><span class="nm">Mua hàng</span><span class="qty">m 10 · v 17<br>785</span><span class="cd">lfood_purchase</span></div><div class="room"><span class="nm">Kho</span><span class="qty">m 14 · v 19<br>855</span><span class="cd">lfood_stock</span></div><div class="room"><span class="nm">Kiểm soát kho</span><span class="qty">m 5 · v 7<br>313</span><span class="cd">lfood_stock_control</span></div><div class="room"><span class="nm">Nhập khẩu, xuất khẩu, thuế nhà thầu</span><span class="qty">m 5 · v 6<br>335</span><span class="cd">lfood_trade</span></div><div class="room"><span class="nm">Bán hàng giữa hai pháp nhân</span><span class="qty">m 2 · v 3<br>163</span><span class="cd">lfood_intercompany</span></div></div></div><div class="zone"><div class="zone-h"><h3>Bán hàng</h3><span class="label">5 phòng</span></div><p class="zone-desc">Kênh, bảng giá, hóa đơn, khuyến mại, sàn</p><div class="rooms"><div class="room"><span class="nm">Bán hàng</span><span class="qty">m 5 · v 9<br>419</span><span class="cd">lfood_sale</span></div><div class="room"><span class="nm">Đơn bán hàng</span><span class="qty">m 9 · v 16<br>563</span><span class="cd">lfood_salesorder</span></div><div class="room"><span class="nm">Khuyến mại</span><span class="qty">m 2 · v 4<br>241</span><span class="cd">lfood_promotion</span></div><div class="room"><span class="nm">Hợp đồng mua bán, đánh giá nhà cung cấp, trade marketing</span><span class="qty">m 6 · v 11<br>327</span><span class="cd">lfood_contract</span></div><div class="room"><span class="nm">Sàn thương mại điện tử</span><span class="qty">m 5 · v 6<br>263</span><span class="cd">lfood_ecommerce</span></div></div></div><div class="zone"><div class="zone-h"><h3>Tài sản và thiết bị</h3><span class="label">2 phòng</span></div><p class="zone-desc">Khấu hao, bảo trì, đội xe</p><div class="rooms"><div class="room"><span class="nm">Tài sản cố định</span><span class="qty">m 9 · v 15<br>705</span><span class="cd">lfood_asset</span></div><div class="room"><span class="nm">Bảo trì thiết bị, đội xe</span><span class="qty">m 6 · v 9<br>208</span><span class="cd">lfood_equipment</span></div></div></div><div class="zone"><div class="zone-h"><h3>Nhân sự và lương</h3><span class="label">5 phòng</span></div><p class="zone-desc">Hợp đồng, chấm công, bảng lương, bảo hiểm, thuế TNCN</p><div class="rooms"><div class="room"><span class="nm">Tiền lương và bảo hiểm</span><span class="qty">m 7 · v 9<br>497</span><span class="cd">lfood_payroll</span></div><div class="room"><span class="nm">Nhân sự</span><span class="qty">m 6 · v 13<br>708</span><span class="cd">lfood_hr</span></div><div class="room"><span class="nm">Hồ sơ nhân sự</span><span class="qty">m 17 · v 25<br>858</span><span class="cd">lfood_hr_records</span></div><div class="room"><span class="nm">Chế độ ốm đau, thai sản</span><span class="qty">m 3 · v 4<br>326</span><span class="cd">lfood_benefit</span></div><div class="room"><span class="nm">Tạm ứng lương, thưởng, thuế TNCN</span><span class="qty">m 5 · v 6<br>401</span><span class="cd">lfood_pit</span></div></div></div><div class="zone"><div class="zone-h"><h3>Chất lượng và R&D</h3><span class="label">2 phòng</span></div><p class="zone-desc">An toàn thực phẩm, truy xuất, sản phẩm mới</p><div class="rooms"><div class="room"><span class="nm">Chất lượng, truy xuất, thu hồi</span><span class="qty">m 13 · v 21<br>648</span><span class="cd">lfood_quality</span></div><div class="room"><span class="nm">Nghiên cứu phát triển sản phẩm</span><span class="qty">m 5 · v 6<br>207</span><span class="cd">lfood_rnd</span></div></div></div><div class="zone"><div class="zone-h"><h3>Hợp nhất</h3><span class="label">1 phòng</span></div><p class="zone-desc">Gộp số liệu hai pháp nhân</p><div class="rooms"><div class="room"><span class="nm">Hợp nhất hai pháp nhân</span><span class="qty">m 1 · v 1<br>185</span><span class="cd">lfood_consolidation</span></div></div></div></div>
+</section>
+
+<!-- KC-01 -->
+<section class="dwg" id="kc01" aria-labelledby="kc01h">
+  <div class="dwg-head"><span class="dwg-no">KC-01</span><h2 id="kc01h">Kết cấu chịu lực: từ chứng từ đến báo cáo</h2></div>
+  <p class="dwg-note">Mọi nghiệp vụ có tiền đều đổ xuống một dầm chung là bút toán (<code>lfood.move</code>). Bút toán đã ghi sổ không sửa, không xóa;
+    sai thì đảo và lập bút toán mới, nên sổ luôn cân và báo cáo nào cũng đọc từ cùng một nguồn. Tham số pháp lý đè lên từ trên,
+    thẻ kho chạy song song bên dưới và được đối chiếu với tài khoản kho.</p>
+  <div class="frame"><svg viewBox="0 0 1000 470" role="img" aria-label="Kết cấu: chứng từ nguồn ghi vào bút toán, dòng bút toán theo tài khoản, rồi thành báo cáo">
+    <defs>
+      <marker id="ah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#d7e6fb"/></marker>
+      <marker id="ah3" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0,0 L10,5 L0,10 z" fill="#ffc561"/></marker>
+    </defs>
+    <rect x="200" y="18" width="600" height="58" fill="rgba(18,60,110,.85)" stroke="#8fd8ff" stroke-width="1.6"/>
+    <text x="500" y="42" text-anchor="middle" class="t-draft" font-size="16" fill="#8fd8ff">THAM SỐ PHÁP LÝ · lfood.legal.param</text>
+    <text x="500" y="63" text-anchor="middle" font-size="13" fill="#a9c3e6">thuế suất, mức đóng bảo hiểm, lương cơ sở, ngưỡng tiền mặt; có căn cứ, ngày hiệu lực, kế toán trưởng duyệt</text>
+    <g fill="rgba(18,60,110,.85)" stroke="#d7e6fb" stroke-width="1.4">
+      <rect x="20" y="104" width="200" height="30"/><rect x="20" y="140" width="200" height="30"/><rect x="20" y="176" width="200" height="30"/>
+      <rect x="20" y="212" width="200" height="30"/><rect x="20" y="248" width="200" height="30"/><rect x="20" y="284" width="200" height="30"/>
+      <rect x="20" y="320" width="200" height="30"/><rect x="20" y="356" width="200" height="30"/>
+    </g>
+    <g font-size="13.5" fill="#eaf2ff">
+      <text x="32" y="124">Chứng từ mua dịch vụ</text><text x="32" y="160">Phiếu nhập, xuất kho</text><text x="32" y="196">Hóa đơn bán ra</text>
+      <text x="32" y="232">Phiếu thu, phiếu chi</text><text x="32" y="268">Bảng lương</text><text x="32" y="304">Khấu hao, phân bổ</text>
+      <text x="32" y="340">Tờ khai GTGT (bù trừ)</text><text x="32" y="376">Kết chuyển cuối kỳ</text>
+    </g>
+    <text x="20" y="96" class="t-draft" font-size="14" fill="#a9c3e6">CHỨNG TỪ NGUỒN</text>
+    <g stroke="#ffc561" stroke-width="1.5" fill="none">
+      <path d="M220 119 H250 V245 H300" marker-end="url(#ah3)"/>
+      <path d="M220 155 H250"/><path d="M220 191 H250"/><path d="M220 227 H250"/><path d="M220 263 H250"/>
+      <path d="M220 299 H250"/><path d="M220 335 H250"/><path d="M220 371 H250 V245"/>
+    </g>
+    <rect x="300" y="200" width="250" height="92" fill="rgba(11,42,80,.95)" stroke="#ffc561" stroke-width="2.2"/>
+    <text x="425" y="226" text-anchor="middle" class="t-draft" font-size="17" fill="#ffc561">BÚT TOÁN · lfood.move</text>
+    <text x="425" y="248" text-anchor="middle" font-size="13" fill="#eaf2ff">khóa nguồn: model, mã, khóa phụ</text>
+    <text x="425" y="266" text-anchor="middle" font-size="13" fill="#eaf2ff">ghi sổ rồi không sửa; sai thì đảo</text>
+    <text x="425" y="284" text-anchor="middle" font-size="13" fill="#a9c3e6">chặn ghi vào kỳ đã khóa</text>
+    <path d="M550 246 H600" stroke="#d7e6fb" stroke-width="1.6" marker-end="url(#ah2)"/>
+    <rect x="600" y="200" width="170" height="92" fill="rgba(18,60,110,.85)" stroke="#d7e6fb" stroke-width="1.6"/>
+    <text x="685" y="226" text-anchor="middle" class="t-draft" font-size="15" fill="#eaf2ff">DÒNG BÚT TOÁN</text>
+    <text x="685" y="248" text-anchor="middle" font-size="13" fill="#a9c3e6">tài khoản TT99</text>
+    <text x="685" y="266" text-anchor="middle" font-size="13" fill="#a9c3e6">đối tượng công nợ</text>
+    <text x="685" y="284" text-anchor="middle" font-size="13" fill="#a9c3e6">ngoại tệ, pháp nhân</text>
+    <path d="M770 246 H810" stroke="#d7e6fb" stroke-width="1.6" marker-end="url(#ah2)"/>
+    <g fill="rgba(18,60,110,.85)" stroke="#d7e6fb" stroke-width="1.4">
+      <rect x="810" y="140" width="170" height="28"/><rect x="810" y="174" width="170" height="28"/><rect x="810" y="208" width="170" height="28"/>
+      <rect x="810" y="242" width="170" height="28"/><rect x="810" y="276" width="170" height="28"/><rect x="810" y="310" width="170" height="28"/>
+    </g>
+    <text x="810" y="130" class="t-draft" font-size="14" fill="#a9c3e6">BÁO CÁO</text>
+    <g font-size="13" fill="#eaf2ff">
+      <text x="820" y="159">Bảng cân đối phát sinh</text><text x="820" y="193">Sổ cái, sổ công nợ</text><text x="820" y="227">B01 tình hình tài chính</text>
+      <text x="820" y="261">B02 kết quả kinh doanh</text><text x="820" y="295">B03 lưu chuyển tiền tệ</text><text x="820" y="329">Tờ khai, tuổi nợ, hợp nhất</text>
+    </g>
+    <g stroke="#8fd8ff" stroke-width="1.3" stroke-dasharray="6 5" fill="none">
+      <path d="M300 76 V104 H250" marker-end="url(#ah2)"/>
+    </g>
+    <text x="306" y="96" font-size="12" fill="#8fd8ff">tính lương, thuế theo mức hiệu lực tại ngày chứng từ</text>
+    <rect x="300" y="380" width="470" height="62" fill="rgba(18,60,110,.85)" stroke="#d7e6fb" stroke-width="1.4" stroke-dasharray="8 5"/>
+    <text x="535" y="405" text-anchor="middle" class="t-draft" font-size="15" fill="#eaf2ff">THẺ KHO · lfood.stock.valuation</text>
+    <text x="535" y="426" text-anchor="middle" font-size="13" fill="#a9c3e6">giá bình quân tức thời, xuất theo lô hết hạn trước; tổng giá trị = số dư 152, 155, 156</text>
+    <path d="M220 155 H236 V410 H300" stroke="#d7e6fb" stroke-width="1.3" fill="none" marker-end="url(#ah2)"/>
+    <path d="M685 380 V292" stroke="#8fd8ff" stroke-width="1.3" stroke-dasharray="4 4" fill="none"/>
+    <text x="692" y="342" font-size="12" fill="#8fd8ff">đối chiếu</text>
+  </svg></div>
+</section>
+
+<!-- HT-01 -->
+<section class="dwg" id="ht01" aria-labelledby="ht01h">
+  <div class="dwg-head"><span class="dwg-no">HT-01</span><h2 id="ht01h">Hệ thống đường ống nghiệp vụ</h2></div>
+  <p class="dwg-note">Bốn đường ống chính. Ô viền vàng là điểm ghi sổ: từ đó số liệu đi vào kết cấu ở bản vẽ KC-01. Mỗi bước có người chịu trách nhiệm
+    theo vai trò và được ghi vào nhật ký.</p>
+  <div class="flows">
+    <div class="flow"><div class="label">Mua hàng</div><div class="steps">
+      <div class="step"><b>Yêu cầu mua</b><span>kiểm tra ngân sách</span></div><i class="arrow"></i>
+      <div class="step"><b>Đơn mua</b><span>vượt hạn mức chờ duyệt</span></div><i class="arrow"></i>
+      <div class="step"><b>Nhận hàng</b><span>lô, hạn dùng, kiểm tra chất lượng</span></div><i class="arrow"></i>
+      <div class="step post"><b>Ghi phiếu nhập</b><span>Nợ 152, 156, 1331 / Có 3311; đối chiếu 3 bên</span></div><i class="arrow"></i>
+      <div class="step post"><b>Trả tiền</b><span>ủy nhiệm chi, Nợ 3311 / Có 112</span></div><i class="arrow"></i>
+      <div class="step"><b>Bảng kê mua vào</b><span>điều kiện khấu trừ thuế</span></div>
+    </div></div>
+    <div class="flow"><div class="label">Bán hàng</div><div class="steps">
+      <div class="step"><b>Kênh, bảng giá</b><span>siêu thị, đại lý, trực tuyến</span></div><i class="arrow"></i>
+      <div class="step"><b>Đơn bán</b><span>hạn mức công nợ, hạn dùng tối thiểu</span></div><i class="arrow"></i>
+      <div class="step post"><b>Hóa đơn</b><span>Nợ 1311 / Có 511, 33311; tự xuất kho, giá vốn 632</span></div><i class="arrow"></i>
+      <div class="step post"><b>Thu tiền</b><span>trừ công nợ từng hóa đơn</span></div><i class="arrow"></i>
+      <div class="step"><b>Tuổi nợ, nhắc hạn</b><span>quá hạn lên Việc sắp đến hạn</span></div>
+    </div></div>
+    <div class="flow"><div class="label">Lương</div><div class="steps">
+      <div class="step"><b>Hợp đồng lao động</b><span>thời hạn, thử việc theo BLLĐ</span></div><i class="arrow"></i>
+      <div class="step"><b>Chấm công, nghỉ phép</b><span>ca, làm thêm giờ</span></div><i class="arrow"></i>
+      <div class="step"><b>Bảng lương</b><span>BHXH, BHYT, BHTN, thuế TNCN theo tham số</span></div><i class="arrow"></i>
+      <div class="step post"><b>Ghi sổ lương</b><span>Nợ 622, 627, 641, 642 / Có 334, 338, 3335</span></div><i class="arrow"></i>
+      <div class="step post"><b>Chi lương</b><span>334 của từng người về 0</span></div>
+    </div></div>
+    <div class="flow"><div class="label">Cuối kỳ</div><div class="steps">
+      <div class="step post"><b>Khấu hao, phân bổ</b><span>tài sản, chi phí trả trước</span></div><i class="arrow"></i>
+      <div class="step post"><b>Tờ khai GTGT</b><span>bù trừ 33311 với 133</span></div><i class="arrow"></i>
+      <div class="step post"><b>Kết chuyển</b><span>đầu 5 đến 8 về 911, lãi lỗ vào 4212</span></div><i class="arrow"></i>
+      <div class="step"><b>Khóa sổ</b><span>chặn ghi lùi vào kỳ đã khóa</span></div><i class="arrow"></i>
+      <div class="step"><b>B01, B02, B03</b><span>theo Thông tư 99/2025</span></div>
+    </div></div>
+  </div>
+</section>
+
+<!-- AN-01 -->
+<section class="dwg" id="an01" aria-labelledby="an01h">
+  <div class="dwg-head"><span class="dwg-no">AN-01</span><h2 id="an01h">An ninh và phòng chống sự cố</h2></div>
+  <div class="two">
+    <div class="tbl"><table>
+      <thead><tr><th>Vai trò</th><th>Được làm</th><th>Bị chặn</th></tr></thead>
+      <tbody>
+        <tr><td>Quản trị hệ thống</td><td>Người dùng, phân quyền, cấu hình, sao lưu</td><td>Sửa, xóa nhật ký</td></tr>
+        <tr><td>Giám đốc</td><td>Xem mọi số liệu, duyệt vượt hạn mức, duyệt R&amp;D</td><td>Lập, sửa số liệu kế toán</td></tr>
+        <tr><td>Kế toán trưởng</td><td>Duyệt, ghi sổ lương, khóa sổ, sửa chứng từ đã cất, điều chỉnh hàng loạt</td><td>Phân hệ R&amp;D</td></tr>
+        <tr><td>Kế toán viên</td><td>Lập chứng từ, cất, xem báo cáo</td><td>Duyệt, khóa sổ, xem nhật ký</td></tr>
+        <tr><td>Nhân viên</td><td>Xem thông tin chung</td><td>Chứng từ, lương, báo cáo</td></tr>
+        <tr><td>R&amp;D</td><td>Dự án, công thức, mẫu thử</td><td>Mọi số liệu kế toán</td></tr>
+      </tbody>
+    </table></div>
+    <ul class="notes">
+      <li><b>Nhật ký không sửa được:</b> mọi tạo, sửa, xóa, đăng nhập, in, xuất dữ liệu; trigger trong cơ sở dữ liệu chặn cả lệnh SQL; mỗi dòng nối mã băm SHA-256 với dòng trước.</li>
+      <li><b>Đăng nhập:</b> mã 2 lớp, khóa 15 phút sau 5 lần sai, tự đăng xuất sau 30 phút, quên mật khẩu qua thư.</li>
+      <li><b>Dữ liệu tách theo pháp nhân:</b> quy tắc theo dòng cho Văn phòng và Nhà máy.</li>
+      <li><b>Mạng:</b> app và cơ sở dữ liệu chỉ nghe <code>127.0.0.1</code>; người ngoài vào qua HTTPS của tunnel; trang quản lý cơ sở dữ liệu đã tắt.</li>
+      <li><b>Không gửi dữ liệu ra ngoài:</b> chặn module tự tra cứu đối tác qua máy chủ Odoo.</li>
+      <li><b>Mất máy, hỏng ổ:</b> sao lưu 2 lần mỗi ngày kèm mã kiểm tra SHA-256; mã nguồn trên GitHub. <span class="redline">Bản sao ngoài laptop đang tắt, chờ chủ đầu tư đồng ý.</span></li>
+      <li><b>Dữ liệu cá nhân:</b> nhật ký người xem hồ sơ lương, nhân sự; hạn phản hồi yêu cầu theo quy định hiện hành.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- TK-01 -->
+<section class="dwg" id="tk01" aria-labelledby="tk01h">
+  <div class="dwg-head"><span class="dwg-no">TK-01</span><h2 id="tk01h">Bảng thống kê khối lượng</h2></div>
+  <div class="qtys">
+    <div class="q"><div class="n">173</div><div class="u">nghiệp vụ trong 15 nhóm, đã làm đủ</div></div>
+    <div class="q"><div class="n">42</div><div class="u">module <code>lfood_*</code></div></div>
+    <div class="q"><div class="n">208</div><div class="u">bảng dữ liệu mới, 100 bảng kế thừa mở rộng</div></div>
+    <div class="q"><div class="n">334</div><div class="u">màn hình, 180 mục menu</div></div>
+    <div class="q"><div class="n">17.514</div><div class="u">dòng mã Python</div></div>
+    <div class="q"><div class="n">11.747</div><div class="u">dòng XML giao diện, dữ liệu, phân quyền</div></div>
+    <div class="q"><div class="n">188</div><div class="u">tài khoản theo Thông tư 99/2025</div></div>
+    <div class="q"><div class="n">2 · 6</div><div class="u">pháp nhân · vai trò người dùng</div></div>
+  </div>
+</section>
+
+<!-- NT-01 -->
+<section class="dwg" id="nt01" aria-labelledby="nt01h">
+  <div class="dwg-head"><span class="dwg-no">NT-01</span><h2 id="nt01h">Biên bản nghiệm thu</h2><span class="label scale">Lần cuối 23/09/2026</span></div>
+  <div class="tbl"><table>
+    <thead><tr><th>Hạng mục kiểm tra</th><th>Cách kiểm</th><th class="num">Kết quả</th></tr></thead>
+    <tbody>
+      <tr><td>Nghiệp vụ, định khoản, phân quyền</td><td><code>tests/smoke_test.py</code> trên cơ sở dữ liệu sạch</td><td class="num ok">803 / 803</td></tr>
+      <tr><td>Cài mới từ kho mã</td><td>Tải repo, cài 42 module vào cơ sở dữ liệu trống, chạy lại bộ nghiệp vụ</td><td class="num ok">42 module · 803 / 803</td></tr>
+      <tr><td>Mở mọi màn hình theo 5 vai trò</td><td><code>tests/ui_crawl.py</code>: danh sách, bản ghi, biểu mẫu mới, bộ lọc, pivot</td><td class="num ok">2.225 thao tác · 0 lỗi</td></tr>
+      <tr><td>Khớp số liệu giữa các phân hệ</td><td><code>tests/data_consistency.py</code> trên 9 tháng dữ liệu mẫu</td><td class="num ok">30 / 30</td></tr>
+      <tr><td>Màn hình qua HTTP</td><td><code>tests/http_test.ps1</code></td><td class="num ok">145 / 145</td></tr>
+      <tr><td>Trình duyệt thật</td><td>Chrome, tài khoản kế toán viên, 139 menu</td><td class="num ok">0 lỗi</td></tr>
+      <tr><td>Truy cập từ xa</td><td>Qua link Dev Tunnels: đăng nhập, realtime, độ trễ</td><td class="num ok">0,23–0,43 giây mỗi yêu cầu</td></tr>
+    </tbody>
+  </table></div>
+  <ul class="notes">
+    <li><b>Lỗi tìm ra khi nghiệm thu và đã sửa:</b> B01 không cân khi còn lương chưa trả; chuỗi mã băm nhật ký gãy khi ghi đồng thời; biểu mẫu hàng hóa mới lỗi;
+      nhân viên xem được đơn nghỉ toàn công ty; menu Ứng dụng lộ cho người dùng thường; kho mã thiếu 40 tệp phân quyền.</li>
+  </ul>
+</section>
+
+<footer class="foot">
+  <span>ERP LiFeOOD · Hồ sơ thiết kế kiến trúc phần mềm · 9 bản vẽ</span>
+  <span>Số liệu khối lượng đếm tự động từ mã nguồn tại phiên bản <span class="mono">c9e0749</span></span>
+</footer>
+
+</div></div>
