@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_entry_sheet_acc,entry sheet accountant,model_lfood_entry_sheet,lfood_base.group_accountant,1,1,1,1
+access_entry_sheet_chief,entry sheet chief,model_lfood_entry_sheet,lfood_base.group_chief_accountant,1,1,1,1
+access_entry_line_acc,entry line accountant,model_lfood_entry_line,lfood_base.group_accountant,1,1,1,1
+access_entry_line_chief,entry line chief,model_lfood_entry_line,lfood_base.group_chief_accountant,1,1,1,1
+access_entry_rule_acc,entry rule accountant,model_lfood_entry_rule,lfood_base.group_accountant,1,0,0,0
+access_entry_rule_chief,entry rule chief,model_lfood_entry_rule,lfood_base.group_chief_accountant,1,1,1,1

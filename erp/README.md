@@ -29,7 +29,8 @@ Kiểm thử HTTP lấy tài khoản quản trị từ biến môi trường `LF
 
 ## Kiểm thử
 
-Hai cơ sở dữ liệu: `lfood` là bản làm việc (có dữ liệu mẫu từ `tools/seed_demo.py`, máy chủ web chỉ phục vụ bản này),
+Hai cơ sở dữ liệu: `lfood` là bản làm việc (dữ liệu mẫu công ty CP Nhựa Đại An, nạp bằng `tools/seed_daian.py`,
+máy chủ web chỉ phục vụ bản này),
 `lfood_test` là bản sạch dành cho bộ kiểm thử nghiệp vụ. Nâng cấp module thì chạy `-u` trên cả hai.
 
 ```
@@ -43,6 +44,16 @@ docker compose run --rm -T odoo odoo shell -c /etc/odoo/odoo.conf -d lfood --no-
 - `data_consistency.py`: đối chiếu chéo trên dữ liệu thật: sổ cân, thẻ kho = sổ cái 152/155/156, công nợ 131 từng
   khách = hóa đơn chưa thu, tuổi nợ = 131, 334 = lương chưa chi, 3335 = thuế TNCN, tờ khai GTGT = hóa đơn,
   B01 cân, B02 = 4212, B03 = số dư tiền, không lập hóa đơn vượt đơn, không lô nào tồn âm.
+
+## Nhập liệu kiểu Excel
+
+Chứng từ > **Bảng nhập liệu**: một lưới giống sổ Nhật ký chung trong Excel, mỗi dòng là một vế Nợ - Có
+(Ngày, Số chứng từ, Diễn giải, TK Nợ, TK Có, Số tiền, Đối tượng, Khoản mục). Nhiều dòng cùng Ngày và Số chứng từ
+được gộp thành một bút toán. Ô Ngày, Số chứng từ, Diễn giải để trống thì lấy của dòng trên, giống kéo ô trong Excel.
+Bấm **Kiểm tra** để soát cả bảng, lỗi hiện ngay trên từng dòng; **Ghi sổ** ghi một lần cho cả bảng.
+
+Cấu hình > **Ràng buộc nhập liệu** (kế toán trưởng): đặt luật theo nhóm tài khoản - bắt buộc đối tượng, khoản mục
+chi phí, diễn giải, số chứng từ; hạn mức tiền mỗi dòng; cấm hạch toán tay vào tài khoản do phân hệ khác ghi (154…).
 
 803 kiểm tra: số liệu MDV00433, chặn quyền từng vai trò, Sửa sau khi Cất, phân bổ tổng khớp tới đồng,
 báo cáo không đổi sau Sửa và sau điều chỉnh hàng loạt, hoàn tác lô, khôi phục số gốc, nhật ký

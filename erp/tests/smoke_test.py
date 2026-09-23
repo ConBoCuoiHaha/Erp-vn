@@ -4349,6 +4349,54 @@ check('Đảo bút toán kỳ đã khóa thì ghi vào ngày mở', rev.date > d
 env.flush_all()
 check('Sau mọi nghiệp vụ sổ vẫn cân', round(sum(ML.sudo().search([('state', '=', 'posted')]).mapped('balance'))) == 0)
 
+# ---------------------------------------------------------------- bang nhap lieu kieu Excel
+Sheet = env['lfood.entry.sheet'].with_user(users['ketoanvien']).with_company(factory)
+Rule = env['lfood.entry.rule'].with_user(users['ketoantruong']).with_company(factory)
+Rule.create({'name': 'Cam hach toan tay 154', 'account_prefix': '154', 'forbid': True, 'company_id': factory.id})
+Rule.create({'name': 'Chi phi quan ly can khoan muc', 'account_prefix': '642', 'side': 'debit',
+             'require_cost_item': True, 'company_id': factory.id})
+sh = Sheet.create({'name': 'Thu nhap lieu', 'journal': 'purchase', 'company_id': factory.id, 'line_ids': [
+    (0, 0, {'sequence': 1, 'date': date(2026, 10, 5), 'ref': 'HD001', 'memo': 'Mua hang nhap kho',
+            'debit_account_id': acc('156'), 'credit_account_id': acc('3311'), 'amount': 10_000_000}),
+    (0, 0, {'sequence': 2, 'debit_account_id': acc('1331'), 'credit_account_id': acc('3311'), 'amount': 1_000_000}),
+]})
+sh.action_check()
+check('Bảng nhập liệu báo thiếu đối tượng của TK 3311',
+      all('đối tượng' in (l.error or '') for l in sh.line_ids), sh.line_ids.mapped('error'))
+sh.line_ids.write({'partner_id': v433.partner_id.id})
+sh.action_check()
+check('Dòng dưới kế thừa ngày, số chứng từ của dòng trên như kéo ô Excel',
+      sh.line_ids[1].date == date(2026, 10, 5) and sh.line_ids[1].ref == 'HD001', (sh.line_ids[1].date, sh.line_ids[1].ref))
+check('Bảng nhập liệu hết lỗi sau khi ghi đối tượng', sh.error_count == 0, sh.line_ids.mapped('error'))
+sh.action_post()
+sh.invalidate_recordset()
+posted_lines = sh.move_ids.line_ids
+check('Bảng nhập liệu sinh đúng một bút toán gộp theo số chứng từ', sh.move_count == 1, sh.move_count)
+check('Bút toán sinh ra cân và đủ 4 dòng', len(posted_lines) == 4
+      and round(sum(posted_lines.mapped('debit'))) == round(sum(posted_lines.mapped('credit'))) == 11_000_000,
+      (len(posted_lines), sum(posted_lines.mapped('debit'))))
+try:
+    sh.write({'name': 'sua lai'}); check('Bảng đã ghi sổ không sửa được', False)
+except UserError:
+    check('Bảng đã ghi sổ không sửa được', True)
+sh2 = Sheet.create({'name': 'Thu rang buoc', 'company_id': factory.id, 'line_ids': [
+    (0, 0, {'sequence': 1, 'date': date(2026, 10, 6), 'ref': 'PKT01', 'memo': 'Hach toan tay do dang',
+            'debit_account_id': acc('154'), 'credit_account_id': acc('621'), 'amount': 500_000}),
+    (0, 0, {'sequence': 2, 'date': date(2026, 10, 7), 'ref': 'PKT02', 'memo': 'Chi phi quan ly',
+            'debit_account_id': acc('642'), 'amount': 200_000}),
+]})
+sh2.action_check()
+check('Ràng buộc cấm hạch toán tay vào 154 chặn được',
+      'không được hạch toán tay' in (sh2.line_ids[0].error or ''), sh2.line_ids[0].error)
+check('Ràng buộc bắt buộc khoản mục chi phí cho TK 642',
+      'thiếu khoản mục' in (sh2.line_ids[1].error or ''), sh2.line_ids[1].error)
+check('Bút toán không cân bị báo lỗi', 'không cân' in (sh2.line_ids[1].error or ''), sh2.line_ids[1].error)
+try:
+    sh2.action_post(); check('Còn lỗi thì không ghi sổ được', False)
+except UserError:
+    check('Còn lỗi thì không ghi sổ được', True)
+env.flush_all()
+
 env.cr.rollback()
 print('\n==== KET QUA KIEM THU ====')
 for name, ok, detail in results:

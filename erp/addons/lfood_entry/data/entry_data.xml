@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Ràng buộc nhập liệu mặc định. Kế toán trưởng sửa, tắt hoặc thêm tùy doanh nghiệp. -->
+<odoo noupdate="1">
+    <record id="rule_ref_memo" model="lfood.entry.rule">
+        <field name="name">Mọi dòng phải có số chứng từ và diễn giải</field>
+        <field name="sequence">1</field>
+        <field name="require_ref" eval="True"/>
+        <field name="require_memo" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="rule_cost_item_62" model="lfood.entry.rule">
+        <field name="name">Chi phí sản xuất phải có khoản mục chi phí</field>
+        <field name="sequence">10</field>
+        <field name="account_prefix">62</field>
+        <field name="side">debit</field>
+        <field name="require_cost_item" eval="True"/>
+        <field name="message">Chọn khoản mục để lên được báo cáo chi phí theo cây khoản mục</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="rule_cost_item_64" model="lfood.entry.rule">
+        <field name="name">Chi phí bán hàng, quản lý phải có khoản mục chi phí</field>
+        <field name="sequence">11</field>
+        <field name="account_prefix">64</field>
+        <field name="side">debit</field>
+        <field name="require_cost_item" eval="True"/>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+
+    <record id="rule_no_manual_154" model="lfood.entry.rule">
+        <field name="name">Không hạch toán tay vào chi phí dở dang</field>
+        <field name="sequence">20</field>
+        <field name="account_prefix">154</field>
+        <field name="forbid" eval="True"/>
+        <field name="message">Tài khoản 154 do phân hệ Tính giá thành ghi</field>
+        <field name="company_id" ref="base.main_company"/>
+    </record>
+</odoo>
