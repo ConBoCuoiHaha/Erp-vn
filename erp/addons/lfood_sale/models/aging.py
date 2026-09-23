@@ -8,6 +8,8 @@ from odoo import api, fields, models, _
 from odoo.addons.lfood_voucher.models.tools import vnd
 
 BUCKETS = [(None, 0, 'Chưa đến hạn'), (1, 30, 'Quá hạn 1–30 ngày'), (31, 60, '31–60 ngày'), (61, 90, '61–90 ngày'), (91, None, 'Trên 90 ngày')]
+# cột cuối gom phần số dư không gắn với hóa đơn nào: số dư đầu kỳ, tiền khách trả trước, bù trừ công nợ
+COLUMNS = BUCKETS + [(None, None, 'Chưa gắn hóa đơn')]
 
 
 def bucket_of(days_overdue):
@@ -57,9 +59,19 @@ class LfoodAging(models.TransientModel):
     def _summary(self):
         by_partner = {}
         for partner, _ref, _d, due, residual in self._items():
-            row = by_partner.setdefault(partner, [0] * len(BUCKETS))
+            row = by_partner.setdefault(partner, [0] * len(COLUMNS))
             row[bucket_of((self.as_of - due).days)] += residual
-        return by_partner
+        # phần chênh với số dư trên sổ cái xếp vào cột cuối để bảng luôn khớp sổ
+        prefix, sign = ('131', 1) if self.kind == 'receivable' else ('331', -1)
+        self.env.flush_all()
+        groups = self.env['lfood.move.line'].sudo()._read_group(
+            [('state', '=', 'posted'), ('company_id', '=', self.company_id.id),
+             ('account_code', '=like', prefix + '%'), ('date', '<=', self.as_of)],
+            ['partner_id'], ['debit:sum', 'credit:sum'])
+        for partner, debit, credit in groups:
+            row = by_partner.setdefault(partner.name or _('Không ghi đối tượng'), [0] * len(COLUMNS))
+            row[-1] += round(sign * (debit - credit)) - sum(row)
+        return {name: row for name, row in by_partner.items() if any(row)}
 
     @api.depends('kind', 'company_id', 'as_of')
     def _compute_html(self):
@@ -67,9 +79,9 @@ class LfoodAging(models.TransientModel):
             if not rec.as_of:
                 rec.html = False
                 continue
-            head = Markup('').join(Markup('<th>%s</th>') % label for _lo, _hi, label in BUCKETS)
+            head = Markup('').join(Markup('<th>%s</th>') % label for _lo, _hi, label in COLUMNS)
             summary = rec._summary()
-            totals = [0] * len(BUCKETS)
+            totals = [0] * len(COLUMNS)
             body = Markup('')
             for partner in sorted(summary):
                 row = summary[partner]
@@ -88,5 +100,6 @@ class LfoodAging(models.TransientModel):
                 '<h4>Chi tiết từng hóa đơn</h4><div class="o_lfood_changes"><table><tr><th>Đối tượng</th><th>Hóa đơn</th><th>Ngày</th>'
                 '<th>Hạn thanh toán</th><th>Số ngày quá hạn</th><th>Còn nợ</th></tr>%s</table></div>'
                 '<p class="text-muted">Còn nợ = số trên hóa đơn trừ phiếu thu, phiếu chi đã gắn với hóa đơn và hàng bán trả lại, giảm giá. '
-                'Thu, chi tiền không gắn hóa đơn vẫn giảm công nợ trên sổ nhưng không trừ vào tuổi nợ: đối chiếu với Sổ chi tiết công nợ.</p>') % (
+                'Phần không gắn được với hóa đơn nào (số dư đầu kỳ, tiền trả trước, bù trừ công nợ) nằm ở cột Chưa gắn hóa đơn, '
+                'nhờ vậy tổng cộng luôn bằng số dư tài khoản công nợ trên sổ cái.</p>') % (
                 head, body, foot, detail)

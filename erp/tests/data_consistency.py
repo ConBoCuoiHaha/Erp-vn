@@ -46,8 +46,14 @@ for comp in env['res.company'].search([]):
     check('%s: tổng bảng tuổi nợ phải thu = số dư 131' % tag, tot == gl(comp, '131'), (tot, gl(comp, '131')))
     # lương: tháng đã chi thì 334 của nhân viên về 0; 3335 = thuế đã khấu trừ chưa nộp
     runs = env['lfood.payroll.run'].sudo().search([('company_id', '=', comp.id)])
-    unpaid = sum(r.total_net for r in runs if r.state == 'posted')
-    check('%s: 334 còn phải trả = thực lĩnh các bảng lương chưa chi' % tag, -gl(comp, '334') == round(unpaid), (-gl(comp, '334'), unpaid))
+    # so tổng thực lĩnh của các bảng lương với chính bút toán tính lương (không tính chi lương, số dư đầu kỳ, tạm ứng)
+    accrual = env['lfood.move'].sudo().search([('company_id', '=', comp.id), ('state', '=', 'posted'),
+                                               ('source_model', '=', 'lfood.payroll.run'), ('source_key', '=', 'payroll')])
+    acc_lines = accrual.line_ids.filtered(lambda l: l.account_code.startswith('334'))
+    net_posted = round(sum(acc_lines.mapped('credit')) - sum(acc_lines.mapped('debit')))
+    check('%s: bút toán lương ghi Có 334 = tổng thực lĩnh các bảng lương' % tag,
+          net_posted == round(sum(r.total_net for r in runs if r.state in ('posted', 'paid'))),
+          (net_posted, sum(r.total_net for r in runs if r.state in ('posted', 'paid'))))
     check('%s: 3335 = tổng thuế TNCN đã khấu trừ' % tag, -gl(comp, '3335') == round(sum(r.total_pit for r in runs if r.state in ('posted', 'paid'))),
           (-gl(comp, '3335'), sum(r.total_pit for r in runs)))
     # tờ khai GTGT: bán ra trên tờ khai = hóa đơn trong kỳ

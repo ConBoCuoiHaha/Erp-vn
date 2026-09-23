@@ -44,8 +44,11 @@ CO.sudo().with_context(lfood_audit_skip=True).write({
 for u in env['res.users'].sudo().search([]):
     u.write({'company_ids': [(4, CO.id)], 'company_id': CO.id})
 OTHER = ref('lfood_base.company_factory', False)
-if OTHER and OTHER != CO and OTHER.active:
-    OTHER.sudo().with_context(lfood_audit_skip=True).write({'active': False})
+if OTHER and OTHER != CO:
+    # gỡ khỏi danh sách công ty của người dùng, nếu không Odoo báo "công ty không hợp lệ"
+    env['res.users'].sudo().search([]).write({'company_ids': [(3, OTHER.id)]})
+    if OTHER.active:
+        OTHER.sudo().with_context(lfood_audit_skip=True).write({'active': False})
 U = {u.login: u for u in env['res.users'].search([('login', 'in', ['ketoanvien', 'ketoantruong'])])}
 kv = lambda m: env[m].with_user(U['ketoanvien']).with_company(CO)
 kt = lambda m: env[m].with_user(U['ketoantruong']).with_company(CO)
