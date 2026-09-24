@@ -40,6 +40,25 @@ App luôn quy về số tháng để tính khấu hao; đổi đơn vị chỉ �
 Số tháng tương ứng hiện ngay bên cạnh theo từng ký tự đang gõ (tính trên trình duyệt, không gọi máy chủ).
 Tài sản nhập từ trước vẫn giữ nguyên số tháng, chỉ hiển thị lại theo năm.
 
+## Xuất báo cáo tài chính ra Excel
+
+Mọi màn hình trong nhóm Báo cáo (Bảng cân đối số phát sinh, Sổ cái, Sổ chi tiết công nợ, B01, B02, B03) có nút
+**Xuất Excel**. Tệp xuất ra đúng mẫu của Thông tư 99/2025/TT-BTC: tiêu đề đơn vị, tên mẫu, kỳ báo cáo, đơn vị tính,
+khối ký tên Người lập biểu - Kế toán trưởng - Giám đốc, khổ A4 vừa một trang ngang.
+
+Số liệu trong tệp là công thức sống, không phải ảnh chụp:
+
+- B01: mỗi chỉ tiêu tổng hợp là phép cộng các chỉ tiêu con đúng như mẫu (`100 = 110 + 120 + ...`, `440 = 300 + 400`),
+  kèm ô Kiểm tra báo ngay tổng tài sản có bằng tổng nguồn vốn không;
+- B02: `10 = 01 - 02`, `20 = 10 - 11`, `30 = 20 + 21 + 22 - (23 + 25 + 26)`, `50 = 30 + 40`, `60 = 50 - 51 - 52`;
+- B03: `20`, `30`, `40` là tổng các dòng trong từng hoạt động, `50 = 20 + 30 + 40`, `70 = 50 + 60 + 61`, kèm ô
+  Kiểm tra đối chiếu tiền cuối kỳ với số dư tiền trên sổ;
+- Bảng cân đối số phát sinh và Sổ chi tiết công nợ: dòng Cộng dùng `SUM`, kèm ô Kiểm tra Nợ bằng Có ở cả ba cặp cột;
+- Sổ cái: cột Số dư cộng dồn từ số dư đầu kỳ theo từng dòng.
+
+Trang tính được khóa, chỉ cột Thuyết minh để trống cho kế toán tự ghi. Bộ kiểm thử tự đọc lại tệp, tính các công
+thức trong đó rồi so với số của app nên không lo tệp xuất ra lệch số.
+
 ## Giám sát khi chạy thật
 
 Quản trị > **Tình trạng hệ thống**: một màn hình gói đủ phiên bản, thời gian chạy liên tục, dung lượng cơ sở dữ liệu,

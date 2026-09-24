@@ -4481,6 +4481,56 @@ _el.LOG_MAX_MB = _old_max
 _cfg.options['logfile'] = _old_logfile
 env.flush_all()
 
+# xuat bao cao tai chinh ra Excel, cong thuc trong tep phai ra dung so cua app
+import re as _re, io as _io2, openpyxl as _xl2
+from openpyxl.utils import range_boundaries as _rb, get_column_letter as _gcl
+
+def _cell(cells, ref, seen=frozenset()):
+    v = cells.get(ref, 0)
+    if isinstance(v, str) and v.startswith('='):
+        return _expr(cells, v[1:], seen | {ref})
+    return v if isinstance(v, (int, float)) else 0
+
+def _expr(cells, e, seen=frozenset()):
+    def _sum(m):
+        c1, r1, c2, r2 = _rb(m.group(1))
+        return repr(sum(_cell(cells, '%s%s' % (_gcl(c), r), seen)
+                        for c in range(c1, c2 + 1) for r in range(r1, r2 + 1)))
+    e = _re.sub(r'SUM\(([A-Z]+\d+:[A-Z]+\d+)\)', _sum, e)
+    return eval(_re.sub(r'\b([A-Z]{1,2}\d+)\b', lambda m: repr(_cell(cells, m.group(1), seen)), e))
+
+_Rep = env['lfood.ledger.report'].with_user(users['ketoantruong']).with_company(factory)
+_rep = _Rep.create({'report': 'b01', 'company_id': factory.id, 'date_from': date(2026, 1, 1), 'date_to': date(2026, 12, 31)})
+_wb = _xl2.load_workbook(_io2.BytesIO(_rep._build_workbook())).active
+_cells = {c.coordinate: c.value for row in _wb.iter_rows() for c in row if c.value is not None}
+_at = {c.value.strip(): c.row for row in _wb.iter_rows() for c in row
+       if c.column == 2 and isinstance(c.value, str) and c.value.strip().isdigit()}
+_end, _pl = _rep._b01_values(date(2027, 1, 1))
+check('B01 xuất Excel: công thức tổng tài sản ra đúng số của app',
+      round(_cell(_cells, 'D%s' % _at['280'])) == round(_end['280']),
+      (_cell(_cells, 'D%s' % _at['280']), _end['280']))
+check('B01 xuất Excel: công thức tổng nguồn vốn ra đúng số của app',
+      round(_cell(_cells, 'D%s' % _at['440'])) == round(_end['440']),
+      (_cell(_cells, 'D%s' % _at['440']), _end['440']))
+check('B01 xuất Excel: có ô Kiểm tra và khóa trang',
+      any(isinstance(v, str) and v.startswith('=IF(') for v in _cells.values()) and _wb.protection.sheet)
+_rep2 = _Rep.create({'report': 'b02', 'company_id': factory.id, 'date_from': date(2026, 1, 1), 'date_to': date(2026, 12, 31)})
+_wb2 = _xl2.load_workbook(_io2.BytesIO(_rep2._build_workbook())).active
+_cells2 = {c.coordinate: c.value for row in _wb2.iter_rows() for c in row if c.value is not None}
+_at2 = {c.value.strip(): c.row for row in _wb2.iter_rows() for c in row
+        if c.column == 2 and isinstance(c.value, str) and c.value.strip().isdigit()}
+_v2 = _rep2._b02_values(date(2026, 1, 1), date(2026, 12, 31))
+check('B02 xuất Excel: công thức lợi nhuận sau thuế ra đúng số của app',
+      round(_cell(_cells2, 'D%s' % _at2['60'])) == round(_v2['60']), (_cell(_cells2, 'D%s' % _at2['60']), _v2['60']))
+_rep3 = _Rep.create({'report': 'trial', 'company_id': factory.id, 'date_from': date(2026, 1, 1), 'date_to': date(2026, 12, 31)})
+_wb3 = _xl2.load_workbook(_io2.BytesIO(_rep3._build_workbook())).active
+_cells3 = {c.coordinate: c.value for row in _wb3.iter_rows() for c in row if c.value is not None}
+_tot = [k for k, v in _cells3.items() if isinstance(v, str) and v.startswith('=SUM(')]
+check('Bảng cân đối phát sinh xuất Excel: dòng Cộng dùng SUM và Nợ bằng Có',
+      len(_tot) == 6 and round(_cell(_cells3, 'C%s' % _tot[0][1:])) == round(_cell(_cells3, 'D%s' % _tot[0][1:])),
+      (len(_tot), _tot[:2]))
+env.flush_all()
+
 env.cr.rollback()
 print('\n==== KET QUA KIEM THU ====')
 for name, ok, detail in results:

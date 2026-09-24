@@ -10,6 +10,21 @@ from odoo.addons.lfood_voucher.models.tools import vnd
 from . import b01, b03
 
 
+B02_LINES = [
+    ('01', '1. Doanh thu bán hàng và cung cấp dịch vụ'), ('02', '2. Các khoản giảm trừ doanh thu'),
+    ('10', '3. Doanh thu thuần về bán hàng và cung cấp dịch vụ (10 = 01 - 02)'), ('11', '4. Giá vốn hàng bán'),
+    ('20', '5. Lợi nhuận gộp về bán hàng và cung cấp dịch vụ (20 = 10 - 11)'),
+    ('21', '6. Lãi/lỗ của hoạt động bán, thanh lý bất động sản đầu tư'),
+    ('22', '7. Doanh thu hoạt động tài chính'), ('23', '8. Chi phí tài chính'),
+    ('24', '   Trong đó: Chi phí đi vay'), ('25', '9. Chi phí bán hàng'), ('26', '10. Chi phí quản lý doanh nghiệp'),
+    ('30', '11. Lợi nhuận thuần từ hoạt động kinh doanh (30 = 20 + 21 + 22 - (23 + 25 + 26))'),
+    ('31', '12. Thu nhập khác'), ('32', '13. Chi phí khác'), ('40', '14. Lợi nhuận khác (40 = 31 - 32)'),
+    ('50', '15. Tổng lợi nhuận kế toán trước thuế (50 = 30 + 40)'),
+    ('51', '16. Chi phí thuế TNDN hiện hành'), ('52', '17. Chi phí thuế TNDN hoãn lại'),
+    ('60', '18. Lợi nhuận sau thuế thu nhập doanh nghiệp (60 = 50 - 51 - 52)'), ('70', '19. Lãi cơ bản trên cổ phiếu'),
+]
+
+
 def money(v):
     v = round(v or 0)
     if not v:
@@ -390,19 +405,7 @@ class LfoodLedgerReport(models.TransientModel):
         return Markup('').join(parts)
 
     def _render_b02(self):
-        lines = [
-            ('01', _('1. Doanh thu bán hàng và cung cấp dịch vụ')), ('02', _('2. Các khoản giảm trừ doanh thu')),
-            ('10', _('3. Doanh thu thuần về bán hàng và cung cấp dịch vụ (10 = 01 - 02)')), ('11', _('4. Giá vốn hàng bán')),
-            ('20', _('5. Lợi nhuận gộp về bán hàng và cung cấp dịch vụ (20 = 10 - 11)')),
-            ('21', _('6. Lãi/lỗ của hoạt động bán, thanh lý bất động sản đầu tư')),
-            ('22', _('7. Doanh thu hoạt động tài chính')), ('23', _('8. Chi phí tài chính')),
-            ('24', _('   Trong đó: Chi phí đi vay')), ('25', _('9. Chi phí bán hàng')), ('26', _('10. Chi phí quản lý doanh nghiệp')),
-            ('30', _('11. Lợi nhuận thuần từ hoạt động kinh doanh (30 = 20 + 21 + 22 - (23 + 25 + 26))')),
-            ('31', _('12. Thu nhập khác')), ('32', _('13. Chi phí khác')), ('40', _('14. Lợi nhuận khác (40 = 31 - 32)')),
-            ('50', _('15. Tổng lợi nhuận kế toán trước thuế (50 = 30 + 40)')),
-            ('51', _('16. Chi phí thuế TNDN hiện hành')), ('52', _('17. Chi phí thuế TNDN hoãn lại')),
-            ('60', _('18. Lợi nhuận sau thuế thu nhập doanh nghiệp (60 = 50 - 51 - 52)')), ('70', _('19. Lãi cơ bản trên cổ phiếu')),
-        ]
+        lines = B02_LINES
         cur = self._b02_values(self.date_from, self.date_to)
         prev = self._b02_values(self.date_from.replace(year=self.date_from.year - 1), self.date_to.replace(year=self.date_to.year - 1))
         rows = [([label, code, '', money(cur[code]) if cur[code] is not None else '',

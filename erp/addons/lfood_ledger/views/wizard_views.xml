@@ -5,6 +5,10 @@
         <field name="model">lfood.ledger.report</field>
         <field name="arch" type="xml">
             <form string="Báo cáo sổ kế toán" create="false" delete="false">
+                <header>
+                    <button name="action_export_excel" type="object" string="Xuất Excel" class="btn-primary"
+                            invisible="report == 'dashboard'"/>
+                </header>
                 <sheet>
                     <group>
                         <group>
