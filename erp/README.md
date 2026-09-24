@@ -10,6 +10,11 @@ nhật ký toàn bộ thao tác không sửa được, báo cáo chi phí nhiề
 
 Tắt: `docker compose down` (dữ liệu giữ nguyên trong volume Docker).
 
+Lúc sửa app thì bật bằng `start-erp-dev.bat` (thêm `--dev=xml`): sửa tệp trong `views/` xong chỉ cần tải lại trang,
+không phải chạy `-u tên_module`. Sửa tệp trong `static/src` (giao diện widget) và sửa Python thì vẫn phải chạy
+`docker compose run --rm odoo odoo -c /etc/odoo/odoo.conf -d lfood -u tên_module --stop-after-init --no-http`.
+Mở link cho người khác thì quay lại `start-erp.bat`.
+
 ## Tài khoản dùng thử (chỉ trên laptop, đổi trước khi mở link cho người khác)
 
 | Tài khoản | Vai trò | Được làm |

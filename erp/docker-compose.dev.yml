@@ -1,0 +1,3 @@
+services:
+  odoo:
+    command: ["odoo", "--dev=xml"]
