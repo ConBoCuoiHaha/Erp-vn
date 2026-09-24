@@ -210,3 +210,40 @@ Nạp bằng `erp/tools/seed_daian.py` vào cơ sở dữ liệu `lfood_daian`: 
 1. Khai được tài sản đang dùng dở khi bắt đầu chạy phần mềm (ngày bắt đầu theo dõi, hao mòn lũy kế đầu kỳ).
 2. Bán, thanh lý tài sản ghi được thuế GTGT đầu ra và lên đúng nhóm thuế suất trên tờ khai.
 3. Bút toán nộp thuế GTGT kỳ trước không còn bị tính nhầm thành doanh thu bán ra âm.
+
+## 8. Các biểu Excel sách dựng và app đã phủ tới đâu
+
+Nguồn: sơ đồ MENU của chính tệp Excel mà sách dựng (trang 109), cộng các biểu xuất hiện trong phần bài giải.
+
+### Sơ đồ MENU của sách
+
+| Nhóm | Các sheet |
+|---|---|
+| Khai báo danh mục | Bảng danh mục tài khoản; Bảng định khoản |
+| Sổ kế toán tổng hợp | Sổ Nhật ký chung; Sổ cái |
+| Sổ chi tiết | tiền mặt; tiền gửi ngân hàng; thanh toán; hàng tồn kho; chi phí sản xuất kinh doanh; doanh thu; các tài khoản khác |
+| Bảng tổng hợp chi tiết | TK 152; TK 153; TK 131; TK 331 |
+| Báo cáo tài chính | Bảng cân đối tài khoản; Báo cáo tình hình tài chính (B01); Báo cáo kết quả hoạt động kinh doanh (B02); Báo cáo lưu chuyển tiền tệ (B03); Bản thuyết minh báo cáo tài chính (B09) |
+
+Ngoài menu, phần bài giải còn dựng: bảng tổng hợp nhập xuất tồn thành phẩm TK 155 (tr.153), bảng tính giá thành,
+bảng tính và phân bổ khấu hao 01/KH (tr.105), bảng lương và bảng phân bổ tiền lương (tr.103), tờ khai thuế GTGT
+(tr.106), tờ khai thuế TNDN tạm tính (tr.108).
+
+### Đối chiếu với app
+
+| Biểu của sách | Trong app | Xuất Excel |
+|---|---|---|
+| Bảng danh mục tài khoản, Bảng định khoản | Cấu hình > Hệ thống tài khoản | theo cách xuất danh sách của Odoo |
+| Sổ Nhật ký chung | Chứng từ > Bảng nhập liệu; Sổ kế toán > Tất cả bút toán | có |
+| Sổ cái | Báo cáo > Sổ cái | có |
+| Bảng cân đối tài khoản | Báo cáo > Bảng cân đối số phát sinh | có |
+| Sổ chi tiết thanh toán; Bảng tổng hợp chi tiết TK 131, TK 331 | Báo cáo > Sổ chi tiết công nợ | có |
+| B01, B02, B03 | Báo cáo > B01-DN, B02-DN, B03-DN | có |
+| Sổ chi tiết tiền mặt, tiền gửi, doanh thu, TK khác | Báo cáo > Sổ cái lọc theo tài khoản | có, nhưng chưa đúng mẫu S38-DN |
+| Sổ chi tiết chi phí sản xuất kinh doanh (621, 622, 627) | Báo cáo > Sổ cái theo tài khoản; Chứng từ > Tính giá thành | chưa có mẫu riêng |
+| Sổ chi tiết hàng tồn kho; Bảng tổng hợp chi tiết TK 152, 153, 155 | Kho > Thẻ kho, Báo cáo tồn kho | chưa có mẫu riêng |
+| Bảng tính giá thành | Chứng từ > Tính giá thành | chưa có mẫu riêng |
+| Bảng tính và phân bổ khấu hao | Tài sản cố định > Khấu hao | chưa có mẫu riêng |
+| Bảng lương, bảng phân bổ tiền lương | Tiền lương > Bảng lương | chưa có mẫu riêng |
+| Tờ khai thuế GTGT; tờ khai TNDN tạm tính | Thuế > Tờ khai GTGT; Thuế TNDN | chưa có mẫu riêng |
+| Bản thuyết minh báo cáo tài chính (B09) | **chưa làm** | - |
