@@ -35,7 +35,15 @@ services:
       - odoo-data:/var/lib/odoo
       - ./addons:/mnt/extra-addons
       - ./config:/etc/odoo
+      - ./logs:/var/log/odoo
       - ${BACKUP_DIR:-./backups}:/mnt/backups
+    # Docker tự khởi động lại máy chủ nếu nó treo, không cần ai ngồi canh
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fsS http://localhost:8069/web/health || exit 1"]
+      interval: 1m
+      timeout: 10s
+      retries: 3
+      start_period: 2m
 
   backup:
     image: postgres:16

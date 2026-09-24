@@ -4445,6 +4445,42 @@ check('Đổi đơn vị chỉ đổi cách hiển thị, không đổi số th�
       _nam.life_months == 60 and _nam.life_value == 60, (_nam.life_months, _nam.life_value))
 env.flush_all()
 
+# giam sat: so loi ky thuat, suc khoe he thong, nhat ky may chu
+import os as _os, tempfile as _tmp
+from odoo.tools import config as _cfg
+from odoo.addons.lfood_monitor.models import error_log as _el
+Err = env['lfood.error.log']
+_e1 = Err._record('browser', 'TypeError: x is not a function', 'stack A / stack B', url='/odoo/a')
+_e2 = Err._record('browser', 'TypeError: x is not a function', 'stack A / stack B', url='/odoo/b')
+_e3 = Err._record('browser', 'ReferenceError: y', 'stack C')
+check('Lỗi trùng gom vào một dòng và đếm số lần',
+      _e1 == _e2 and _e2.count == 2 and _e2.url == '/odoo/b' and _e3 != _e1, (_e2.count, _e2.url))
+_e2.action_ignore()
+_e4 = Err._record('browser', 'TypeError: x is not a function', 'stack A / stack B')
+check('Lỗi đã bỏ qua không làm phiền nữa', _e4 != _e2 and _e2.state == 'ignored', _e2.state)
+_problems = Err._health_problems()
+check('Kiểm tra sức khỏe trả về danh sách vấn đề',
+      isinstance(_problems, list) and all(len(p) == 3 and p[0] in ('bad', 'warn') for p in _problems), _problems)
+_status = env['lfood.system.status'].with_user(users['ketoantruong']).create({})
+check('Màn hình tình trạng hệ thống hiện đủ chỉ tiêu',
+      'Phiên bản' in (_status.html or '') and 'Bản sao lưu gần nhất' in (_status.html or ''),
+      len(_status.html or ''))
+_dir = _tmp.mkdtemp()
+_path = _os.path.join(_dir, 'odoo.log')
+open(_path, 'w', encoding='utf-8').write('2026-01-01 00:00:00 1 INFO lfood x: binh thuong' + chr(10)
+                                         + '2026-01-01 00:00:01 1 ERROR lfood y: hong roi' + chr(10))
+_old_logfile, _old_max = _cfg.options.get('logfile'), _el.LOG_MAX_MB
+_cfg.options['logfile'] = _path
+_view = env['lfood.server.log'].with_user(users['ketoantruong']).sudo().create({'level': 'error', 'lines': 50})
+check('Nhật ký máy chủ lọc đúng mức lỗi',
+      'hong roi' in (_view.html or '') and 'binh thuong' not in (_view.html or ''), _view.html)
+_el.LOG_MAX_MB = 0
+check('Nhật ký quá lớn thì xoay vòng', Err._rotate_log() and _os.path.exists(_path + '.1')
+      and not _os.path.exists(_path), _os.listdir(_dir))
+_el.LOG_MAX_MB = _old_max
+_cfg.options['logfile'] = _old_logfile
+env.flush_all()
+
 env.cr.rollback()
 print('\n==== KET QUA KIEM THU ====')
 for name, ok, detail in results:

@@ -1,0 +1,8 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_error_log_chief,error log chief,model_lfood_error_log,lfood_base.group_chief_accountant,1,1,0,0
+access_error_log_dir,error log director,model_lfood_error_log,lfood_base.group_director,1,0,0,0
+access_error_log_emp,error log employee,model_lfood_error_log,lfood_base.group_employee,0,0,1,0
+access_error_log_admin,error log admin,model_lfood_error_log,base.group_system,1,1,1,1
+access_system_status_chief,system status chief,model_lfood_system_status,lfood_base.group_chief_accountant,1,1,1,1
+access_system_status_admin,system status admin,model_lfood_system_status,base.group_system,1,1,1,1
+access_server_log_admin,server log admin,model_lfood_server_log,base.group_system,1,1,1,1

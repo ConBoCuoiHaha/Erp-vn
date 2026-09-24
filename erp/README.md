@@ -34,6 +34,23 @@ gian của Thông tư 45 ghi theo năm, còn tài sản đã qua sử dụng th�
 App luôn quy về số tháng để tính khấu hao; đổi đơn vị chỉ đổi cách hiển thị chứ không đổi số tháng đã lưu.
 Tài sản nhập từ trước vẫn giữ nguyên số tháng, chỉ hiển thị lại theo năm.
 
+## Giám sát khi chạy thật
+
+Quản trị > **Tình trạng hệ thống**: một màn hình gói đủ phiên bản, thời gian chạy liên tục, dung lượng cơ sở dữ liệu,
+đĩa còn trống, bản sao lưu gần nhất, số lỗi chưa xem, lượt đăng nhập và đăng nhập sai trong ngày, kích thước nhật ký.
+Đầu màn hình là kết luận Bình thường / Cần để ý / Có vấn đề kèm danh sách việc phải làm.
+
+Quản trị > **Lỗi kỹ thuật**: lỗi JavaScript xảy ra trên máy người dùng được gửi về đây kèm người gặp, màn hình,
+dấu vết lỗi và trình duyệt; lỗi giống nhau gom một dòng và đếm số lần. Bấm Đã xem hoặc Bỏ qua để dọn. Cảnh báo sức
+khỏe hằng ngày cũng ghi vào đây. Không dùng Sentry hay dịch vụ ngoài nào, dữ liệu nằm trên máy này.
+
+Quản trị > **Nhật ký máy chủ**: đọc thẳng `erp/logs/odoo.log` ngay trên web, lọc theo mức (chỉ lỗi, từ cảnh báo
+trở lên) và theo từ khóa, không cần mở Docker. Tệp vượt 20 MB thì việc chạy hằng ngày tự xoay vòng, giữ 5 tệp.
+
+Việc chạy hằng ngày (`ir.cron`) kiểm tra: sao lưu có quá 36 giờ chưa, đĩa còn dưới 5 GB chưa, chuỗi băm Nhật ký hệ
+thống có bị gãy không. Có vấn đề thì ghi thành một dòng ở Lỗi kỹ thuật. Docker cũng tự kiểm tra `/web/health`
+mỗi phút và khởi động lại máy chủ nếu nó treo.
+
 ## Kiểm thử
 
 Hai cơ sở dữ liệu: `lfood` là bản làm việc (dữ liệu mẫu công ty CP Nhựa Đại An, nạp bằng `tools/seed_daian.py`,
