@@ -132,11 +132,9 @@
                                     <field name="depreciable_value"/>
                                     <label for="life_value"/>
                                     <div class="o_row">
-                                        <field name="life_value" readonly="state != 'draft'" class="oe_inline"/>
                                         <field name="life_unit" readonly="state != 'draft'" class="oe_inline" nolabel="1"/>
-                                        <span class="text-muted oe_inline" invisible="life_unit == 'month' or life_months == 0">
-                                            (<field name="life_months" readonly="1" class="oe_inline"/> tháng)
-                                        </span>
+                                        <field name="life_value" widget="lfood_life" readonly="state != 'draft'" class="oe_inline"/>
+                                        <field name="life_months" invisible="1"/>
                                     </div>
                                     <field name="date_start" readonly="state != 'draft'"/>
                             <field name="opening_date" readonly="state != 'draft'"/>

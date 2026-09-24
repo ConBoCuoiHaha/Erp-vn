@@ -32,6 +32,7 @@ Kiểm thử HTTP lấy tài khoản quản trị từ biến môi trường `LF
 Thẻ tài sản và công trình xây dựng cơ bản có ô **Thời gian sử dụng** kèm ô chọn **Năm** hoặc **Tháng**. Khung thời
 gian của Thông tư 45 ghi theo năm, còn tài sản đã qua sử dụng thường tính theo tháng, chọn đơn vị nào cũng được.
 App luôn quy về số tháng để tính khấu hao; đổi đơn vị chỉ đổi cách hiển thị chứ không đổi số tháng đã lưu.
+Số tháng tương ứng hiện ngay bên cạnh theo từng ký tự đang gõ (tính trên trình duyệt, không gọi máy chủ).
 Tài sản nhập từ trước vẫn giữ nguyên số tháng, chỉ hiển thị lại theo năm.
 
 ## Giám sát khi chạy thật

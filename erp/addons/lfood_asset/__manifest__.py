@@ -19,5 +19,11 @@
         'views/menus.xml',
     ],
     'post_init_hook': 'post_init_demo',
+    'assets': {
+        'web.assets_backend': [
+            'lfood_asset/static/src/js/life_field.js',
+            'lfood_asset/static/src/xml/life_field.xml',
+        ],
+    },
     'installable': True,
 }

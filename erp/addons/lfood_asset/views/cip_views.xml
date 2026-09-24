@@ -33,8 +33,8 @@
                         <group><field name="total"/><field name="category_id" readonly="state != 'draft'" options="{'no_create': True}"/>
                             <label for="life_value"/>
                             <div class="o_row">
-                                <field name="life_value" readonly="state != 'draft'" class="oe_inline"/>
                                 <field name="life_unit" readonly="state != 'draft'" class="oe_inline" nolabel="1"/>
+                                <field name="life_value" widget="lfood_life" readonly="state != 'draft'" class="oe_inline"/>
                             </div><field name="usage" readonly="state != 'draft'"/>
                             <field name="asset_id"/><field name="accept_date"/></group>
                     </group>
