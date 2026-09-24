@@ -4397,6 +4397,33 @@ except UserError:
     check('Còn lỗi thì không ghi sổ được', True)
 env.flush_all()
 
+# xuat Excel co cong thuc va rang buoc, nap nguoc lai
+import base64 as _b64, io as _io, openpyxl as _xl
+sh3 = Sheet.create({'name': 'Thu xuat Excel', 'journal': 'purchase', 'company_id': factory.id, 'line_ids': [
+    (0, 0, {'sequence': 1, 'date': date(2026, 10, 8), 'ref': 'HD900', 'memo': 'Mua hang xuat Excel',
+            'debit_account_id': acc('156'), 'credit_account_id': acc('3311'), 'amount': 7_000_000,
+            'partner_id': v433.partner_id.id}),
+]})
+_data = sh3._build_workbook()
+_wb = _xl.load_workbook(_io.BytesIO(_data))
+_ws = _wb['NhatKy']
+check('Tệp Excel có trang danh mục ẩn và vùng đặt tên',
+      _wb['DanhMuc'].sheet_state == 'hidden' and {'TK', 'TK_DoiTuong', 'DoiTuong', 'KhoanMuc'} <= set(_wb.defined_names),
+      (_wb['DanhMuc'].sheet_state, list(_wb.defined_names)))
+check('Tệp Excel giữ công thức VLOOKUP, SUMIF và cột Kiểm tra',
+      str(_ws.cell(4, 5).value).startswith('=IF(D4=') and 'COUNTIF(TK_DoiTuong' in str(_ws.cell(4, 11).value)
+      and 'SUMIF' in str(_ws.cell(55, 4).value), (_ws.cell(4, 5).value, _ws.cell(55, 4).value))
+check('Tệp Excel có ràng buộc nhập và khóa ô công thức',
+      len(_ws.data_validations.dataValidation) == 6 and _ws.protection.sheet
+      and _ws.cell(5, 11).protection.locked and not _ws.cell(5, 2).protection.locked,
+      len(_ws.data_validations.dataValidation))
+sh3.write({'import_file': _b64.b64encode(_data), 'import_file_name': 'thu.xlsx'})
+sh3.action_import_excel()
+check('Nạp ngược tệp Excel về đúng một dòng không lỗi',
+      len(sh3.line_ids) == 1 and sh3.error_count == 0 and sh3.line_ids.amount == 7_000_000
+      and sh3.line_ids.debit_account_id.code == '156', (len(sh3.line_ids), sh3.line_ids.mapped('error')))
+env.flush_all()
+
 env.cr.rollback()
 print('\n==== KET QUA KIEM THU ====')
 for name, ok, detail in results:

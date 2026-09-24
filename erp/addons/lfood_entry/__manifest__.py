@@ -6,7 +6,7 @@
     'category': 'LiFeOOD',
     'author': 'LiFeOOD',
     'license': 'LGPL-3',
-    'depends': ['lfood_base', 'lfood_audit', 'lfood_voucher', 'lfood_ledger'],
+    'depends': ['lfood_base', 'lfood_audit', 'lfood_voucher', 'lfood_ledger', 'lfood_importer'],
     'data': [
         'security/ir.model.access.csv',
         'data/entry_data.xml',

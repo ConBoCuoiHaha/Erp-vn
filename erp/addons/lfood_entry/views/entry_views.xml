@@ -28,6 +28,7 @@
                             invisible="state != 'draft'"
                             confirm="Ghi sổ toàn bộ các dòng trong bảng thành bút toán?"/>
                     <button name="action_open_moves" type="object" string="Xem bút toán" invisible="move_count == 0"/>
+                    <button name="action_export_excel" type="object" string="Xuất Excel"/>
                     <field name="state" widget="statusbar"/>
                 </header>
                 <sheet>
@@ -63,6 +64,18 @@
                             <field name="error" readonly="1" widget="badge" decoration-danger="error"/>
                         </list>
                     </field>
+                    <group string="Nạp lại từ Excel" invisible="state != 'draft'">
+                        <div colspan="2" class="text-muted">
+                            Tải tệp đã xuất về, gõ tiếp trong Excel rồi chọn tệp ở đây và bấm Nạp từ Excel.
+                            Toàn bộ các dòng hiện có sẽ được thay bằng nội dung trong tệp.
+                        </div>
+                        <field name="import_file" filename="import_file_name" nolabel="1" colspan="2"/>
+                        <field name="import_file_name" invisible="1"/>
+                        <button name="action_import_excel" type="object" string="Nạp từ Excel"
+                                invisible="not import_file" confirm="Thay toàn bộ các dòng hiện có bằng nội dung tệp Excel?"/>
+                    </group>
+                    <field name="file" filename="file_name" invisible="not file" readonly="1"/>
+                    <field name="file_name" invisible="1"/>
                     <field name="note" placeholder="Ghi chú"/>
                 </sheet>
             </form>

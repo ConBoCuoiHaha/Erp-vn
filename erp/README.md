@@ -55,6 +55,19 @@ Bấm **Kiểm tra** để soát cả bảng, lỗi hiện ngay trên từng dò
 Cấu hình > **Ràng buộc nhập liệu** (kế toán trưởng): đặt luật theo nhóm tài khoản - bắt buộc đối tượng, khoản mục
 chi phí, diễn giải, số chứng từ; hạn mức tiền mỗi dòng; cấm hạch toán tay vào tài khoản do phân hệ khác ghi (154…).
 
+Nút **Xuất Excel** trên bảng tạo tệp .xlsx còn sống chứ không phải ảnh chụp số liệu:
+
+- Tên tài khoản tra bằng `VLOOKUP` sang trang danh mục ẩn `DanhMuc`;
+- Cột **Kiểm tra** là công thức soát đủ ràng buộc (thiếu ngày, thiếu số chứng từ, thiếu diễn giải, số tiền không
+  dương, sai tài khoản, trùng TK Nợ với TK Có, thiếu đối tượng với tài khoản công nợ), ô nào sai thì tô đỏ;
+- Dòng **Cộng** dùng `SUMIF`, `SUM` và một ô báo "Nợ bằng Có" hay "Lệch …";
+- Ô nhập có danh sách chọn lấy từ danh mục tài khoản, đối tượng, khoản mục của chính công ty; ngày và số tiền có
+  ràng buộc kiểu dữ liệu;
+- Cột công thức bị khóa, trang tính được bảo vệ, chỉ gõ được vào ô trắng; chừa sẵn 50 dòng trống.
+
+Gõ tiếp trong Excel rồi chọn tệp ở mục **Nạp lại từ Excel** để đưa ngược vào app: app đọc các cột giá trị nên không
+phụ thuộc Excel đã tính công thức hay chưa, sai danh mục thì báo rõ từng dòng trước khi thay dữ liệu.
+
 803 kiểm tra: số liệu MDV00433, chặn quyền từng vai trò, Sửa sau khi Cất, phân bổ tổng khớp tới đồng,
 báo cáo không đổi sau Sửa và sau điều chỉnh hàng loạt, hoàn tác lô, khôi phục số gốc, nhật ký
 ghi đích danh, không sửa được nhật ký kể cả bằng SQL, chuỗi mã băm toàn vẹn; quản trị: tạo, đổi vai trò,

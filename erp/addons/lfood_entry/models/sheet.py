@@ -115,7 +115,7 @@ class LfoodEntrySheet(models.Model):
                 'view_mode': 'list,form', 'domain': [('entry_sheet_id', '=', self.id)]}
 
     def write(self, vals):
-        if self.filtered(lambda r: r.state == 'posted') and set(vals) - {'note'}:
+        if self.filtered(lambda r: r.state == 'posted') and set(vals) - {'note', 'file', 'file_name'}:
             raise UserError(_('Bảng đã ghi sổ không sửa được. Hãy đảo bút toán rồi lập bảng mới.'))
         return super().write(vals)
 
