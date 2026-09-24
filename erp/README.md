@@ -117,12 +117,13 @@ Nút **Xuất Excel** trên bảng tạo tệp .xlsx còn sống chứ không ph
 Gõ tiếp trong Excel rồi chọn tệp ở mục **Nạp lại từ Excel** để đưa ngược vào app: app đọc các cột giá trị nên không
 phụ thuộc Excel đã tính công thức hay chưa, sai danh mục thì báo rõ từng dòng trước khi thay dữ liệu.
 
-803 kiểm tra: số liệu MDV00433, chặn quyền từng vai trò, Sửa sau khi Cất, phân bổ tổng khớp tới đồng,
+832 kiểm tra: số liệu MDV00433, chặn quyền từng vai trò, Sửa sau khi Cất, phân bổ tổng khớp tới đồng,
 báo cáo không đổi sau Sửa và sau điều chỉnh hàng loạt, hoàn tác lô, khôi phục số gốc, nhật ký
 ghi đích danh, không sửa được nhật ký kể cả bằng SQL, chuỗi mã băm toàn vẹn; quản trị: tạo, đổi vai trò,
 ngừng, xóa người dùng, R&D bị chặn chứng từ, CRUD nhà cung cấp và pháp nhân, xóa chứng từ đã hủy,
-đồng bộ và kiểm tra bản sao lưu. Bài test tự hoàn tác
-dữ liệu sau khi chạy.
+đồng bộ và kiểm tra bản sao lưu; bảng nhập liệu và ràng buộc nhập liệu; thời gian sử dụng tài sản theo năm hoặc
+tháng; sổ lỗi kỹ thuật và tình trạng hệ thống; tệp Excel xuất ra được đọc lại, tính công thức trong tệp rồi so với
+số của app. Bài test tự hoàn tác dữ liệu sau khi chạy.
 
 `tests/http_test.ps1`: đăng nhập, đăng nhập sai, xuất Excel, đăng xuất, màn hình quản trị, tải bản sao lưu
 (admin được, kế toán trưởng bị từ chối và vào nhật ký).
@@ -173,6 +174,10 @@ dữ liệu sau khi chạy.
 | `lfood_ledger` | Hệ thống tài khoản Thông tư 99/2025 (71 TK cấp 1 + chi tiết công ty), bút toán tự sinh từ chứng từ mua, khấu hao, ghi tăng, thanh lý; sửa số báo cáo thì đảo bút toán cũ; phiếu thu, phiếu chi, ủy nhiệm chi; phiếu kế toán; số dư đầu kỳ; bù trừ công nợ đối tác vừa mua vừa bán (Nợ 3311 / Có 1311, chặn vượt số nhỏ hơn); kết chuyển cuối kỳ; khóa sổ; sổ nhật ký chung, sổ cái, bảng cân đối số phát sinh, sổ chi tiết công nợ, B01-DN (Báo cáo tình hình tài chính), B02-DN, B03-DN; bảng điều hành ban giám đốc (doanh thu, chi phí, lợi nhuận so kỳ liền trước; tiền, tồn kho, công nợ cuối kỳ; 5 khoản mục chi phí lớn nhất; 5 khách nợ và 5 nhà cung cấp phải trả nhiều nhất) |
 | `lfood_asset` | Tài sản cố định: ghi tăng (từ chứng từ mua hoặc nhập tay), chặn dưới ngưỡng 30 triệu và ngoài khung thời gian, lịch khấu hao đường thẳng tính theo ngày, chứng từ khấu hao tháng (KH), thanh lý, khấu hao lên báo cáo chi phí; xây dựng cơ bản dở dang: tập hợp chi phí vào 241x, nghiệm thu kết chuyển sang nguyên giá và tạo thẻ tài sản |
 | `lfood_voucher` | Chứng từ mua dịch vụ, phiên bản, dòng, chênh lệch, điều chỉnh hàng loạt, lô, khoản mục chi phí, tham số pháp lý, thuế suất, báo cáo pivot; tra cứu mức mọi tham số tại một ngày, xuất và nhập gói tham số giữa bản thử và bản thật (mức nhập vào luôn ở trạng thái chờ duyệt) |
+| `lfood_costing` | Tính giá thành giản đơn: tập hợp 621, 622, 627 theo sản phẩm, phân bổ chi phí sản xuất chung theo tiêu thức tự chọn (tiền lương công nhân, nguyên vật liệu, sản lượng), đánh giá sản phẩm dở dang theo sản lượng hoàn thành tương đương, kết chuyển 154 và nhập kho thành phẩm theo giá thành vừa tính |
+| `lfood_entry` | Bảng nhập liệu kiểu Excel: lưới sổ Nhật ký chung, mỗi dòng một vế Nợ - Có, gộp theo số chứng từ thành bút toán, ô trống kế thừa dòng trên; ràng buộc nhập liệu tự cấu hình theo nhóm tài khoản; xuất ra Excel còn công thức, danh sách chọn và khóa ô rồi nạp ngược tệp vào app |
+| `lfood_monitor` | Giám sát khi chạy thật: thu lỗi JavaScript trên máy người dùng và gom theo loại, màn hình tình trạng hệ thống, đọc nhật ký máy chủ ngay trên web, kiểm tra sức khỏe hằng ngày (sao lưu quá hạn, đĩa sắp đầy, chuỗi băm nhật ký bị gãy) và xoay vòng tệp nhật ký |
+| `lfood_brand` | Gỡ nhận diện và liên kết dịch vụ của Odoo khỏi trang đăng nhập, cổng thông tin, thư gửi đi và menu người dùng; đặt tên, biểu tượng riêng cho app |
 
 ## Sao lưu
 
