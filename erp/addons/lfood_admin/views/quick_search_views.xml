@@ -10,7 +10,6 @@
                     <field name="limit"/>
                 </group>
                 <field name="result_html"/>
-                <footer><button string="Đóng" special="cancel"/></footer>
             </form>
         </field>
     </record>
@@ -18,7 +17,6 @@
         <field name="name">Tìm kiếm nhanh</field>
         <field name="res_model">lfood.quick.search</field>
         <field name="view_mode">form</field>
-        <field name="target">new</field>
     </record>
-    <menuitem id="menu_quick_search" name="Tìm kiếm nhanh" parent="lfood_base.menu_root" action="action_quick_search" sequence="1"/>
+    <menuitem id="menu_quick_search" name="Tìm kiếm nhanh" parent="lfood_base.menu_root" action="action_quick_search" sequence="2"/>
 </odoo>

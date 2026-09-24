@@ -1,7 +1,7 @@
 # ERP LiFeOOD
 
 Hệ thống ERP nội bộ cho công ty thực phẩm LiFeOOD (2 pháp nhân: Văn phòng và Nhà máy), xây trên **Odoo 19 Community**.
-Gồm 42 module riêng (`erp/addons/lfood_*`) phủ **173 nghiệp vụ**: kế toán theo Thông tư 99/2025, thuế, mua bán, kho theo lô
+Gồm 46 module riêng (`erp/addons/lfood_*`) phủ **173 nghiệp vụ**: kế toán theo Thông tư 99/2025, thuế, mua bán, kho theo lô
 và hạn dùng, lương và bảo hiểm, nhân sự, chất lượng, an toàn thực phẩm. Tham số pháp lý (thuế suất, mức đóng bảo hiểm,
 lương tối thiểu...) để trong app, có căn cứ và ngày hiệu lực, nên luật đổi thì sửa tham số chứ không sửa mã.
 
@@ -16,7 +16,7 @@ Không làm khâu sản xuất (lệnh sản xuất, định mức, giá thành 
 | Cơ sở dữ liệu | PostgreSQL 16 |
 | Chạy | Docker Compose: `odoo`, `db`, `backup` (sao lưu tự động bằng `pg_dump` + tệp đính kèm, giữ theo ngày, tuần, tháng) |
 | Bảo mật | Mã xác thực 2 lớp, khóa tạm khi đăng nhập sai, tự đăng xuất, nhật ký thao tác có chuỗi mã băm SHA-256 không sửa được |
-| Kiểm thử | Kịch bản chạy trong `odoo shell` (803 tình huống nghiệp vụ, duyệt giao diện theo vai trò, đối chiếu số liệu) và HTTP |
+| Kiểm thử | Kịch bản chạy trong `odoo shell` (832 tình huống nghiệp vụ, duyệt giao diện theo vai trò, đối chiếu số liệu) và HTTP |
 
 ## Cài nhanh
 
