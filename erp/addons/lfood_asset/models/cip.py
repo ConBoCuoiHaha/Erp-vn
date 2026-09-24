@@ -10,6 +10,8 @@ from odoo.exceptions import UserError
 
 from odoo.addons.lfood_voucher.models.tools import vnd
 
+from .asset import LIFE_UNITS, months_of
+
 COUNTERPARTS = [('3311', '3311 Phải trả người bán'), ('111', '111 Tiền mặt'), ('112', '112 Tiền gửi ngân hàng'),
                 ('335', '335 Chi phí phải trả'), ('242', '242 Chi phí trả trước')]
 
@@ -28,13 +30,27 @@ class LfoodCip(models.Model):
     line_ids = fields.One2many('lfood.cip.line', 'cip_id', 'Chi phí')
     total = fields.Float('Chi phí đã tập hợp', digits=(16, 0), compute='_compute_total', store=True)
     category_id = fields.Many2one('lfood.asset.category', 'Loại tài sản khi nghiệm thu')
-    life_months = fields.Integer('Thời gian sử dụng (tháng)')
+    life_months = fields.Integer('Quy ra tháng')
+    life_unit = fields.Selection(LIFE_UNITS, 'Đơn vị', required=True, default='year')
+    life_value = fields.Float('Thời gian sử dụng', digits=(16, 2), compute='_compute_life_value',
+                              inverse='_inverse_life_value', store=True, readonly=False)
     usage = fields.Selection([('production', 'Bộ phận sản xuất, nhà máy'), ('sales', 'Bộ phận bán hàng'),
                               ('admin', 'Bộ phận quản lý')], 'Bộ phận sử dụng', default='production')
     asset_id = fields.Many2one('lfood.asset', 'Thẻ tài sản', readonly=True, copy=False)
     accept_date = fields.Date('Ngày nghiệm thu, bàn giao', readonly=True, copy=False)
     state = fields.Selection([('draft', 'Đang xây dựng'), ('done', 'Đã nghiệm thu, ghi tăng tài sản'),
                               ('cancel', 'Đã hủy')], 'Trạng thái', default='draft', required=True, readonly=True)
+
+    @api.depends('life_months', 'life_unit')
+    def _compute_life_value(self):
+        for rec in self:
+            rec.life_value = (rec.life_months or 0) / 12 if rec.life_unit == 'year' else (rec.life_months or 0)
+
+    def _inverse_life_value(self):
+        for rec in self:
+            months = months_of(rec.life_value, rec.life_unit)
+            if months != rec.life_months:
+                rec.life_months = months
 
     @api.depends('line_ids.amount', 'line_ids.state')
     def _compute_total(self):

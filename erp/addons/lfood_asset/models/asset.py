@@ -11,6 +11,12 @@ USAGES = [
 ]
 USAGE_ACCOUNT = {'production': '6274', 'sales': '6414', 'admin': '6424'}
 LOCKED_WHEN_RUNNING = {'original_value', 'salvage_value', 'life_months', 'date_start', 'company_id'}
+LIFE_UNITS = [('year', 'Năm'), ('month', 'Tháng')]
+
+
+def months_of(value, unit):
+    """Quy thời gian sử dụng về số tháng."""
+    return int(round((value or 0) * (12 if unit == 'year' else 1)))
 SYSTEM_FIELDS = {'state', 'code', 'confirmed_by', 'confirmed_on', 'dispose_date', 'dispose_reason', 'dispose_proceeds'}
 
 
@@ -58,7 +64,13 @@ class LfoodAsset(models.Model):
     salvage_value = fields.Float('Giá trị thu hồi dự kiến', digits=(16, 0))
     depreciable_value = fields.Float('Giá trị phải khấu hao', digits=(16, 0), compute='_compute_values', store=True)
     quantity = fields.Integer('Số lượng', default=1, help='Mua nhiều chiếc cùng loại trên một dòng: khi Ghi tăng tự tách mỗi chiếc một thẻ tài sản')
-    life_months = fields.Integer('Thời gian sử dụng (tháng)', required=True)
+    life_months = fields.Integer('Quy ra tháng', help='App luôn quy thời gian sử dụng về tháng để tính khấu hao')
+    life_unit = fields.Selection(LIFE_UNITS, 'Đơn vị', required=True, default='year',
+                                 help='Chọn nhập thời gian sử dụng theo năm hay theo tháng')
+    life_value = fields.Float('Thời gian sử dụng', digits=(16, 2), compute='_compute_life_value',
+                              inverse='_inverse_life_value', store=True, readonly=False,
+                              help='Khung thời gian của Thông tư 45 ghi theo năm, mua tài sản đã qua sử dụng thì '
+                                   'thường tính theo tháng: chọn đơn vị bên cạnh cho hợp với chứng từ')
     date_start = fields.Date('Ngày bắt đầu khấu hao', required=True, default=fields.Date.context_today)
     monthly_depreciation = fields.Float('Khấu hao tháng', digits=(16, 0), compute='_compute_values', store=True)
     yearly_depreciation = fields.Float('Khấu hao năm', digits=(16, 0), compute='_compute_values', store=True)
@@ -90,6 +102,23 @@ class LfoodAsset(models.Model):
             rec.account_depreciation = rec.category_id.account_depreciation or rec.account_depreciation
             rec.account_expense = USAGE_ACCOUNT.get(rec.usage)
             rec.cost_item_id = rec.category_id.cost_item_id or rec.cost_item_id
+
+    @api.depends('life_months', 'life_unit')
+    def _compute_life_value(self):
+        for rec in self:
+            rec.life_value = (rec.life_months or 0) / 12 if rec.life_unit == 'year' else (rec.life_months or 0)
+
+    def _inverse_life_value(self):
+        for rec in self:
+            months = months_of(rec.life_value, rec.life_unit)
+            if months != rec.life_months:
+                rec.life_months = months
+
+    @api.onchange('life_value', 'life_unit')
+    def _onchange_life_value(self):
+        # đổi ngay số tháng hiện trên biểu mẫu, không đợi lưu
+        for rec in self:
+            rec.life_months = months_of(rec.life_value, rec.life_unit)
 
     @api.depends('original_value', 'salvage_value', 'life_months')
     def _compute_values(self):
@@ -126,6 +155,15 @@ class LfoodAsset(models.Model):
                 raise ValidationError(_('Giá trị thu hồi dự kiến phải từ 0 và nhỏ hơn nguyên giá.'))
 
     # ------------------------------------------------------------ bảo vệ dữ liệu
+    @api.model_create_multi
+    def create(self, vals_list):
+        # quy thời gian sử dụng về tháng ngay lúc tạo: ràng buộc chạy trước hàm nghịch đảo của life_value
+        for vals in vals_list:
+            if not vals.get('life_months') and vals.get('life_value'):
+                unit = vals.get('life_unit') or self.default_get(['life_unit']).get('life_unit') or 'year'
+                vals['life_months'] = months_of(vals['life_value'], unit)
+        return super().create(vals_list)
+
     def write(self, vals):
         if SYSTEM_FIELDS & set(vals) and not self.env.context.get('lfood_asset_system'):
             raise UserError(_('Trạng thái tài sản chỉ đổi bằng các nút Ghi tăng, Thanh lý.'))

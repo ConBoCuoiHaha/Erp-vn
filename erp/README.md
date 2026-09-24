@@ -27,6 +27,13 @@ Mật khẩu 4 tài khoản mẫu: `lfood2026` (đổi trước khi giao cho ng�
 Tài khoản quản trị đăng nhập bằng email của chủ hệ thống, mật khẩu do người dùng tự đặt (My Profile > Account Security).
 Kiểm thử HTTP lấy tài khoản quản trị từ biến môi trường `LFOOD_ADMIN_LOGIN`, `LFOOD_ADMIN_PASSWORD`.
 
+## Thời gian sử dụng tài sản: nhập theo năm hay theo tháng
+
+Thẻ tài sản và công trình xây dựng cơ bản có ô **Thời gian sử dụng** kèm ô chọn **Năm** hoặc **Tháng**. Khung thời
+gian của Thông tư 45 ghi theo năm, còn tài sản đã qua sử dụng thường tính theo tháng, chọn đơn vị nào cũng được.
+App luôn quy về số tháng để tính khấu hao; đổi đơn vị chỉ đổi cách hiển thị chứ không đổi số tháng đã lưu.
+Tài sản nhập từ trước vẫn giữ nguyên số tháng, chỉ hiển thị lại theo năm.
+
 ## Kiểm thử
 
 Hai cơ sở dữ liệu: `lfood` là bản làm việc (dữ liệu mẫu công ty CP Nhựa Đại An, nạp bằng `tools/seed_daian.py`,

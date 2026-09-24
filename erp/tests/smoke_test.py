@@ -4424,6 +4424,27 @@ check('Nạp ngược tệp Excel về đúng một dòng không lỗi',
       and sh3.line_ids.debit_account_id.code == '156', (len(sh3.line_ids), sh3.line_ids.mapped('error')))
 env.flush_all()
 
+# thoi gian su dung tai san nhap theo nam hoac theo thang
+_cat = env['lfood.asset.category'].search([], limit=1)
+_A = env['lfood.asset'].with_user(users['ketoanvien']).with_company(factory)
+_nam = _A.create({'name': 'Thu don vi nam', 'category_id': _cat.id, 'company_id': factory.id,
+                  'original_value': 120_000_000, 'life_value': 5, 'date_start': date(2026, 10, 1), 'usage': 'admin'})
+_thang = _A.create({'name': 'Thu don vi thang', 'category_id': _cat.id, 'company_id': factory.id,
+                    'original_value': 60_000_000, 'life_unit': 'month', 'life_value': 30,
+                    'date_start': date(2026, 10, 1), 'usage': 'admin'})
+check('Nhập 5 năm quy thành 60 tháng, khấu hao tháng đúng',
+      _nam.life_months == 60 and _nam.monthly_depreciation == 2_000_000, (_nam.life_months, _nam.monthly_depreciation))
+check('Nhập 30 tháng giữ nguyên 30 tháng', _thang.life_months == 30 and _thang.life_value == 30,
+      (_thang.life_months, _thang.life_value))
+_cu = _A.create({'name': 'Thu nhap bang thang', 'category_id': _cat.id, 'company_id': factory.id,
+                 'original_value': 60_000_000, 'life_months': 72, 'date_start': date(2026, 10, 1), 'usage': 'admin'})
+check('Tài sản nhập bằng số tháng hiển thị thành năm',
+      _cu.life_value == 6 and _cu.life_unit == 'year', (_cu.life_value, _cu.life_unit))
+_nam.life_unit = 'month'
+check('Đổi đơn vị chỉ đổi cách hiển thị, không đổi số tháng',
+      _nam.life_months == 60 and _nam.life_value == 60, (_nam.life_months, _nam.life_value))
+env.flush_all()
+
 env.cr.rollback()
 print('\n==== KET QUA KIEM THU ====')
 for name, ok, detail in results:
